@@ -1,8 +1,9 @@
 [tool.poetry]
-name = "qulacs-visualizer"
+name = "qulacsvis"
 version = "0.1.0"
 description = "visualizers for qulacs"
 authors = ["Qulacs-Osaka <you@example.com>"]
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.8"
