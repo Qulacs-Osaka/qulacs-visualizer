@@ -19,6 +19,20 @@ Sphinx = "^4.1.2"
 sphinx-rtd-theme = "^0.5.2"
 pysen = {version = "^0.9.1", extras = ["lint"]}
 
+[tool.pysen]
+version = "0.9"
+
+[tool.pysen.lint]
+enable_black = true
+enable_flake8 = true
+enable_isort = true
+enable_mypy = true
+mypy_preset = "strict"
+line_length = 88
+
+[[tool.pysen.lint.mypy_targets]]
+  paths = ["."]
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
