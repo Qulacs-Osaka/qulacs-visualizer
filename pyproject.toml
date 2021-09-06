@@ -1,7 +1,11 @@
 [tool.poetry]
 name = "qulacsvis"
 version = "0.1.0"
+readme = "README.md"
 description = "visualizers for qulacs"
+repository = "https://github.com/Qulacs-Osaka/qulacs-visualizer"
+homepage = "https://github.com/Qulacs-Osaka/qulacs-visualizer"
+documentation = "https://qulacs-osaka.github.io/qulacs-visualizer"
 authors = ["Qulacs-Osaka <you@example.com>"]
 license = "MIT"
 
