@@ -1,7 +1,11 @@
 [tool.poetry]
 name = "qulacsvis"
 version = "0.1.0"
+readme = "README.md"
 description = "visualizers for qulacs"
+repository = "https://github.com/Qulacs-Osaka/qulacs-visualizer"
+homepage = "https://github.com/Qulacs-Osaka/qulacs-visualizer"
+documentation = "https://qulacs-osaka.github.io/qulacs-visualizer"
 authors = ["Qulacs-Osaka <you@example.com>"]
 license = "MIT"
 
@@ -10,8 +14,24 @@ python = "^3.8"
 Qulacs = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
-black = "^21.7b0"
-flake8 = "^3.9.2"
+pytest = "^6.2.5"
+Sphinx = "^4.1.2"
+sphinx-rtd-theme = "^0.5.2"
+pysen = {version = "^0.9.1", extras = ["lint"]}
+
+[tool.pysen]
+version = "0.9"
+
+[tool.pysen.lint]
+enable_black = true
+enable_flake8 = true
+enable_isort = true
+enable_mypy = true
+mypy_preset = "strict"
+line_length = 88
+
+[[tool.pysen.lint.mypy_targets]]
+  paths = ["."]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
