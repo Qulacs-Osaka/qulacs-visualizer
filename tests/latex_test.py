@@ -1,5 +1,5 @@
 import pytest
-from qulacsvis.visualization.latex import LatexCompiler
+from qulacsvis.utils.latex import LatexCompiler
 
 
 @pytest.mark.runlatex
