@@ -569,6 +569,14 @@ lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
 
 [[package]]
+name = "temp"
+version = "2020.7.2"
+description = "temp.tempdir(), temp.tempfile() functions"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -624,7 +632,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "87836aed51e01bd65ee34e0d68b9f2fb78ca424abda2d84d42a8a5845ee1838c"
+content-hash = "be0d09e3d1abaa1c6e5f81a0501dc726105d9e4b487fff8ce73b3289d5928a2c"
 
 [metadata.files]
 alabaster = [
@@ -939,6 +947,9 @@ sphinxcontrib-qthelp = [
 sphinxcontrib-serializinghtml = [
     {file = "sphinxcontrib-serializinghtml-1.1.5.tar.gz", hash = "sha256:aa5f6de5dfdf809ef505c4895e51ef5c9eac17d0f287933eb49ec495280b6952"},
     {file = "sphinxcontrib_serializinghtml-1.1.5-py2.py3-none-any.whl", hash = "sha256:352a9a00ae864471d3a7ead8d7d79f5fc0b57e8b3f95e9867eb9eb28999b92fd"},
+]
+temp = [
+    {file = "temp-2020.7.2.tar.gz", hash = "sha256:aefecf9e4d0d3900fba7fde844dc9dc62918ab66ad4003c8fdddcf3cd0a1edb4"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},

@@ -8,6 +8,10 @@ all: format lint test
 test:
 	$(PYTEST)
 
+.PHONY: test-with-latex
+test-with-latex:
+	$(PYTEST) --runlatex
+
 .PHONY: lint
 lint:
 	$(PYSEN) run lint

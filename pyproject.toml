@@ -12,6 +12,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.8"
 Qulacs = "^0.3.0"
+temp = "^2020.7.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -31,7 +32,11 @@ mypy_preset = "strict"
 line_length = 88
 
 [[tool.pysen.lint.mypy_targets]]
-  paths = ["."]
+  paths = [
+    "./",
+    "./qulacsvis/visualization",
+    "./tests/"
+  ]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
