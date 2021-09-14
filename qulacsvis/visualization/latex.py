@@ -23,7 +23,7 @@ class LatexCompiler:
         code : str
             The latex code to compile.
         filename : str
-            The filename of the latex code.
+            The filename of the latex code (No extension).
         """
         with tempfile.TemporaryDirectory() as tmpdir:
             with open(tmpdir + "/" + filename + ".tex", "w") as f:

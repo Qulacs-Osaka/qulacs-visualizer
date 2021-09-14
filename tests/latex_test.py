@@ -17,7 +17,7 @@ def test_compile() -> None:
     """
 
     latex = LatexCompiler()
-    latex.compile(code, "test.tex")
+    latex.compile(code, "test")
 
 
 @pytest.mark.runlatex
