@@ -1,3 +1,4 @@
+import tempfile
 from typing import Optional
 
 from qulacsvis.utils.latex import LatexCompiler
@@ -20,9 +21,10 @@ def circuit_drawer(output_method: Optional[str] = None):  # type: ignore
         raise NotImplementedError("Text output_method is not implemented yet.")
 
     elif output_method == "latex":
-        latex_source = generate_latex_source()
-        latex = LatexCompiler()
-        latex.compile(latex_source, "circuit_drawer")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            latex_source = generate_latex_source()
+            latex = LatexCompiler()
+            latex.compile(latex_source, tmpdir, "circuit_drawer")
 
     elif output_method == "latex_source":
         return generate_latex_source()

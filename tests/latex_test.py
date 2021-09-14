@@ -1,3 +1,5 @@
+import tempfile
+
 import pytest
 from qulacsvis.utils.latex import LatexCompiler
 
@@ -17,7 +19,9 @@ def test_compile() -> None:
     """
 
     latex = LatexCompiler()
-    latex.compile(code, "test")
+    with tempfile.TemporaryDirectory() as tmpdir:
+        latex = LatexCompiler()
+        latex.compile(code, tmpdir, "test")
 
 
 @pytest.mark.runlatex
@@ -30,4 +34,6 @@ def test_fail_compile() -> None:
 
     latex = LatexCompiler()
     with pytest.raises(Exception):
-        latex.compile(code, "test")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            latex = LatexCompiler()
+            latex.compile(code, tmpdir, "test")
