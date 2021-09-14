@@ -33,13 +33,16 @@ class LatexCompiler:
                     [
                         "pdflatex",
                         "-halt-on-error",
+                        "-interaction=nonstopmode",
                         f"-output-directory={tmpdir}",
                         tmpdir + "/" + filename + ".tex",
                     ],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
+                    check=True,
+                    text=True,
+                    capture_output=True,
                 )
-            except subprocess.CalledProcessError:
+            except subprocess.CalledProcessError as e:
+                print(e.output)
                 raise Exception("pdflatex failed.")
 
     def has_pdflatex(self) -> bool:

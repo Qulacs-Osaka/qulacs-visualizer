@@ -18,3 +18,16 @@ def test_compile() -> None:
 
     latex = LatexCompiler()
     latex.compile(code, "test.tex")
+
+
+@pytest.mark.runlatex
+def test_fail_compile() -> None:
+    code = r"""
+    \documentclass{article}
+    \begin{document}
+    % missing end
+    """
+
+    latex = LatexCompiler()
+    with pytest.raises(Exception):
+        latex.compile(code, "test")
