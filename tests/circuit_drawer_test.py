@@ -12,11 +12,10 @@ def test_output_method_text() -> None:
         circuit_drawer(output_method="text")
 
 
+@pytest.mark.runlatex
 def test_output_method_latex() -> None:
-    with pytest.raises(Exception):
-        circuit_drawer(output_method="latex")
+    circuit_drawer(output_method="latex")
 
 
 def test_output_method_latex_source() -> None:
-    with pytest.raises(Exception):
-        circuit_drawer(output_method="latex_source")
+    circuit_drawer(output_method="latex_source")
