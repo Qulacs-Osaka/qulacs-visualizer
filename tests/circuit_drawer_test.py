@@ -15,7 +15,9 @@ def test_output_method_text() -> None:
 @pytest.mark.runlatex
 def test_output_method_latex() -> None:
     circuit_drawer(output_method="latex")
+    # TODO: check if pdf file is generated
 
 
 def test_output_method_latex_source() -> None:
     circuit_drawer(output_method="latex_source")
+    # TODO: check if latex file is generated

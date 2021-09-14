@@ -43,6 +43,7 @@ def generate_latex_source() -> str:
     generated_latex_code = r"""
     \documentclass{article}
     \begin{document}
+    Circuit diagram goes here.
     \end{document}
     """
     return generated_latex_code

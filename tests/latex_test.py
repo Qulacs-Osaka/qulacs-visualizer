@@ -1,3 +1,4 @@
+import os
 import tempfile
 
 import pytest
@@ -15,6 +16,7 @@ def test_compile() -> None:
     code = r"""
     \documentclass{article}
     \begin{document}
+    Test Document Body
     \end{document}
     """
 
@@ -22,6 +24,7 @@ def test_compile() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         latex = LatexCompiler()
         latex.compile(code, tmpdir, "test")
+        assert os.path.exists(os.path.join(tmpdir, "test.pdf"))
 
 
 @pytest.mark.runlatex
