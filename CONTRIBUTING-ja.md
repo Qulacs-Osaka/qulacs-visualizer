@@ -42,6 +42,7 @@ make check
 make test
 ```
 
+Git で追跡されているファイルにのみフォーマットが適用されます．新しくファイルを作成した場合は `git add` してください．
 リントエラーはエラーメッセージに沿って手で直す必要があります．やむを得ない場合、特定の行に対して無効化することが出来ます．詳しくは各ドキュメントを参照してください．
 
 - [black #code-style](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#code-style)

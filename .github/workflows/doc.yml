@@ -40,7 +40,6 @@ jobs:
 
       - name: Build documentation
         run: |
-          source ../$VENV
           make html
         working-directory: ./docs
 

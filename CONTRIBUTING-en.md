@@ -27,7 +27,9 @@ git switch main
 git pull # Shorthand for `git pull origin main`
 ```
 
-4. Create branch with name describing what you are going to develop.
+4. Create branch.
+
+The branch name should be a combination of the issue number and the content to be developed.
 
 ```bash
 git switch -c 99-wonderful-model
@@ -40,6 +42,7 @@ make check
 make test
 ```
 
+The formatting is only applied to files that are tracked by Git. If you have created a new file, run `git add`.
 Lint errors should be fixed by hand along error messages.  
 If this is unavoidable, it is possible to disable it for a specific line. See the documentation for details.
 
