@@ -1,5 +1,5 @@
+import os
 import subprocess
-import tempfile
 
 
 class LatexCompiler:
@@ -14,7 +14,7 @@ class LatexCompiler:
         if not self.has_pdflatex():
             raise Exception("pdflatex not found.")
 
-    def compile(self, code: str, filename: str) -> None:
+    def compile(self, code: str, output_dir: str, filename: str) -> None:
         """
         Compile the latex code.
 
@@ -22,28 +22,35 @@ class LatexCompiler:
         ----------
         code : str
             The latex code to compile.
+        output_dir : str
+            The directory to save the pdf file.
         filename : str
             The filename of the latex code (No extension).
         """
-        with tempfile.TemporaryDirectory() as tmpdir:
-            with open(tmpdir + "/" + filename + ".tex", "w") as f:
-                f.write(code)
-            try:
-                subprocess.run(
-                    [
-                        "pdflatex",
-                        "-halt-on-error",
-                        "-interaction=nonstopmode",
-                        f"-output-directory={tmpdir}",
-                        tmpdir + "/" + filename + ".tex",
-                    ],
-                    check=True,
-                    capture_output=True,
-                )
-            except subprocess.CalledProcessError as err:
-                with open("latex_error.log", "wb") as error_file:
-                    error_file.write(err.output)
-                raise Exception("`pdflatex` failed. See `latex_error.log`") from err
+        filename_with_ext = os.path.join(filename + ".tex")
+        texfile_path = os.path.join(output_dir, filename_with_ext)
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        with open(texfile_path, "w") as f:
+            f.write(code)
+        try:
+            subprocess.run(
+                [
+                    "pdflatex",
+                    "-halt-on-error",
+                    "-interaction=nonstopmode",
+                    f"-output-directory={output_dir}",
+                    filename_with_ext,
+                ],
+                check=True,
+                capture_output=True,
+            )
+        except subprocess.CalledProcessError as err:
+            with open("latex_error.log", "wb") as error_file:
+                error_file.write(err.output)
+            raise Exception("`pdflatex` failed. See `latex_error.log`") from err
 
     def has_pdflatex(self) -> bool:
         """
