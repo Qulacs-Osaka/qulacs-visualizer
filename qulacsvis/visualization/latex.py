@@ -38,12 +38,12 @@ class LatexCompiler:
                         tmpdir + "/" + filename + ".tex",
                     ],
                     check=True,
-                    text=True,
                     capture_output=True,
                 )
-            except subprocess.CalledProcessError as e:
-                print(e.output)
-                raise Exception("pdflatex failed.")
+            except subprocess.CalledProcessError as err:
+                with open("latex_error.log", "wb") as error_file:
+                    error_file.write(err.output)
+                raise Exception("`pdflatex` failed. See `latex_error.log`") from err
 
     def has_pdflatex(self) -> bool:
         """
