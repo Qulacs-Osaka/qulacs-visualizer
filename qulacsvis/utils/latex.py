@@ -117,7 +117,7 @@ class PDFtoImage:
         """
         try:
             subprocess.run(
-                ["pdftocairo", "--version"],
+                ["pdftocairo", "-v"],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
