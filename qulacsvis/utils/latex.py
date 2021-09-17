@@ -79,7 +79,7 @@ class PDFtoImage:
         if not self.has_pdftocairo():
             raise Exception("pdftocairo not found.")
 
-    def convert(self, filename: str) -> None:
+    def convert(self, filename: str, *, ppi: int = 150) -> None:
         """
         Convert the pdf to image.
         <filename>.pdf -> <filename>.png
@@ -88,6 +88,8 @@ class PDFtoImage:
         ----------
         filename : str
             The filename of the pdf file (No extension).
+        ppi : int
+            The pixels per inch of the output image.
         """
         pdf_path = filename + ".pdf"
 
@@ -100,6 +102,8 @@ class PDFtoImage:
                     "pdftocairo",
                     "-singlefile",
                     "-png",
+                    "-r",
+                    f"{ppi}",
                     pdf_path,
                     filename,
                 ],

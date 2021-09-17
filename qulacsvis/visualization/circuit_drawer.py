@@ -8,6 +8,8 @@ from qulacsvis.utils.latex import LatexCompiler, PDFtoImage
 
 def circuit_drawer(
     output_method: Optional[str] = None,
+    *,
+    ppi: int = 150,
 ) -> Union[str, Image.Image]:
     """
     Draws a circuit diagram of a circuit.
@@ -16,6 +18,9 @@ def circuit_drawer(
     ----------
     output_method : Optional[str]
         Set the output method for the drawn circuit.
+        If None, the output method is set to 'text'.
+    ppi : int
+        The pixels per inch of the output image.
     """
 
     if output_method is None:
@@ -31,7 +36,7 @@ def circuit_drawer(
             pdftoimage = PDFtoImage()
 
             latex.compile(latex_source, tmpdir, "circuit_drawer")
-            pdftoimage.convert(os.path.join(tmpdir, "circuit_drawer"))
+            pdftoimage.convert(os.path.join(tmpdir, "circuit_drawer"), ppi=ppi)
 
             image = Image.open(os.path.join(tmpdir, "circuit_drawer.png"))
             return image
