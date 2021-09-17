@@ -45,11 +45,12 @@ class LatexCompiler:
                     filename_with_ext,
                 ],
                 check=True,
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
             )
         except subprocess.CalledProcessError as err:
             with open("latex_error.log", "wb") as error_file:
-                error_file.write(err.output)
+                error_file.write(err.stdout)
             raise Exception("`pdflatex` failed. See `latex_error.log`") from err
 
     def has_pdflatex(self) -> bool:
@@ -108,11 +109,12 @@ class PDFtoImage:
                     filename,
                 ],
                 check=True,
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
             )
         except subprocess.CalledProcessError as err:
             with open("pdftocairo_error.log", "wb") as error_file:
-                error_file.write(err.output)
+                error_file.write(err.stdout)
             raise Exception("`pdftocairo` failed. See `pdftocairo_error.log`") from err
 
     def has_pdftocairo(self) -> bool:
