@@ -17,7 +17,7 @@ help:
 
 .PHONY: apidoc
 apidoc: Makefile
-	@$(SPHINXAPIDOC) -f -e -o "$(SOURCEDIR)" "../$(PROJECTDIR)"
+	@$(SPHINXAPIDOC) -f -e -o "$(SOURCEDIR)" "../$(PROJECTDIR)" "../$(PROJECTDIR)/utils"
 
 .PHONY: html
 html: apidoc

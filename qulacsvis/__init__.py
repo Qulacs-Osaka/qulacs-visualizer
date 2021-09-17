@@ -1,1 +1,1 @@
-from .visualization.circuit_drawer import circuit_drawer  # noqa
+from .visualization import circuit_drawer  # noqa
