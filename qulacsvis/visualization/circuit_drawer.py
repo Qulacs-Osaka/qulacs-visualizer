@@ -56,9 +56,23 @@ def generate_latex_source() -> str:
     """
 
     generated_latex_code = r"""
-    \documentclass{article}
-    \begin{document}
-    Circuit diagram goes here.
-    \end{document}
+\documentclass[12pt,border={25pt 5pt 5pt 5pt}]{standalone}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[cmex10]{amsmath}
+
+\usepackage{qcircuit}
+\usepackage{braket}
+
+\begin{document}
+
+\Qcircuit @C=1em @R=.7em {
+  \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \qw          & \qw      & \meter \\
+  \lstick{\ket{0}} & \qw      & \targ    & \ctrl{1}     & \qw      & \meter \\
+  \lstick{\ket{0}} & \qw      & \gate{H} & \control \qw & \gate{H} & \meter
+}
+
+\end{document}
     """
     return generated_latex_code
