@@ -2,12 +2,12 @@ import os
 import tempfile
 
 import pytest
-from qulacsvis.utils.latex import LatexCompiler, PDFtoImage
+from qulacsvis.utils.latex import _LatexCompiler, _PDFtoImage
 
 
 @pytest.mark.runlatex
 def test_has_pdflatex() -> None:
-    latex = LatexCompiler()
+    latex = _LatexCompiler()
     assert latex.has_pdflatex()
 
 
@@ -20,10 +20,9 @@ def test_convert() -> None:
     \end{document}
     """
 
-    latex = LatexCompiler()
     with tempfile.TemporaryDirectory() as tmpdir:
-        latex = LatexCompiler()
-        pdftoimage = PDFtoImage()
+        latex = _LatexCompiler()
+        pdftoimage = _PDFtoImage()
         latex.compile(code, tmpdir, "test")
         assert os.path.exists(os.path.join(tmpdir, "test.pdf"))
 
@@ -39,8 +38,7 @@ def test_fail_compile() -> None:
     % missing end
     """
 
-    latex = LatexCompiler()
     with pytest.raises(Exception):
         with tempfile.TemporaryDirectory() as tmpdir:
-            latex = LatexCompiler()
+            latex = _LatexCompiler()
             latex.compile(code, tmpdir, "test")

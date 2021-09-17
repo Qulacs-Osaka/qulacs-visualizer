@@ -3,7 +3,7 @@ import tempfile
 from typing import Optional, Union
 
 from PIL import Image
-from qulacsvis.utils.latex import LatexCompiler, PDFtoImage
+from qulacsvis.utils.latex import _LatexCompiler, _PDFtoImage
 
 
 def circuit_drawer(
@@ -31,9 +31,9 @@ def circuit_drawer(
 
     elif output_method == "latex":
         with tempfile.TemporaryDirectory() as tmpdir:
-            latex_source = generate_latex_source()
-            latex = LatexCompiler()
-            pdftoimage = PDFtoImage()
+            latex_source = _generate_latex_source()
+            latex = _LatexCompiler()
+            pdftoimage = _PDFtoImage()
 
             latex.compile(latex_source, tmpdir, "circuit_drawer")
             pdftoimage.convert(os.path.join(tmpdir, "circuit_drawer"), ppi=ppi)
@@ -42,7 +42,7 @@ def circuit_drawer(
             return image
 
     elif output_method == "latex_source":
-        return generate_latex_source()
+        return _generate_latex_source()
 
     else:
         raise ValueError(
@@ -50,7 +50,7 @@ def circuit_drawer(
         )
 
 
-def generate_latex_source() -> str:
+def _generate_latex_source() -> str:
     """
     Generates a latex source code of a circuit.
 

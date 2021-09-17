@@ -2,7 +2,7 @@ import os
 import subprocess
 
 
-class LatexCompiler:
+class _LatexCompiler:
     """
     Compile latex code to pdf.
     """
@@ -68,7 +68,7 @@ class LatexCompiler:
             return False
 
 
-class PDFtoImage:
+class _PDFtoImage:
     """
     Convert pdf to image with pdftocairo.
     """
