@@ -1,10 +1,14 @@
+import os
 import tempfile
-from typing import Optional
+from typing import Optional, Union
 
-from qulacsvis.utils.latex import LatexCompiler
+from PIL import Image
+from qulacsvis.utils.latex import LatexCompiler, PDFtoImage
 
 
-def circuit_drawer(output_method: Optional[str] = None):  # type: ignore
+def circuit_drawer(
+    output_method: Optional[str] = None,
+) -> Union[str, Image.Image]:
     """
     Draws a circuit diagram of a circuit.
 
@@ -24,10 +28,21 @@ def circuit_drawer(output_method: Optional[str] = None):  # type: ignore
         with tempfile.TemporaryDirectory() as tmpdir:
             latex_source = generate_latex_source()
             latex = LatexCompiler()
+            pdftoimage = PDFtoImage()
+
             latex.compile(latex_source, tmpdir, "circuit_drawer")
+            pdftoimage.convert(os.path.join(tmpdir, "circuit_drawer"))
+
+            image = Image.open(os.path.join(tmpdir, "circuit_drawer.png"))
+            return image
 
     elif output_method == "latex_source":
         return generate_latex_source()
+
+    else:
+        raise ValueError(
+            "Invalid output_method. Valid options are: 'text', 'latex', 'latex_source'."
+        )
 
 
 def generate_latex_source() -> str:
