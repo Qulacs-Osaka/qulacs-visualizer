@@ -1,14 +1,6 @@
 qulacsvis package
 =================
 
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   qulacsvis.main
-
 Module contents
 ---------------
 
