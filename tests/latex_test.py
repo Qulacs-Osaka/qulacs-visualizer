@@ -2,7 +2,7 @@ import os
 import tempfile
 
 import pytest
-from qulacsvis.utils.latex import LatexCompiler
+from qulacsvis.utils.latex import LatexCompiler, PDFtoImage
 
 
 @pytest.mark.runlatex
@@ -12,7 +12,7 @@ def test_has_pdflatex() -> None:
 
 
 @pytest.mark.runlatex
-def test_compile() -> None:
+def test_convert() -> None:
     code = r"""
     \documentclass{article}
     \begin{document}
@@ -23,8 +23,12 @@ def test_compile() -> None:
     latex = LatexCompiler()
     with tempfile.TemporaryDirectory() as tmpdir:
         latex = LatexCompiler()
+        pdftoimage = PDFtoImage()
         latex.compile(code, tmpdir, "test")
         assert os.path.exists(os.path.join(tmpdir, "test.pdf"))
+
+        pdftoimage.convert(os.path.join(tmpdir, "test"))
+        assert os.path.exists(os.path.join(tmpdir, "test.png"))
 
 
 @pytest.mark.runlatex
