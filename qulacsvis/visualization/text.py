@@ -312,7 +312,7 @@ class Gate_AA_Generator:
             self.gate_string[p] = control_q_body
 
 
-class Qulacs_QC_Drawer:
+class TextCircuitDrawer:
     """qulacsの量子回路(QuantumCircuit)を描画するためのクラス
     """
     def __init__(self, circuit):
@@ -560,5 +560,5 @@ def draw_circuit(circuit, verbose=0):
         circuit: 出力したい量子回路(qulacs.QuantumCircuit)
         verbose: 詳細出力(default=0). 1のときはgateにcircuitに追加された順番が出力される
     """
-    Drawer = Qulacs_QC_Drawer(circuit)
+    Drawer = TextCircuitDrawer(circuit)
     Drawer.draw(verbose=verbose)
