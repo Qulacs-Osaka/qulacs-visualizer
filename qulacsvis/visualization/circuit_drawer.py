@@ -7,6 +7,7 @@ from qulacs import QuantumCircuit
 from qulacsvis.utils.latex import _LatexCompiler, _PDFtoImage
 
 from .latex import _generate_latex_source
+from .text import TextCircuitDrawer
 
 
 def circuit_drawer(
@@ -14,7 +15,8 @@ def circuit_drawer(
     output_method: Optional[str] = None,
     *,
     ppi: int = 150,
-) -> Union[str, Image.Image]:
+    verbose: bool = False,
+) -> Union[str, Image.Image, None]:
     """
     Draws a circuit diagram of a circuit.
 
@@ -31,7 +33,9 @@ def circuit_drawer(
         output_method = "text"
 
     if output_method == "text":
-        raise NotImplementedError("Text output_method is not implemented yet.")
+        drawer = TextCircuitDrawer(circuit)  # type: ignore
+        drawer.draw(verbose=verbose)  # type: ignore
+        return None
 
     elif output_method == "latex":
         with tempfile.TemporaryDirectory() as tmpdir:
