@@ -558,10 +558,15 @@ class TextCircuitDrawer:
 
 
 def draw_circuit(circuit, verbose: bool = False) -> None:  # type: ignore
-    """量子回路図を出力するための関数
-    Arguments:
-        circuit: 出力したい量子回路(qulacs.QuantumCircuit)
-        verbose: 詳細出力(default=False). Trueのときはgateにcircuitに追加された順番が出力される
+    """
+    量子回路図をテキストで出力するための関数
+
+    Parameters
+    ----------
+    circuit: qulacs.QuantumCircuit
+        出力したい量子回路(qulacs.QuantumCircuit)
+    verbose: bool
+        詳細出力(default=False). Trueのときはgateにcircuitに追加された順番が出力される
     """
     Drawer = TextCircuitDrawer(circuit)
     Drawer.draw(verbose=verbose)
