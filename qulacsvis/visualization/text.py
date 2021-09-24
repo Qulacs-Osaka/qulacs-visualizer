@@ -3,14 +3,36 @@ import shutil
 
 import numpy as np
 
-CON_DOT = "●"
-# CON_DOT = "･"
+CON_DOT_STYLE = {
+    "large": "●",
+    "small": "･",
+}
+
+
+def _set_con_dot(dot: str) -> str:
+    """
+    Set a character to mean control qubit.
+
+    Parameters
+    ----------
+    dot: str
+        dot style "large" or "small"
+
+    Returns
+    -------
+    str
+        dot character
+    """
+    if dot in CON_DOT_STYLE:
+        return CON_DOT_STYLE[dot]
+    else:
+        return CON_DOT_STYLE["large"]
 
 
 class _Gate_AA_Generator:
     """qulacsの量子ゲート(QuantumGateBase)を描画するためのクラス"""
 
-    def __init__(self):
+    def __init__(self, *, dot: str = "large"):
         # qulacsの対応バージョン:0.2.0
         # 想定のゲートの出力の文字の幅が３文字分なので3文字用のゲートの名前を定義
         self.gate_dict = {
@@ -54,6 +76,9 @@ class _Gate_AA_Generator:
 
         # このgate_stringにゲートの上の部分から文字列を作成して追加していきゲートの形を作成
         self.gate_string = []
+
+        # 制御qubitの記号
+        self.CON_DOT = _set_con_dot(dot)
 
     def generate(self, gate, index="   ", verbose=False):
         """引数のゲートを文字列表示で返してくれる関数
@@ -126,7 +151,7 @@ class _Gate_AA_Generator:
         # 制御qubit用の部分の形(空)
         control_q_name = "       "
         # 制御qubit用の部分の接続の部分の形
-        control_q_body = "   {}   ".format(CON_DOT)
+        control_q_body = "   {}   ".format(self.CON_DOT)
         # 制御信号用のワイヤーの形
         vertical_wire = "   |   "
 
@@ -283,14 +308,14 @@ class _Gate_AA_Generator:
             # 何個下のqubitに描き込めばよいか分かる. この値をゲートの高さ分修正(*4-2)して中央をドットに書き換える
             row = (index + 1 - min(t_list)) * 4 - 2
             self.gate_string[row] = (
-                self.gate_string[row][:3] + CON_DOT + self.gate_string[row][4:]
+                self.gate_string[row][:3] + self.CON_DOT + self.gate_string[row][4:]
             )
 
     def gen_lower_control_part(self, t_list, c_list):
         """ターゲットqubitにかかるゲートより下側に存在する制御qubitを描くメソッド"""
         # 以下制御qubit用のパーツ作り
         # 制御qubit用の部分の接続の部分の形
-        control_q_body = "   {}   ".format(CON_DOT)
+        control_q_body = "   {}   ".format(self.CON_DOT)
         # 制御信号用のワイヤーの形
         vertical_wire = "   |   "
 
@@ -317,7 +342,9 @@ class _Gate_AA_Generator:
 class TextCircuitDrawer:
     """qulacsの量子回路(QuantumCircuit)を描画するためのクラス"""
 
-    def __init__(self, circuit):
+    def __init__(self, circuit, *, dot: str = "large"):
+        # 制御qubitの記号
+        self.CON_DOT = _set_con_dot(dot)
         # 出力したい量子回路
         self.circ = circuit
         # 出力したい量子回路の深さ
@@ -374,7 +401,7 @@ class TextCircuitDrawer:
             self.circuit_picture[row][-1] = "-"
 
         # 単体のゲートの文字列表現を作成するクラスを呼び出す
-        self.AA_Generator = _Gate_AA_Generator()
+        self.AA_Generator = _Gate_AA_Generator(dot=dot)
 
     def draw(self, verbose):
         """実際に回路を描き始め出力までするメソッド"""
@@ -521,7 +548,7 @@ class TextCircuitDrawer:
             while True:
                 # 先頭の文字を読む
                 char_now = self.circuit_picture[row][p]
-                if char_now == "{}".format(CON_DOT):
+                if char_now == "{}".format(self.CON_DOT):
                     # 読んだのが"･"のときは次の文字が必ず空白になっているはずなので"-"に書き換える
                     self.circuit_picture[row][p + 1] = "-"
                 elif char_now == "-":
@@ -557,7 +584,7 @@ class TextCircuitDrawer:
                     break
 
 
-def draw_circuit(circuit, verbose: bool = False) -> None:  # type: ignore
+def draw_circuit(circuit, verbose: bool = False, dot: str = "large") -> None:  # type: ignore
     """
     量子回路図をテキストで出力するための関数
 
@@ -567,6 +594,9 @@ def draw_circuit(circuit, verbose: bool = False) -> None:  # type: ignore
         出力したい量子回路(qulacs.QuantumCircuit)
     verbose: bool
         詳細出力(default=False). Trueのときはgateにcircuitに追加された順番が出力される
+    dot: str
+        制御qubitを表すドットのスタイル(default="large")
     """
-    Drawer = TextCircuitDrawer(circuit)
+
+    Drawer = TextCircuitDrawer(circuit, dot=dot)
     Drawer.draw(verbose=verbose)

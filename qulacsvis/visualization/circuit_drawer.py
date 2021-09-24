@@ -16,6 +16,7 @@ def circuit_drawer(
     *,
     ppi: int = 150,
     verbose: bool = False,
+    dot: str = "large"
 ) -> Union[str, Image.Image, None]:
     """
     Draws a circuit diagram of a circuit.
@@ -32,6 +33,8 @@ def circuit_drawer(
     verbose : bool
         If True, a number will be added to the gate.
         Gates are numbered in the order in which they are added to the circuit.
+    dot: str
+        Dot style to mean control qubit(default="large")
 
     Returns
     -------
@@ -78,7 +81,7 @@ def circuit_drawer(
         output_method = "text"
 
     if output_method == "text":
-        drawer = TextCircuitDrawer(circuit)  # type: ignore
+        drawer = TextCircuitDrawer(circuit, dot=dot)  # type: ignore
         drawer.draw(verbose=verbose)  # type: ignore
         return None
 
