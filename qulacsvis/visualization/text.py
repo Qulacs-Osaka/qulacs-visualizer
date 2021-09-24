@@ -55,12 +55,12 @@ class Gate_AA_Generator:
         # このgate_stringにゲートの上の部分から文字列を作成して追加していきゲートの形を作成
         self.gate_string = []
 
-    def generate(self, gate, index="   ", verbose=0):
+    def generate(self, gate, index="   ", verbose=False):
         """引数のゲートを文字列表示で返してくれる関数
         Argeuments:
             gate:    Qulacsのゲート(QuantumGateBase)
             index:   circuitに追加された順番を示す値, 1000以上の場合は表示が崩れる
-            verbose: 1だと詳細出力, 表示されるゲートにcircuitで追加された順番(引数のindex)を表示
+            verbose: Trueだと詳細出力, 表示されるゲートにcircuitで追加された順番(引数のindex)を表示
         Return:
             gate_string: 1次元のリスト(リストのリスト)
                          1次元目が行の指定, 2次元目が文字の指定
@@ -82,7 +82,7 @@ class Gate_AA_Generator:
         self.gate_string.clear()
 
         # verboseに応じて回路への追加番号を表示させるかさせないか文字列を作成
-        if verbose == 1:
+        if verbose:
             index = str(index).zfill(3)
         else:
             index = "   "
@@ -249,7 +249,7 @@ class Gate_AA_Generator:
         """SWAPゲートをきれいに描くためのメソッド"""
         # ゲートの上部分の形, SWAPは空
         gate_head = "       "
-        # ゲートの名前が表示される部分の形, verbose=1のときは追加された順番でそれ以外は空
+        # ゲートの名前が表示される部分の形, verbose=Trueのときは追加された順番でそれ以外は空
         gate_name = "  {}  ".format(index)
         # SWAPする位置を表す部分. この部分が他のゲートの場合と異なり, "×"が着くのは
         # SWAPする2点のqubitのみでその間のqubitのワイヤーは接続の縦線ワイヤーで描きたい
@@ -557,11 +557,11 @@ class TextCircuitDrawer:
                     break
 
 
-def draw_circuit(circuit, verbose=0):
+def draw_circuit(circuit, verbose: bool = False) -> None:  # type: ignore
     """量子回路図を出力するための関数
     Arguments:
         circuit: 出力したい量子回路(qulacs.QuantumCircuit)
-        verbose: 詳細出力(default=0). 1のときはgateにcircuitに追加された順番が出力される
+        verbose: 詳細出力(default=False). Trueのときはgateにcircuitに追加された順番が出力される
     """
     Drawer = TextCircuitDrawer(circuit)
     Drawer.draw(verbose=verbose)
