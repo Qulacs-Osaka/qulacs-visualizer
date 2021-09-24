@@ -7,7 +7,7 @@ CON_DOT = "●"
 # CON_DOT = "･"
 
 
-class Gate_AA_Generator:
+class _Gate_AA_Generator:
     """qulacsの量子ゲート(QuantumGateBase)を描画するためのクラス"""
 
     def __init__(self):
@@ -374,7 +374,7 @@ class TextCircuitDrawer:
             self.circuit_picture[row][-1] = "-"
 
         # 単体のゲートの文字列表現を作成するクラスを呼び出す
-        self.AA_Generator = Gate_AA_Generator()
+        self.AA_Generator = _Gate_AA_Generator()
 
     def draw(self, verbose):
         """実際に回路を描き始め出力までするメソッド"""
@@ -390,10 +390,10 @@ class TextCircuitDrawer:
                     + 'This gate does not have "target_qubit_list"'
                 )
             else:
-                self.draw_gate(gate, index=i, verbose=verbose)
+                self._draw_gate(gate, index=i, verbose=verbose)
 
         # ゲートを描き終えたら, ゲート同士や接続が切れているワイヤーを繋ぐ
-        self.connect_wire()
+        self._connect_wire()
 
         # 描き込まれたゲートを実際に出力する
         # ただし、回路の長さに応じて表示方法を変える
@@ -428,7 +428,7 @@ class TextCircuitDrawer:
                 print("".join(line[plot_range:]))
             print(delimiter)
 
-    def draw_gate(self, gate, index, verbose):
+    def _draw_gate(self, gate, index, verbose):
         """引数にgateをとり, 「ゲートの文字化」, 「適切な位置に描き込み」 の順で実際に描き込むメソッド"""
         # 単一のゲートの文字列表示を作成
         gate_string = self.AA_Generator.generate(gate, index, verbose)
@@ -445,11 +445,11 @@ class TextCircuitDrawer:
 
         # circuit_pictureに描き込むに必要な左上隅のインデックスを取得
         # 引数は使用するqubitのリストの最小値と最大値
-        upper_left_corner = self.place_check(min(tc_list), max(tc_list))
+        upper_left_corner = self._place_check(min(tc_list), max(tc_list))
         # 作成した文字列表示をircuit_pictureに描き込む
-        self.write_gate_on_picture(gate_string, upper_left_corner)
+        self._write_gate_on_picture(gate_string, upper_left_corner)
 
-    def place_check(self, min_v, max_v):
+    def _place_check(self, min_v, max_v):
         """適切なゲートの描き込み位置を計算するメソッド"""
         # 回路の浅い所から探索
         for i in range(self.depth):
@@ -468,7 +468,7 @@ class TextCircuitDrawer:
             # 一番深いとこまで探索したのに, 描き込める場所が見つからなかったとき
             elif i + 1 == self.depth:
                 # gate_mapとcircuit_pictureを拡張する
-                self.expand_map_and_picture()
+                self._expand_map_and_picture()
                 # 追加した場所にゲートを割り当てていく
                 self.gate_map[min_v : max_v + 1, : i + 2] = False
                 col = i + 1
@@ -479,7 +479,7 @@ class TextCircuitDrawer:
 
         return row, col
 
-    def expand_map_and_picture(self):
+    def _expand_map_and_picture(self):
         """回路図が重なって表示されないように深さを増やすメソッド"""
         # self.gate_mapの拡張
         additional_gate_map = np.full(self.qubit_num, True).reshape(self.qubit_num, 1)
@@ -501,7 +501,7 @@ class TextCircuitDrawer:
         # 深さが+1になったのでcircuit_pictureの横サイズも増やす
         self.horizontal_size += 8
 
-    def write_gate_on_picture(self, gate_string, ulc):
+    def _write_gate_on_picture(self, gate_string, ulc):
         """作成したゲート文字列を実際に描き込むメソッド"""
         row, col = ulc
         width = 7
@@ -509,7 +509,7 @@ class TextCircuitDrawer:
             self.circuit_picture[row][col : col + width] = list(line)
             row += 1
 
-    def connect_wire(self):
+    def _connect_wire(self):
         """量子回路の横向きのワイヤーの接続を補うメソッド"""
         # 回路のqubit数回ループ
         for i in range(self.qubit_num):
