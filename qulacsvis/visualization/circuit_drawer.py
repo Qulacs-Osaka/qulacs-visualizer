@@ -22,11 +22,56 @@ def circuit_drawer(
 
     Parameters
     ----------
+    circuit : qulacs.QuantumCircuit
+        The quantum circuit to be drawn.
     output_method : Optional[str]
         Set the output method for the drawn circuit.
         If None, the output method is set to 'text'.
     ppi : int
         The pixels per inch of the output image.
+    verbose : bool
+        If True, a number will be added to the gate.
+        Gates are numbered in the order in which they are added to the circuit.
+
+    Returns
+    -------
+    Union[str, Image.Image, None]
+        The output of the circuit drawer.
+        If output_method is 'text', the output is a None. Circuit is output to stdout.
+        If output_method is 'latex', the output is an Image.Image object.
+        If output_method is 'latex_source', the output is a string.
+
+    Raises
+    ------
+    ValueError
+        If the output_method is not 'text', 'latex', or 'latex_source'.
+
+    Examples
+    --------
+    >>> from qulacs import QuantumCircuit
+    >>> from qulacsvis.visualization import circuit_drawer
+    >>> circuit = QuantumCircuit(3)
+    >>> circuit.add_X_gate(0)
+    >>> circuit.add_Y_gate(1)
+    >>> circuit.add_Z_gate(2)
+    >>> circuit.add_dense_matrix_gate(
+    >>>     [0, 1], [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]
+    >>> )
+    >>> circuit.add_CNOT_gate(2, 0)
+    >>> circuit.add_X_gate(2)
+    >>> circuit_drawer(circuit, output_method='text')
+       ___     ___     ___
+      | X |   |DeM|   |CX |
+    --|   |---|   |---|   |-----x----
+      |___|   |   |   |___|     |
+       ___    |   |     |       |
+      | Y |   |   |     |       |
+    --|   |---|   |-----|-------x----
+      |___|   |___|     |
+       ___              |      ___
+      | Z |             |     | X |
+    --|   |-------------●-----|   |--
+      |___|                   |___|
     """
 
     if output_method is None:
