@@ -3,13 +3,14 @@ import tempfile
 from typing import Optional, Union
 
 from PIL import Image
+from qulacs import QuantumCircuit
 from qulacsvis.utils.latex import _LatexCompiler, _PDFtoImage
 
 from .latex import _generate_latex_source
 
 
 def circuit_drawer(
-    circuit,
+    circuit: QuantumCircuit,
     output_method: Optional[str] = None,
     *,
     ppi: int = 150,
