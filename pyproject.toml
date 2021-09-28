@@ -10,10 +10,11 @@ authors = ["Qulacs-Osaka <you@example.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.7,<3.11"
 Qulacs = "^0.3.0"
 temp = "^2020.7.2"
 Pillow = "^8.3.2"
+numpy = "^1.21.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
