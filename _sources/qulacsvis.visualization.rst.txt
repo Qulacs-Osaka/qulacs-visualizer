@@ -9,6 +9,7 @@ Submodules
 
    qulacsvis.visualization.circuit_drawer
    qulacsvis.visualization.latex
+   qulacsvis.visualization.text
 
 Module contents
 ---------------

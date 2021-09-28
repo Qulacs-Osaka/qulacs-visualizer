@@ -160,6 +160,7 @@
 <span class="kn">from</span> <span class="nn">qulacsvis.utils.latex</span> <span class="kn">import</span> <span class="n">_LatexCompiler</span><span class="p">,</span> <span class="n">_PDFtoImage</span>
 
 <span class="kn">from</span> <span class="nn">.latex</span> <span class="kn">import</span> <span class="n">_generate_latex_source</span>
+<span class="kn">from</span> <span class="nn">.text</span> <span class="kn">import</span> <span class="n">TextCircuitDrawer</span>
 
 
 <div class="viewcode-block" id="circuit_drawer"><a class="viewcode-back" href="../../../qulacsvis.visualization.circuit_drawer.html#qulacsvis.visualization.circuit_drawer.circuit_drawer">[docs]</a><span class="k">def</span> <span class="nf">circuit_drawer</span><span class="p">(</span>
@@ -167,24 +168,75 @@
     <span class="n">output_method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">ppi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">]:</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">dot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;large&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draws a circuit diagram of a circuit.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    circuit : qulacs.QuantumCircuit</span>
+<span class="sd">        The quantum circuit to be drawn.</span>
 <span class="sd">    output_method : Optional[str]</span>
 <span class="sd">        Set the output method for the drawn circuit.</span>
 <span class="sd">        If None, the output method is set to &#39;text&#39;.</span>
 <span class="sd">    ppi : int</span>
 <span class="sd">        The pixels per inch of the output image.</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        If True, a number will be added to the gate.</span>
+<span class="sd">        Gates are numbered in the order in which they are added to the circuit.</span>
+<span class="sd">    dot: str</span>
+<span class="sd">        Dot style to mean control qubit(default=&quot;large&quot;)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[str, Image.Image, None]</span>
+<span class="sd">        The output of the circuit drawer.</span>
+<span class="sd">        If output_method is &#39;text&#39;, the output is a None. Circuit is output to stdout.</span>
+<span class="sd">        If output_method is &#39;latex&#39;, the output is an Image.Image object.</span>
+<span class="sd">        If output_method is &#39;latex_source&#39;, the output is a string.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the output_method is not &#39;text&#39;, &#39;latex&#39;, or &#39;latex_source&#39;.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from qulacs import QuantumCircuit</span>
+<span class="sd">    &gt;&gt;&gt; from qulacsvis.visualization import circuit_drawer</span>
+<span class="sd">    &gt;&gt;&gt; circuit = QuantumCircuit(3)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_X_gate(0)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_Y_gate(1)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_Z_gate(2)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_dense_matrix_gate(</span>
+<span class="sd">    &gt;&gt;&gt;     [0, 1], [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_CNOT_gate(2, 0)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_X_gate(2)</span>
+<span class="sd">    &gt;&gt;&gt; circuit_drawer(circuit, output_method=&#39;text&#39;)</span>
+<span class="sd">       ___     ___     ___</span>
+<span class="sd">      | X |   |DeM|   |CX |</span>
+<span class="sd">    --|   |---|   |---|   |-----x----</span>
+<span class="sd">      |___|   |   |   |___|     |</span>
+<span class="sd">       ___    |   |     |       |</span>
+<span class="sd">      | Y |   |   |     |       |</span>
+<span class="sd">    --|   |---|   |-----|-------x----</span>
+<span class="sd">      |___|   |___|     |</span>
+<span class="sd">       ___              |      ___</span>
+<span class="sd">      | Z |             |     | X |</span>
+<span class="sd">    --|   |-------------●-----|   |--</span>
+<span class="sd">      |___|                   |___|</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">output_method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">output_method</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span>
 
     <span class="k">if</span> <span class="n">output_method</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Text output_method is not implemented yet.&quot;</span><span class="p">)</span>
+        <span class="n">drawer</span> <span class="o">=</span> <span class="n">TextCircuitDrawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">dot</span><span class="o">=</span><span class="n">dot</span><span class="p">)</span>
+        <span class="n">drawer</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">elif</span> <span class="n">output_method</span> <span class="o">==</span> <span class="s2">&quot;latex&quot;</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
