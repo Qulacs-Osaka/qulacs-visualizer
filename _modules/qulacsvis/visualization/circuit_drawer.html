@@ -156,10 +156,14 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
 <span class="kn">from</span> <span class="nn">qulacsvis.utils.latex</span> <span class="kn">import</span> <span class="n">_LatexCompiler</span><span class="p">,</span> <span class="n">_PDFtoImage</span>
+
+<span class="kn">from</span> <span class="nn">.latex</span> <span class="kn">import</span> <span class="n">_generate_latex_source</span>
 
 
 <div class="viewcode-block" id="circuit_drawer"><a class="viewcode-back" href="../../../qulacsvis.visualization.circuit_drawer.html#qulacsvis.visualization.circuit_drawer.circuit_drawer">[docs]</a><span class="k">def</span> <span class="nf">circuit_drawer</span><span class="p">(</span>
+    <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">,</span>
     <span class="n">output_method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">ppi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">,</span>
@@ -184,7 +188,7 @@
 
     <span class="k">elif</span> <span class="n">output_method</span> <span class="o">==</span> <span class="s2">&quot;latex&quot;</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
-            <span class="n">latex_source</span> <span class="o">=</span> <span class="n">_generate_latex_source</span><span class="p">()</span>
+            <span class="n">latex_source</span> <span class="o">=</span> <span class="n">_generate_latex_source</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
             <span class="n">latex</span> <span class="o">=</span> <span class="n">_LatexCompiler</span><span class="p">()</span>
             <span class="n">pdftoimage</span> <span class="o">=</span> <span class="n">_PDFtoImage</span><span class="p">()</span>
 
@@ -195,45 +199,12 @@
             <span class="k">return</span> <span class="n">image</span>
 
     <span class="k">elif</span> <span class="n">output_method</span> <span class="o">==</span> <span class="s2">&quot;latex_source&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_generate_latex_source</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">_generate_latex_source</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Invalid output_method. Valid options are: &#39;text&#39;, &#39;latex&#39;, &#39;latex_source&#39;.&quot;</span>
         <span class="p">)</span></div>
-
-
-<span class="k">def</span> <span class="nf">_generate_latex_source</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generates a latex source code of a circuit.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    str</span>
-<span class="sd">        The latex source code of the circuit.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">generated_latex_code</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">\documentclass[12pt,border={25pt 5pt 5pt 5pt}]</span><span class="si">{standalone}</span><span class="s2"></span>
-
-<span class="s2">\usepackage[T1]</span><span class="si">{fontenc}</span><span class="s2"></span>
-<span class="s2">\usepackage</span><span class="si">{lmodern}</span><span class="s2"></span>
-<span class="s2">\usepackage[cmex10]</span><span class="si">{amsmath}</span><span class="s2"></span>
-
-<span class="s2">\usepackage</span><span class="si">{qcircuit}</span><span class="s2"></span>
-<span class="s2">\usepackage</span><span class="si">{braket}</span><span class="s2"></span>
-
-<span class="s2">\begin</span><span class="si">{document}</span><span class="s2"></span>
-
-<span class="s2">\Qcircuit @C=1em @R=.7em {</span>
-<span class="s2">  \lstick{\ket</span><span class="si">{0}</span><span class="s2">} &amp; \gate</span><span class="si">{H}</span><span class="s2"> &amp; \ctrl</span><span class="si">{1}</span><span class="s2"> &amp; \qw          &amp; \qw      &amp; \meter \\</span>
-<span class="s2">  \lstick{\ket</span><span class="si">{0}</span><span class="s2">} &amp; \qw      &amp; \targ    &amp; \ctrl</span><span class="si">{1}</span><span class="s2">     &amp; \qw      &amp; \meter \\</span>
-<span class="s2">  \lstick{\ket</span><span class="si">{0}</span><span class="s2">} &amp; \qw      &amp; \gate</span><span class="si">{H}</span><span class="s2"> &amp; \control \qw &amp; \gate</span><span class="si">{H}</span><span class="s2"> &amp; \meter</span>
-<span class="s2">}</span>
-
-<span class="s2">\end</span><span class="si">{document}</span><span class="s2"></span>
-<span class="s2">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">generated_latex_code</span>
 </pre></div>
 
            </div>
