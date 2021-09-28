@@ -1,6 +1,6 @@
 from qulacs import QuantumCircuit
 
-def _generate_latex_source(circuit):
+def _generate_latex_source(circuit) -> str:
     gate_dict = {"I" : r"\gate{I}",
                 "X" : r"\gate{X}",
                 "Y" : r"\gate{Y}",
@@ -56,8 +56,8 @@ def _generate_latex_source(circuit):
         
         if len(control_index_list)>0:
             for qubit in range(qubit_count):
-                gate_latex[i].append(gate_latex_part[i])
-                gate_latex_part[i] = r"\qw"
+                gate_latex[qubit].append(gate_latex_part[qubit])
+                gate_latex_part[qubit] = r"\qw"
 
             for target_index in target_index_list:
                 gate_latex_part[target_index] = name_latex
@@ -67,8 +67,8 @@ def _generate_latex_source(circuit):
                 gate_latex_part[control_index] = r"\ctrl{"+str(target_index-control_index)+r"}"
 
             for qubit in range(qubit_count):
-                gate_latex[i].append(gate_latex_part[i])
-                gate_latex_part[i] = r"\qw"
+                gate_latex[qubit].append(gate_latex_part[qubit])
+                gate_latex_part[qubit] = r"\qw"
 
             continue
 
@@ -79,15 +79,15 @@ def _generate_latex_source(circuit):
         
         if conflict:
             for qubit in range(qubit_count):
-                gate_latex[i].append(gate_latex_part[i])
-                gate_latex_part[i] = r"\qw"
+                gate_latex[qubit].append(gate_latex_part[qubit])
+                gate_latex_part[qubit] = r"\qw"
         
         for target_index in target_index_list:
             gate_latex_part[target_index] = name_latex
     
     for qubit in range(qubit_count):
-        gate_latex[i].append(gate_latex_part[i])
-        gate_latex[i].append(r"\qw")
+        gate_latex[qubit].append(gate_latex_part[qubit])
+        gate_latex[qubit].append(r"\qw")
     
     circuit_latex_part = [" & ".join(gate_latex[i]) for i in range(qubit_count)]
     circuit_latex = (r" \\"+"\n").join(circuit_latex_part)
