@@ -16,7 +16,7 @@ def circuit_drawer(
     *,
     ppi: int = 150,
     verbose: bool = False,
-    dot: str = "large"
+    dot: str = "large",
 ) -> Union[str, Image.Image, None]:
     """
     Draws a circuit diagram of a circuit.
@@ -81,7 +81,7 @@ def circuit_drawer(
         output_method = "text"
 
     if output_method == "text":
-        drawer = TextCircuitDrawer(circuit, dot=dot)  # type: ignore
+        drawer = TextCircuitDrawer(circuit, dot=dot)
         drawer.draw(verbose=verbose)  # type: ignore
         return None
 
