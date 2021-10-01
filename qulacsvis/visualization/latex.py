@@ -70,17 +70,17 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
 
             for target_index in target_index_list:
                 name_latex = ""
-                if len(target_index_list)==1:
+                if len(target_index_list) == 1:
                     if name_latex_part == r"\targ":
                         name_latex = name_latex_part
                     else:
-                        name_latex = r"\gate"+name_latex_part
+                        name_latex = r"\gate" + name_latex_part
                 else:
                     if target_index == target_index_list[0]:
                         name_latex = r"\multigate{" + str(len(target_index_list)) + r"}"
                         name_latex += name_latex_part
                     else:
-                        name_latex = r"\ghost"+name_latex_part
+                        name_latex = r"\ghost" + name_latex_part
                 gate_latex_part[target_index] = name_latex
 
             target_index = target_index_list[0]
@@ -107,17 +107,17 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
 
         for target_index in target_index_list:
             name_latex = ""
-            if len(target_index_list)==1:
+            if len(target_index_list) == 1:
                 if name_latex_part == r"\targ":
                     name_latex = name_latex_part
                 else:
-                    name_latex = r"\gate"+name_latex_part
+                    name_latex = r"\gate" + name_latex_part
             else:
                 if target_index == target_index_list[0]:
-                    name_latex = r"\multigate{" + str(len(target_index_list)-1) + r"}"
+                    name_latex = r"\multigate{" + str(len(target_index_list) - 1) + r"}"
                     name_latex += name_latex_part
                 else:
-                    name_latex = r"\ghost"+name_latex_part
+                    name_latex = r"\ghost" + name_latex_part
             gate_latex_part[target_index] = name_latex
 
     for qubit in range(qubit_count):
