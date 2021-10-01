@@ -3,42 +3,42 @@ from qulacs import QuantumCircuit
 
 def _generate_latex_source(circuit: QuantumCircuit) -> str:
     gate_dict = {
-        "I": r"\gate{I}",
-        "X": r"\gate{X}",
-        "Y": r"\gate{Y}",
-        "Z": r"\gate{Z}",
-        "H": r"\gate{H}",
-        "S": r"\gate{S}",
-        "Sdag": r"\gate{S^\dag}",
-        "T": r"\gate{T}",
-        "Tdag": r"\gate{T^\dag}",
-        "sqrtX": r"\gate{\sqrt{X}}",
-        "sqrtXdag": r"\gate{\sqrt{X^\dag}}",
-        "sqrtY": r"\gate{\sqrt{Y}}",
-        "sqrtYdag": r"\gate{\sqrt{Y^\dag}}",
-        "Projection-0": r"\gate{P0}",
-        "Projection-1": r"\gate{P1}",
-        "U1": r"\gate{U1}",
-        "U2": r"\gate{U2}",
-        "U3": r"\gate{U3}",
-        "X-rotation": r"\gate{RX}",
-        "Y-rotation": r"\gate{RY}",
-        "Z-rotation": r"\gate{RZ}",
-        "Pauli": r"\gate{Pauli}",
-        "Pauli-rotation": r"\gate{PR}",
-        "CZ": r"\gate{CZ}",
+        "I": r"{I}",
+        "X": r"{X}",
+        "Y": r"{Y}",
+        "Z": r"{Z}",
+        "H": r"{H}",
+        "S": r"{S}",
+        "Sdag": r"{S^\dag}",
+        "T": r"{T}",
+        "Tdag": r"{T^\dag}",
+        "sqrtX": r"{\sqrt{X}}",
+        "sqrtXdag": r"{\sqrt{X^\dag}}",
+        "sqrtY": r"{\sqrt{Y}}",
+        "sqrtYdag": r"{\sqrt{Y^\dag}}",
+        "Projection-0": r"{P0}",
+        "Projection-1": r"{P1}",
+        "U1": r"{U1}",
+        "U2": r"{U2}",
+        "U3": r"{U3}",
+        "X-rotation": r"{RX}",
+        "Y-rotation": r"{RY}",
+        "Z-rotation": r"{RZ}",
+        "Pauli": r"{Pauli}",
+        "Pauli-rotation": r"{PR}",
+        "CZ": r"{CZ}",
         "CNOT": r"\targ",
-        "SWAP": r"\gate{SWAP}",
-        "Reflection": r"\gate{Ref}",
-        "ReversibleBoolean": r"\gate{ReB}",
-        "DenseMatrix": r"\gate{DeM}",
-        "DinagonalMatrix": r"\gate{DiM}",
-        "SparseMatrix": r"\gate{SpM}",
-        "Generic gate": r"\gate{GeG}",
-        "ParametricRX": r"\gate{pRX}",
-        "ParametricRY": r"\gate{pRY}",
-        "ParametricRZ": r"\gate{pRZ}",
-        "ParametricPauliRotation": r"\gate{pPR}",
+        "SWAP": r"{SWAP}",
+        "Reflection": r"{Ref}",
+        "ReversibleBoolean": r"{ReB}",
+        "DenseMatrix": r"{DeM}",
+        "DinagonalMatrix": r"{DiM}",
+        "SparseMatrix": r"{SpM}",
+        "Generic gate": r"{GeG}",
+        "ParametricRX": r"{pRX}",
+        "ParametricRY": r"{pRY}",
+        "ParametricRZ": r"{pRZ}",
+        "ParametricPauliRotation": r"{pPR}",
     }
     qubit_count = circuit.get_qubit_count()
 
@@ -61,7 +61,7 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
             continue
         target_index_list = gate.get_target_index_list()
         control_index_list = gate.get_control_index_list()
-        name_latex = gate_dict[gate.get_name()]
+        name_latex_part = gate_dict[gate.get_name()]
 
         if len(control_index_list) > 0:
             for qubit in range(qubit_count):
@@ -69,6 +69,18 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
                 gate_latex_part[qubit] = r"\qw"
 
             for target_index in target_index_list:
+                name_latex = ""
+                if len(target_index_list)==1:
+                    if name_latex_part == r"\targ":
+                        name_latex = name_latex_part
+                    else:
+                        name_latex = r"\gate"+name_latex_part
+                else:
+                    if target_index == target_index_list[0]:
+                        name_latex = r"\multigate{" + str(len(target_index_list)) + r"}"
+                        name_latex += name_latex_part
+                    else:
+                        name_latex = r"\ghost"+name_latex_part
                 gate_latex_part[target_index] = name_latex
 
             target_index = target_index_list[0]
@@ -94,6 +106,18 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
                 gate_latex_part[qubit] = r"\qw"
 
         for target_index in target_index_list:
+            name_latex = ""
+            if len(target_index_list)==1:
+                if name_latex_part == r"\targ":
+                    name_latex = name_latex_part
+                else:
+                    name_latex = r"\gate"+name_latex_part
+            else:
+                if target_index == target_index_list[0]:
+                    name_latex = r"\multigate{" + str(len(target_index_list)-1) + r"}"
+                    name_latex += name_latex_part
+                else:
+                    name_latex = r"\ghost"+name_latex_part
             gate_latex_part[target_index] = name_latex
 
     for qubit in range(qubit_count):
