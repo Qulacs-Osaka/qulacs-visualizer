@@ -43,7 +43,10 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
     qubit_count = circuit.get_qubit_count()
 
     gate_latex = [
-        [r"\nghost{ {q}_{" + str(i) + r"} : }", r"\lstick{ {q}_{" + str(i) + r"} :  }"]
+        [
+            r"        \nghost{ {q}_{" + str(i) + r"} : }",
+            r"\lstick{ {q}_{" + str(i) + r"} :  }",
+        ]
         for i in range(qubit_count)
     ]
     gate_latex_part = [r"\qw" for _ in range(qubit_count)]
@@ -127,18 +130,18 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
     circuit_latex_part = [" & ".join(gate_latex[i]) for i in range(qubit_count)]
     circuit_latex = (r" \\" + "\n").join(circuit_latex_part)
 
-    res = r"""\documentclass[border=2px]{standalone}
-    \usepackage[braket, qm]{qcircuit}
-    \usepackage{graphicx}
+    res = r"""
+\documentclass[border=2px]{standalone}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
 
-    \begin{document}
+\begin{document}
     \scalebox{1.0}{
     \Qcircuit @C=1.0em @R=0.2em @!R { \\
-    """
+"""
     res += circuit_latex
-    res += r"""
-    \\ }}
-    \end{document}
-    """
+    res += r""" \\
+    }}
+\end{document}"""
 
     return res
