@@ -15,6 +15,7 @@ Qulacs = "^0.3.0"
 temp = "^2020.7.2"
 Pillow = "^8.3.2"
 numpy = "^1.21.2"
+matplotlib = "^3.4.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
