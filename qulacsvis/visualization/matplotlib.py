@@ -22,6 +22,12 @@ GateData = TypedDict(
 )
 CircuitData = List[List[GateData]]
 
+PORDER_GATE = 5
+PORDER_LINE = 3
+PORDER_REGLINE = 2
+PORDER_GRAY = 3
+PORDER_TEXT = 6
+
 
 class MPLCircuitlDrawer:
     def __init__(self, circuit: QuantumCircuit):
@@ -45,7 +51,7 @@ class MPLCircuitlDrawer:
         for i, line in enumerate(self._circuit_data):
             for j, gate in enumerate(line):
                 if gate["raw_text"] == "CNOT":
-                    self._gate(gate, i, j)
+                    self._cnot(gate, i, j)
                 elif gate["raw_text"] == "ghost":
                     continue
                 else:
@@ -65,7 +71,7 @@ class MPLCircuitlDrawer:
             facecolor="b",  # 塗りつぶし色
             edgecolor="g",  # 辺の色
             linewidth=3,
-            zorder=0,  # 奥行き　線の上にゲートを配置するとか
+            zorder=PORDER_GATE,
         )
         self._ax.add_patch(box)
 
@@ -78,8 +84,32 @@ class MPLCircuitlDrawer:
             fontsize=13,
             color="r",
             clip_on=True,  # グラフ内でクリッピングするかしないか
-            zorder=0,
+            zorder=PORDER_TEXT,
         )
+
+    def _cnot(self, gate: GateData, col: int, row: int) -> None:
+        offset = 0.5  # gateとgateのスペース
+        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + offset), row * (
+            GATE_DEFAULT_WIDTH + offset
+        )
+
+        if gate["control_bit"] is not None:
+            to_ypos = gate["control_bit"] * (GATE_DEFAULT_HEIGHT + offset)
+        else:
+            raise ValueError("control_bit is None")
+
+        self._gate(gate, col, row)
+        self._ax.plot(
+            [xpos, xpos],
+            [ypos, to_ypos],
+            color="r",
+            linewidth=3,
+            zorder=PORDER_LINE,
+        )
+        ctl = patches.Circle(
+            xy=(xpos, to_ypos), radius=0.2, fc="g", ec="r", zorder=PORDER_GATE
+        )
+        self._ax.add_patch(ctl)
 
 
 def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
@@ -169,6 +199,14 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "control_bit": 3,
                 "size": 1,
             },
+            {
+                "text": r"$ghost$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "ghost",
+                "control_bit": None,
+                "size": 1,
+            },
         ],
         [
             {
@@ -177,6 +215,14 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "ghost",
                 "control_bit": None,
+                "size": 1,
+            },
+            {
+                "text": r"$CNOT$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "CNOT",
+                "control_bit": 2,
                 "size": 1,
             },
         ],
