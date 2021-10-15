@@ -2,11 +2,13 @@ import os
 import tempfile
 from typing import Optional, Union
 
+import matplotlib.pyplot as plt
 from PIL import Image
 from qulacs import QuantumCircuit
 from qulacsvis.utils.latex import _LatexCompiler, _PDFtoImage
 
 from .latex import _generate_latex_source
+from .matplotlib import MPLCircuitlDrawer
 from .text import TextCircuitDrawer
 
 
@@ -43,11 +45,13 @@ def circuit_drawer(
         If output_method is 'text', the output is a None. Circuit is output to stdout.
         If output_method is 'latex', the output is an Image.Image object.
         If output_method is 'latex_source', the output is a string.
+        If output_method is 'mpl', the output is a None.
+        Circuit is drawn to a matplotlib figure.
 
     Raises
     ------
     ValueError
-        If the output_method is not 'text', 'latex', or 'latex_source'.
+        If output_method is not 'text', 'latex', 'latex_source', or 'mpl'.
 
     Examples
     --------
@@ -81,8 +85,8 @@ def circuit_drawer(
         output_method = "text"
 
     if output_method == "text":
-        drawer = TextCircuitDrawer(circuit, dot=dot)
-        drawer.draw(verbose=verbose)  # type: ignore
+        text_drawer = TextCircuitDrawer(circuit, dot=dot)
+        text_drawer.draw(verbose=verbose)  # type: ignore
         return None
 
     elif output_method == "latex":
@@ -99,6 +103,12 @@ def circuit_drawer(
 
     elif output_method == "latex_source":
         return _generate_latex_source(circuit)
+
+    elif output_method == "mpl":
+        mpl_drawer = MPLCircuitlDrawer(circuit)
+        mpl_drawer.draw()  # type: ignore
+        plt.show()
+        return None
 
     else:
         raise ValueError(

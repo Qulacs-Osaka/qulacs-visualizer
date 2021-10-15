@@ -1,0 +1,184 @@
+from typing import List, Optional
+
+from matplotlib import patches
+from matplotlib import pyplot as plt
+from qulacs import QuantumCircuit
+from typing_extensions import TypedDict
+
+GATE_DEFAULT_WIDTH = 1
+GATE_DEFAULT_HEIGHT = 1
+
+
+GateData = TypedDict(
+    "GateData",
+    {
+        "text": str,
+        "width": float,
+        "height": float,
+        "raw_text": str,
+        "control_bit": Optional[int],
+        "size": int,
+    },
+)
+CircuitData = List[List[GateData]]
+
+
+class MPLCircuitlDrawer:
+    def __init__(self, circuit: QuantumCircuit):
+        self._figure = plt.figure()
+        self._ax = self._figure.add_subplot(111)
+        self._ax.axis("on")
+        self._ax.grid()
+        self._ax.set_aspect("equal")
+        self._figure.set_size_inches(18.5, 10.5)
+
+        self._circuit = circuit
+        self._circuit_data = parse_circuit(self._circuit)
+
+    def draw(self):  # type: ignore
+        self._ax.set_xlim(-1, 15)
+        self._ax.set_ylim(15, -1)  # (max, min)にすると吊り下げになる
+
+        # for col in range(10):
+        #     for row in range(10):
+        #         self._gate(col,row,0)
+        for i, line in enumerate(self._circuit_data):
+            for j, gate in enumerate(line):
+                if gate["raw_text"] == "CNOT":
+                    self._gate(gate, i, j)
+                elif gate["raw_text"] == "ghost":
+                    continue
+                else:
+                    self._gate(gate, i, j)
+
+        return self._figure
+
+    def _gate(self, gate: GateData, col: int, row: int) -> None:
+        offset = 0.5  # gateとgateのスペース
+        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + offset), row * (
+            GATE_DEFAULT_WIDTH + offset
+        )
+        box = patches.Rectangle(
+            xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * gate["height"]),
+            width=gate["width"],
+            height=gate["height"],
+            facecolor="b",  # 塗りつぶし色
+            edgecolor="g",  # 辺の色
+            linewidth=3,
+            zorder=0,  # 奥行き　線の上にゲートを配置するとか
+        )
+        self._ax.add_patch(box)
+
+        self._ax.text(
+            xpos,
+            ypos,
+            gate["text"],
+            horizontalalignment="center",
+            verticalalignment="center",
+            fontsize=13,
+            color="r",
+            clip_on=True,  # グラフ内でクリッピングするかしないか
+            zorder=0,
+        )
+
+
+def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
+    arr: CircuitData = [
+        [
+            {
+                "text": r"$I$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "I",
+                "control_bit": None,
+                "size": 1,
+            },
+            {
+                "text": r"$X$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "X",
+                "control_bit": None,
+                "size": 1,
+            },
+            {
+                "text": r"$Y$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "Y",
+                "control_bit": None,
+                "size": 1,
+            },
+            {
+                "text": r"$Z$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "Z",
+                "control_bit": None,
+                "size": 1,
+            },
+            {
+                "text": r"$H$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "H",
+                "control_bit": None,
+                "size": 1,
+            },
+            {
+                "text": r"$S$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "S",
+                "control_bit": None,
+                "size": 1,
+            },
+        ],
+        [
+            {
+                "text": r"$S^\dagger$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "Sdag",
+                "control_bit": None,
+                "size": 1,
+            },
+            {
+                "text": r"$T$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "T",
+                "control_bit": None,
+                "size": 1,
+            },
+            {
+                "text": r"$T^\dagger$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "X",
+                "control_bit": None,
+                "size": 1,
+            },
+        ],
+        [
+            {
+                "text": r"$CNOT$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "CNOT",
+                "control_bit": 3,
+                "size": 1,
+            },
+        ],
+        [
+            {
+                "text": r"$ghost$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "ghost",
+                "control_bit": None,
+                "size": 1,
+            },
+        ],
+    ]
+    return arr
