@@ -153,7 +153,20 @@ class MPLCircuitlDrawer:
         else:
             raise ValueError("control_bit is None")
 
-        self._gate(gate, col, row)
+        ctl = patches.Circle(
+            xy=(xpos, ypos), radius=0.4, fc="w", ec="g", zorder=PORDER_GATE
+        )
+        self._ax.add_patch(ctl)
+        self._ax.plot(
+            xpos,
+            ypos,
+            marker="+",
+            color="r",
+            markersize=10,
+            markeredgewidth=3,
+            zorder=PORDER_TEXT,
+        )
+
         self._line(
             (xpos, ypos),
             (xpos, to_ypos),
