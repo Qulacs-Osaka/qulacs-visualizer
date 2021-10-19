@@ -1,9 +1,9 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from matplotlib import patches
 from matplotlib import pyplot as plt
 from qulacs import QuantumCircuit
-from typing_extensions import TypedDict
+from typing_extensions import Final, TypedDict
 
 GATE_DEFAULT_WIDTH = 1
 GATE_DEFAULT_HEIGHT = 1
@@ -22,11 +22,11 @@ GateData = TypedDict(
 )
 CircuitData = List[List[GateData]]
 
-PORDER_GATE = 5
-PORDER_LINE = 3
-PORDER_REGLINE = 2
-PORDER_GRAY = 3
-PORDER_TEXT = 6
+PORDER_GATE: Final[int] = 5
+PORDER_LINE: Final[int] = 3
+PORDER_REGLINE: Final[int] = 2
+PORDER_GRAY: Final[int] = 3
+PORDER_TEXT: Final[int] = 6
 
 
 class MPLCircuitlDrawer:
@@ -58,6 +58,26 @@ class MPLCircuitlDrawer:
                     self._gate(gate, i, j)
 
         return self._figure
+
+    def _line(
+        self,
+        from_xy: Tuple[float, float],
+        to_xy: Tuple[float, float],
+        lc: str = "k",
+        ls: str = "-",
+        lw: float = 3.0,
+        zorder: int = PORDER_LINE,
+    ) -> None:
+        from_x, from_y = from_xy
+        to_x, to_y = to_xy
+        self._ax.plot(
+            [from_x, to_x],
+            [from_y, to_y],
+            color=lc,
+            linestyle=ls,
+            linewidth=lw,
+            zorder=zorder,
+        )
 
     def _gate(self, gate: GateData, col: int, row: int) -> None:
         offset = 0.5  # gateとgateのスペース
