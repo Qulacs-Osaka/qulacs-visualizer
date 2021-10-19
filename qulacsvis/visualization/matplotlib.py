@@ -42,13 +42,27 @@ class MPLCircuitlDrawer:
         self._circuit_data = parse_circuit(self._circuit)
 
     def draw(self):  # type: ignore
-        self._ax.set_xlim(-1, 15)
+        self._ax.set_xlim(-2, 15)
         self._ax.set_ylim(15, -1)  # (max, min)にすると吊り下げになる
 
         # for col in range(10):
         #     for row in range(10):
         #         self._gate(col,row,0)
+        offset = 0.5  # gateとgateのスペース
+        max_line_length = (
+            max([len(line) for line in self._circuit_data])
+            * (GATE_DEFAULT_WIDTH + offset)
+            - offset
+        )
         for i, line in enumerate(self._circuit_data):
+            self._line(
+                (-1, i * (GATE_DEFAULT_HEIGHT + offset)),
+                (
+                    max_line_length,
+                    i * (GATE_DEFAULT_HEIGHT + offset),
+                ),
+            )
+
             for j, gate in enumerate(line):
                 if gate["raw_text"] == "CNOT":
                     self._cnot(gate, i, j)
@@ -119,12 +133,10 @@ class MPLCircuitlDrawer:
             raise ValueError("control_bit is None")
 
         self._gate(gate, col, row)
-        self._ax.plot(
-            [xpos, xpos],
-            [ypos, to_ypos],
-            color="r",
-            linewidth=3,
-            zorder=PORDER_LINE,
+        self._line(
+            (xpos, ypos),
+            (xpos, to_ypos),
+            lc="r",
         )
         ctl = patches.Circle(
             xy=(xpos, to_ypos), radius=0.2, fc="g", ec="r", zorder=PORDER_GATE
