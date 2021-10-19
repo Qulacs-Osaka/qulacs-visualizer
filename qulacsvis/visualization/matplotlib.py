@@ -93,6 +93,30 @@ class MPLCircuitlDrawer:
             zorder=zorder,
         )
 
+    def _text(
+        self,
+        x: float,
+        y: float,
+        text: str,
+        horizontalalignment: str = "center",
+        verticalalignment: str = "center",
+        fontsize: int = 13,
+        color: str = "r",
+        clip_on: bool = True,
+        zorder: int = PORDER_TEXT,
+    ) -> None:
+        self._ax.text(
+            x,
+            y,
+            text,
+            horizontalalignment=horizontalalignment,
+            verticalalignment=verticalalignment,
+            fontsize=fontsize,
+            color=color,
+            clip_on=clip_on,
+            zorder=zorder,
+        )
+
     def _gate(self, gate: GateData, col: int, row: int) -> None:
         offset = 0.5  # gateとgateのスペース
         ypos, xpos = col * (GATE_DEFAULT_HEIGHT + offset), row * (
@@ -109,17 +133,7 @@ class MPLCircuitlDrawer:
         )
         self._ax.add_patch(box)
 
-        self._ax.text(
-            xpos,
-            ypos,
-            gate["text"],
-            horizontalalignment="center",
-            verticalalignment="center",
-            fontsize=13,
-            color="r",
-            clip_on=True,  # グラフ内でクリッピングするかしないか
-            zorder=PORDER_TEXT,
-        )
+        self._text(xpos, ypos, gate["text"])
 
     def _cnot(self, gate: GateData, col: int, row: int) -> None:
         offset = 0.5  # gateとgateのスペース
