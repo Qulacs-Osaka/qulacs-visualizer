@@ -42,7 +42,7 @@ class MPLCircuitlDrawer:
         self._circuit_data = parse_circuit(self._circuit)
 
     def draw(self):  # type: ignore
-        self._ax.set_xlim(-2, 15)
+        self._ax.set_xlim(-3, 15)
         self._ax.set_ylim(15, -1)  # (max, min)にすると吊り下げになる
 
         # for col in range(10):
@@ -55,6 +55,13 @@ class MPLCircuitlDrawer:
             - offset
         )
         for i, line in enumerate(self._circuit_data):
+            self._text(
+                -2,
+                i * (GATE_DEFAULT_HEIGHT + offset),
+                "$q_{" + str(i) + "}$",
+                fontsize=20,
+            )
+
             self._line(
                 (-1, i * (GATE_DEFAULT_HEIGHT + offset)),
                 (
