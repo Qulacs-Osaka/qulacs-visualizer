@@ -55,18 +55,19 @@ class MPLCircuitlDrawer:
             - offset
         )
         for i, line in enumerate(self._circuit_data):
+            line_ypos = i * (GATE_DEFAULT_HEIGHT + offset)
             self._text(
                 -2,
-                i * (GATE_DEFAULT_HEIGHT + offset),
+                line_ypos,
                 "$q_{" + str(i) + "}$",
                 fontsize=20,
             )
 
             self._line(
-                (-1, i * (GATE_DEFAULT_HEIGHT + offset)),
+                (-1, line_ypos),
                 (
                     max_line_length,
-                    i * (GATE_DEFAULT_HEIGHT + offset),
+                    line_ypos,
                 ),
             )
 
