@@ -76,6 +76,8 @@ class MPLCircuitlDrawer:
                     self._cnot(gate, i, j)
                 elif gate["raw_text"] == "ghost":
                     continue
+                elif gate["size"] > 1:
+                    self._multi_gate(gate, i, j)
                 else:
                     self._gate(gate, i, j)
 
@@ -134,6 +136,31 @@ class MPLCircuitlDrawer:
             xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * gate["height"]),
             width=gate["width"],
             height=gate["height"],
+            facecolor="b",  # 塗りつぶし色
+            edgecolor="g",  # 辺の色
+            linewidth=3,
+            zorder=PORDER_GATE,
+        )
+        self._ax.add_patch(box)
+
+        self._text(xpos, ypos, gate["text"])
+
+    def _multi_gate(self, gate: GateData, col: int, row: int) -> None:
+        offset = 0.5
+        multi_gate_size = gate["size"]
+
+        ypos = (
+            col * (GATE_DEFAULT_HEIGHT + offset)
+            + (col + multi_gate_size - 1) * (GATE_DEFAULT_HEIGHT + offset)
+        ) * 0.5
+        xpos = row * (GATE_DEFAULT_WIDTH + offset)
+        multi_gate_height = gate["height"] * multi_gate_size + offset * (
+            multi_gate_size - 1
+        )
+        box = patches.Rectangle(
+            xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * multi_gate_height),
+            width=gate["width"],
+            height=multi_gate_height,
             facecolor="b",  # 塗りつぶし色
             edgecolor="g",  # 辺の色
             linewidth=3,
@@ -275,6 +302,14 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "ghost",
                 "control_bit": None,
                 "size": 1,
+            },
+            {
+                "text": r"$DeM$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "DenseMatrix",
+                "control_bit": None,
+                "size": 3,
             },
         ],
         [
