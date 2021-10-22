@@ -7,6 +7,7 @@ from typing_extensions import Final, TypedDict
 
 GATE_DEFAULT_WIDTH = 1
 GATE_DEFAULT_HEIGHT = 1
+GATE_MARGIN_RIGHT = 0.5
 
 
 GateData = TypedDict(
@@ -48,14 +49,14 @@ class MPLCircuitlDrawer:
         # for col in range(10):
         #     for row in range(10):
         #         self._gate(col,row,0)
-        offset = 0.5  # gateとgateのスペース
+        GATE_RIGHT_MARGIN = 0.5
         max_line_length = (
             max([len(line) for line in self._circuit_data])
-            * (GATE_DEFAULT_WIDTH + offset)
-            - offset
+            * (GATE_DEFAULT_WIDTH + GATE_RIGHT_MARGIN)
+            - GATE_RIGHT_MARGIN
         )
         for i, line in enumerate(self._circuit_data):
-            line_ypos = i * (GATE_DEFAULT_HEIGHT + offset)
+            line_ypos = i * (GATE_DEFAULT_HEIGHT + GATE_RIGHT_MARGIN)
             self._text(
                 -2,
                 line_ypos,
@@ -128,9 +129,8 @@ class MPLCircuitlDrawer:
         )
 
     def _gate(self, gate: GateData, col: int, row: int) -> None:
-        offset = 0.5  # gateとgateのスペース
-        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + offset), row * (
-            GATE_DEFAULT_WIDTH + offset
+        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
+            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
         )
         box = patches.Rectangle(
             xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * gate["height"]),
@@ -146,15 +146,14 @@ class MPLCircuitlDrawer:
         self._text(xpos, ypos, gate["text"])
 
     def _multi_gate(self, gate: GateData, col: int, row: int) -> None:
-        offset = 0.5
         multi_gate_size = gate["size"]
 
         ypos = (
-            col * (GATE_DEFAULT_HEIGHT + offset)
-            + (col + multi_gate_size - 1) * (GATE_DEFAULT_HEIGHT + offset)
+            col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+            + (col + multi_gate_size - 1) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
         ) * 0.5
-        xpos = row * (GATE_DEFAULT_WIDTH + offset)
-        multi_gate_height = gate["height"] * multi_gate_size + offset * (
+        xpos = row * (GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT)
+        multi_gate_height = gate["height"] * multi_gate_size + GATE_MARGIN_RIGHT * (
             multi_gate_size - 1
         )
         box = patches.Rectangle(
@@ -171,9 +170,8 @@ class MPLCircuitlDrawer:
         self._text(xpos, ypos, gate["text"])
 
     def _cnot(self, gate: GateData, col: int, row: int) -> None:
-        offset = 0.5  # gateとgateのスペース
-        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + offset), row * (
-            GATE_DEFAULT_WIDTH + offset
+        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
+            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
         )
 
         if gate["control_bit"] is None:
@@ -196,7 +194,7 @@ class MPLCircuitlDrawer:
         )
 
         for control_bit in gate["control_bit"]:
-            to_ypos = control_bit * (GATE_DEFAULT_HEIGHT + offset)
+            to_ypos = control_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
             self._line(
                 (xpos, ypos),
                 (xpos, to_ypos),
