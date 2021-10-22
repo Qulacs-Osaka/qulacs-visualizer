@@ -16,7 +16,7 @@ GateData = TypedDict(
         "width": float,
         "height": float,
         "raw_text": str,
-        "control_bit": Optional[int],
+        "control_bit": Optional[List[int]],
         "size": int,
     },
 )
@@ -148,15 +148,15 @@ class MPLCircuitlDrawer:
             GATE_DEFAULT_WIDTH + offset
         )
 
-        if gate["control_bit"] is not None:
-            to_ypos = gate["control_bit"] * (GATE_DEFAULT_HEIGHT + offset)
-        else:
+        if gate["control_bit"] is None:
             raise ValueError("control_bit is None")
+        elif gate["control_bit"] == []:
+            raise ValueError("control_bit is empty")
 
-        ctl = patches.Circle(
+        target = patches.Circle(
             xy=(xpos, ypos), radius=0.4, fc="w", ec="g", zorder=PORDER_GATE
         )
-        self._ax.add_patch(ctl)
+        self._ax.add_patch(target)
         self._ax.plot(
             xpos,
             ypos,
@@ -167,15 +167,17 @@ class MPLCircuitlDrawer:
             zorder=PORDER_TEXT,
         )
 
-        self._line(
-            (xpos, ypos),
-            (xpos, to_ypos),
-            lc="r",
-        )
-        ctl = patches.Circle(
-            xy=(xpos, to_ypos), radius=0.2, fc="g", ec="r", zorder=PORDER_GATE
-        )
-        self._ax.add_patch(ctl)
+        for control_bit in gate["control_bit"]:
+            to_ypos = control_bit * (GATE_DEFAULT_HEIGHT + offset)
+            self._line(
+                (xpos, ypos),
+                (xpos, to_ypos),
+                lc="r",
+            )
+            ctl = patches.Circle(
+                xy=(xpos, to_ypos), radius=0.2, fc="g", ec="r", zorder=PORDER_GATE
+            )
+            self._ax.add_patch(ctl)
 
 
 def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
@@ -262,7 +264,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "CNOT",
-                "control_bit": 3,
+                "control_bit": [3, 4],
                 "size": 1,
             },
             {
@@ -288,9 +290,10 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "CNOT",
-                "control_bit": 2,
+                "control_bit": [2, 4],
                 "size": 1,
             },
         ],
+        [],
     ]
     return arr
