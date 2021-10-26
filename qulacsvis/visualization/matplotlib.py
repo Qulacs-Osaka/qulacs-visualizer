@@ -17,6 +17,7 @@ GateData = TypedDict(
         "width": float,
         "height": float,
         "raw_text": str,
+        "target_bit": Optional[List[int]],
         "control_bit": Optional[List[int]],
         "size": int,
     },
@@ -75,6 +76,8 @@ class MPLCircuitlDrawer:
             for j, gate in enumerate(line):
                 if gate["raw_text"] == "CNOT":
                     self._cnot(gate, i, j)
+                elif gate["raw_text"] == "SWAP":
+                    self._swap(gate, i, j)
                 elif gate["raw_text"] == "ghost":
                     continue
                 elif gate["size"] > 1:
@@ -189,12 +192,14 @@ class MPLCircuitlDrawer:
         )
         self._ax.add_patch(target)
         # draw target qubit's "+" mark
+        # |
         self._line(
             (xpos, ypos - TARGET_QUBIT_RADIUS),
             (xpos, ypos + TARGET_QUBIT_RADIUS),
             lc="k",
             zorder=PORDER_TEXT,
         )
+        # -
         self._line(
             (xpos - TARGET_QUBIT_RADIUS, ypos),
             (xpos + TARGET_QUBIT_RADIUS, ypos),
@@ -214,6 +219,33 @@ class MPLCircuitlDrawer:
             )
             self._ax.add_patch(ctl)
 
+    def _swap(self, gate: GateData, col: int, row: int) -> None:
+        TARGET_QUBIT_MARK_SIZE: Final[float] = 0.1
+        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
+            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
+        )
+
+        for target_bit in gate["target_bit"]:
+            to_ypos = target_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+            self._line(
+                (xpos, ypos),
+                (xpos, to_ypos),
+                lc="r",
+            )
+            # draw target qubit's "x" mark
+            # \
+            self._line(
+                (xpos - TARGET_QUBIT_MARK_SIZE, to_ypos - TARGET_QUBIT_MARK_SIZE),
+                (xpos + TARGET_QUBIT_MARK_SIZE, to_ypos + TARGET_QUBIT_MARK_SIZE),
+                lc="k",
+            )
+            # /
+            self._line(
+                (xpos + TARGET_QUBIT_MARK_SIZE, to_ypos - TARGET_QUBIT_MARK_SIZE),
+                (xpos - TARGET_QUBIT_MARK_SIZE, to_ypos + TARGET_QUBIT_MARK_SIZE),
+                lc="k",
+            )
+
 
 def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
     arr: CircuitData = [
@@ -223,6 +255,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "I",
+                "target_bit": [0],
                 "control_bit": None,
                 "size": 1,
             },
@@ -231,6 +264,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "X",
+                "target_bit": [0],
                 "control_bit": None,
                 "size": 1,
             },
@@ -239,6 +273,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "Y",
+                "target_bit": [0],
                 "control_bit": None,
                 "size": 1,
             },
@@ -247,6 +282,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "Z",
+                "target_bit": [0],
                 "control_bit": None,
                 "size": 1,
             },
@@ -255,6 +291,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "H",
+                "target_bit": [0],
                 "control_bit": None,
                 "size": 1,
             },
@@ -263,6 +300,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "S",
+                "target_bit": [0],
                 "control_bit": None,
                 "size": 1,
             },
@@ -273,6 +311,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "Sdag",
+                "target_bit": [1],
                 "control_bit": None,
                 "size": 1,
             },
@@ -281,6 +320,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "T",
+                "target_bit": [1],
                 "control_bit": None,
                 "size": 1,
             },
@@ -288,7 +328,8 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "text": r"$T^\dagger$",
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "X",
+                "raw_text": "Tdag",
+                "target_bit": [1],
                 "control_bit": None,
                 "size": 1,
             },
@@ -299,6 +340,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "CNOT",
+                "target_bit": [2],
                 "control_bit": [3, 4],
                 "size": 1,
             },
@@ -307,6 +349,16 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "ghost",
+                "target_bit": None,
+                "control_bit": None,
+                "size": 1,
+            },
+            {
+                "text": r"$SWAP$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "SWAP",
+                "target_bit": [2, 3],
                 "control_bit": None,
                 "size": 1,
             },
@@ -315,6 +367,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "DenseMatrix",
+                "target_bit": [2, 3, 4],
                 "control_bit": None,
                 "size": 3,
             },
@@ -325,6 +378,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "ghost",
+                "target_bit": None,
                 "control_bit": None,
                 "size": 1,
             },
@@ -333,7 +387,17 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "CNOT",
+                "target_bit": None,
                 "control_bit": [2, 4],
+                "size": 1,
+            },
+            {
+                "text": r"$ghost$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "ghost",
+                "target_bit": None,
+                "control_bit": None,
                 "size": 1,
             },
         ],
