@@ -90,7 +90,7 @@ class MPLCircuitlDrawer:
         to_xy: Tuple[float, float],
         lc: str = "k",
         ls: str = "-",
-        lw: float = 3.0,
+        lw: float = 2.0,
         zorder: int = PORDER_LINE,
     ) -> None:
         from_x, from_y = from_xy
@@ -170,6 +170,7 @@ class MPLCircuitlDrawer:
         self._text(xpos, ypos, gate["text"])
 
     def _cnot(self, gate: GateData, col: int, row: int) -> None:
+        TARGET_QUBIT_RADIUS: Final[float] = 0.4
         ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
             GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
         )
@@ -180,16 +181,24 @@ class MPLCircuitlDrawer:
             raise ValueError("control_bit is empty")
 
         target = patches.Circle(
-            xy=(xpos, ypos), radius=0.4, fc="w", ec="g", zorder=PORDER_GATE
+            xy=(xpos, ypos),
+            radius=TARGET_QUBIT_RADIUS,
+            fc="w",
+            ec="k",
+            zorder=PORDER_GATE,
         )
         self._ax.add_patch(target)
-        self._ax.plot(
-            xpos,
-            ypos,
-            marker="+",
-            color="r",
-            markersize=10,
-            markeredgewidth=3,
+        # draw target qubit's "+" mark
+        self._line(
+            (xpos, ypos - TARGET_QUBIT_RADIUS),
+            (xpos, ypos + TARGET_QUBIT_RADIUS),
+            lc="k",
+            zorder=PORDER_TEXT,
+        )
+        self._line(
+            (xpos - TARGET_QUBIT_RADIUS, ypos),
+            (xpos + TARGET_QUBIT_RADIUS, ypos),
+            lc="k",
             zorder=PORDER_TEXT,
         )
 
