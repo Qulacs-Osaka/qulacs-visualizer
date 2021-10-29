@@ -19,7 +19,6 @@ GateData = TypedDict(
         "raw_text": str,
         "target_bit": Optional[List[int]],
         "control_bit": Optional[List[int]],
-        "size": int,
     },
 )
 CircuitData = List[List[GateData]]
@@ -74,13 +73,15 @@ class MPLCircuitlDrawer:
             )
 
             for j, gate in enumerate(line):
-                if gate["raw_text"] == "CNOT":
+                if gate["raw_text"] == "ghost":
+                    continue
+                elif gate["raw_text"] == "wire":
+                    continue
+                elif gate["raw_text"] == "CNOT":
                     self._cnot(gate, i, j)
                 elif gate["raw_text"] == "SWAP":
                     self._swap(gate, i, j)
-                elif gate["raw_text"] == "ghost":
-                    continue
-                elif gate["size"] > 1:
+                elif len(gate["target_bit"]) > 1:
                     self._multi_gate(gate, i, j)
                 else:
                     self._gate(gate, i, j)
@@ -149,28 +150,26 @@ class MPLCircuitlDrawer:
         self._text(xpos, ypos, gate["text"])
 
     def _multi_gate(self, gate: GateData, col: int, row: int) -> None:
-        multi_gate_size = gate["size"]
-
-        ypos = (
-            col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
-            + (col + multi_gate_size - 1) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
-        ) * 0.5
-        xpos = row * (GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT)
-        multi_gate_height = gate["height"] * multi_gate_size + GATE_MARGIN_RIGHT * (
-            multi_gate_size - 1
+        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
+            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
         )
-        box = patches.Rectangle(
-            xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * multi_gate_height),
-            width=gate["width"],
-            height=multi_gate_height,
-            facecolor="b",  # 塗りつぶし色
-            edgecolor="g",  # 辺の色
-            linewidth=3,
-            zorder=PORDER_GATE,
-        )
-        self._ax.add_patch(box)
+        multi_gate_data: GateData = {
+            "text": "",
+            "width": gate["width"],
+            "height": gate["height"],
+            "target_bit": None,
+            "control_bit": None,
+            "raw_text": gate["raw_text"],
+            "size": 1,
+        }
 
-        self._text(xpos, ypos, gate["text"])
+        for target_bit in gate["target_bit"]:
+            to_ypos = target_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+            self._line((xpos, ypos), (xpos, to_ypos), lc="r", lw=10)
+            self._gate(multi_gate_data, target_bit, row)
+
+        multi_gate_data["text"] = gate["text"]
+        self._gate(multi_gate_data, gate["target_bit"][0], row)
 
     def _cnot(self, gate: GateData, col: int, row: int) -> None:
         TARGET_QUBIT_RADIUS: Final[float] = 0.4
@@ -257,7 +256,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "I",
                 "target_bit": [0],
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$X$",
@@ -266,7 +264,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "X",
                 "target_bit": [0],
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$Y$",
@@ -275,7 +272,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "Y",
                 "target_bit": [0],
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$Z$",
@@ -284,7 +280,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "Z",
                 "target_bit": [0],
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$H$",
@@ -293,7 +288,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "H",
                 "target_bit": [0],
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$S$",
@@ -302,7 +296,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "S",
                 "target_bit": [0],
                 "control_bit": None,
-                "size": 1,
             },
         ],
         [
@@ -313,7 +306,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "Sdag",
                 "target_bit": [1],
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$T$",
@@ -322,7 +314,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "T",
                 "target_bit": [1],
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$T^\dagger$",
@@ -331,7 +322,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "Tdag",
                 "target_bit": [1],
                 "control_bit": None,
-                "size": 1,
             },
         ],
         [
@@ -342,7 +332,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "CNOT",
                 "target_bit": [2],
                 "control_bit": [3, 4],
-                "size": 1,
             },
             {
                 "text": r"$ghost$",
@@ -351,7 +340,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "ghost",
                 "target_bit": None,
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$SWAP$",
@@ -360,7 +348,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "SWAP",
                 "target_bit": [2, 3],
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$DeM$",
@@ -369,7 +356,14 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "DenseMatrix",
                 "target_bit": [2, 3, 4],
                 "control_bit": None,
-                "size": 3,
+            },
+            {
+                "text": r"$DeM$",
+                "width": GATE_DEFAULT_WIDTH,
+                "height": GATE_DEFAULT_HEIGHT,
+                "raw_text": "DenseMatrix",
+                "target_bit": [2, 4],
+                "control_bit": None,
             },
         ],
         [
@@ -380,7 +374,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "ghost",
                 "target_bit": None,
                 "control_bit": None,
-                "size": 1,
             },
             {
                 "text": r"$CNOT$",
@@ -389,7 +382,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "CNOT",
                 "target_bit": None,
                 "control_bit": [2, 4],
-                "size": 1,
             },
             {
                 "text": r"$ghost$",
@@ -398,7 +390,6 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "raw_text": "ghost",
                 "target_bit": None,
                 "control_bit": None,
-                "size": 1,
             },
         ],
         [],
