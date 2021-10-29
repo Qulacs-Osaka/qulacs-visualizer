@@ -1,13 +1,31 @@
+import copy
+from typing import List, Optional
+
 from qulacs import QuantumCircuit
+from typing_extensions import TypedDict
 
 WID = 0.65
 HIG = 0.65
+
+GateData = TypedDict(
+    "GateData",
+    {
+        "text": str,
+        "width": float,
+        "height": float,
+        "raw_text": str,
+        "target_bit": Optional[List[int]],
+        "control_bit": Optional[List[int]],
+    },
+)
+
+CircuitData = List[List[GateData]]
 
 
 class MatplotlibDrawer:
     def __init__(self, circuit: QuantumCircuit):
         self.qubit_count = circuit.get_qubit_count()
-        self.gate_info = [[] for _ in range(self.qubit_count)]
+        self.gate_info: CircuitData = [[] for _ in range(self.qubit_count)]
         self.layer_width = []
 
         self.gate_dict = {
@@ -145,8 +163,16 @@ class MatplotlibDrawer:
             "}": (0.1896, 0.1188),
         }
 
-        gate_info_part = [
-            {"raw_text": "wire", "width": WID} for _ in range(self.qubit_count)
+        default_value: GateData = {
+            "raw_text": "wire",
+            "width": WID,
+            "height": HIG,
+            "text": "",
+            "target_bit": [],
+            "control_bit": [],
+        }
+        gate_info_part: List[GateData] = [
+            copy.deepcopy(default_value) for _ in range(self.qubit_count)
         ]
         gate_num = circuit.get_gate_count()
 
@@ -168,7 +194,7 @@ class MatplotlibDrawer:
             if len(control_index_list) > 0:
                 for qubit in range(self.qubit_count):
                     self.gate_info[qubit].append(gate_info_part[qubit])
-                    gate_info_part[qubit] = {"raw_text": "wire", "width": WID}
+                    gate_info_part[qubit] = copy.deepcopy(default_value)
 
                 for target_index in target_index_list:
                     if target_index == target_index_list[0]:
@@ -188,7 +214,7 @@ class MatplotlibDrawer:
 
                 for qubit in range(self.qubit_count):
                     self.gate_info[qubit].append(gate_info_part[qubit])
-                    gate_info_part[qubit] = {"raw_text": "wire", "width": WID}
+                    gate_info_part[qubit] = copy.deepcopy(default_value)
 
                 continue
 
@@ -200,7 +226,7 @@ class MatplotlibDrawer:
             if conflict:
                 for qubit in range(self.qubit_count):
                     self.gate_info[qubit].append(gate_info_part[qubit])
-                    gate_info_part[qubit] = {"raw_text": "wire", "width": WID}
+                    gate_info_part[qubit] = copy.deepcopy(default_value)
 
             for target_index in target_index_list:
                 if target_index == target_index_list[0]:
@@ -217,6 +243,7 @@ class MatplotlibDrawer:
                         gate_name
                     )
                     gate_info_part[target_index]["raw_text"] = "ghost"
+
         for qubit in range(self.qubit_count):
             self.gate_info[qubit].append(gate_info_part[qubit])
 
@@ -227,8 +254,8 @@ class MatplotlibDrawer:
                     self.layer_width[i], self.gate_info[j][i]["width"]
                 )
 
-    def get_text_width(self, text: str) -> int:
-        width = 0
+    def get_text_width(self, text: str) -> float:
+        width = 0.0
         if "sqrt" in text:
             width += 0.0583
             text = text.replace("sqrt", "")
