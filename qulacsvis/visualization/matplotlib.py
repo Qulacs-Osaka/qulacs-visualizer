@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 from matplotlib import patches
 from matplotlib import pyplot as plt
@@ -17,8 +17,8 @@ GateData = TypedDict(
         "width": float,
         "height": float,
         "raw_text": str,
-        "target_bit": Optional[List[int]],
-        "control_bit": Optional[List[int]],
+        "target_bit": List[int],
+        "control_bit": List[int],
     },
 )
 CircuitData = List[List[GateData]]
@@ -157,10 +157,9 @@ class MPLCircuitlDrawer:
             "text": "",
             "width": gate["width"],
             "height": gate["height"],
-            "target_bit": None,
-            "control_bit": None,
+            "target_bit": [],
+            "control_bit": [],
             "raw_text": gate["raw_text"],
-            "size": 1,
         }
 
         for target_bit in gate["target_bit"]:
@@ -254,7 +253,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "I",
                 "target_bit": [0],
-                "control_bit": None,
+                "control_bit": [],
             },
             {
                 "text": r"$X$",
@@ -262,7 +261,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "X",
                 "target_bit": [0],
-                "control_bit": None,
+                "control_bit": [],
             },
             {
                 "text": r"$Y$",
@@ -270,7 +269,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "Y",
                 "target_bit": [0],
-                "control_bit": None,
+                "control_bit": [],
             },
             {
                 "text": r"$Z$",
@@ -278,7 +277,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "Z",
                 "target_bit": [0],
-                "control_bit": None,
+                "control_bit": [],
             },
             {
                 "text": r"$H$",
@@ -286,7 +285,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "H",
                 "target_bit": [0],
-                "control_bit": None,
+                "control_bit": [],
             },
             {
                 "text": r"$S$",
@@ -294,7 +293,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "S",
                 "target_bit": [0],
-                "control_bit": None,
+                "control_bit": [],
             },
         ],
         [
@@ -304,7 +303,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "Sdag",
                 "target_bit": [1],
-                "control_bit": None,
+                "control_bit": [],
             },
             {
                 "text": r"$T$",
@@ -312,7 +311,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "T",
                 "target_bit": [1],
-                "control_bit": None,
+                "control_bit": [],
             },
             {
                 "text": r"$T^\dagger$",
@@ -320,7 +319,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "Tdag",
                 "target_bit": [1],
-                "control_bit": None,
+                "control_bit": [],
             },
         ],
         [
@@ -337,8 +336,8 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "ghost",
-                "target_bit": None,
-                "control_bit": None,
+                "target_bit": [],
+                "control_bit": [],
             },
             {
                 "text": r"$SWAP$",
@@ -346,7 +345,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "SWAP",
                 "target_bit": [2, 3],
-                "control_bit": None,
+                "control_bit": [],
             },
             {
                 "text": r"$DeM$",
@@ -354,7 +353,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "DenseMatrix",
                 "target_bit": [2, 3, 4],
-                "control_bit": None,
+                "control_bit": [],
             },
             {
                 "text": r"$DeM$",
@@ -362,7 +361,7 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "DenseMatrix",
                 "target_bit": [2, 4],
-                "control_bit": None,
+                "control_bit": [],
             },
         ],
         [
@@ -371,15 +370,15 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "ghost",
-                "target_bit": None,
-                "control_bit": None,
+                "target_bit": [],
+                "control_bit": [],
             },
             {
                 "text": r"$CNOT$",
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "CNOT",
-                "target_bit": None,
+                "target_bit": [],
                 "control_bit": [2, 4],
             },
             {
@@ -387,8 +386,8 @@ def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
                 "width": GATE_DEFAULT_WIDTH,
                 "height": GATE_DEFAULT_HEIGHT,
                 "raw_text": "ghost",
-                "target_bit": None,
-                "control_bit": None,
+                "target_bit": [],
+                "control_bit": [],
             },
         ],
         [],
