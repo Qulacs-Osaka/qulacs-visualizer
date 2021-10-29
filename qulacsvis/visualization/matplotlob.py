@@ -3,9 +3,9 @@ from qulacs import QuantumCircuit
 WID = 0.65
 HIG = 0.65
 
-class MatplotlibDrawer:
 
-    def __init__(self, circuit):
+class MatplotlibDrawer:
+    def __init__(self, circuit: QuantumCircuit):
         self.qubit_count = circuit.get_qubit_count()
         self.gate_info = [[] for _ in range(self.qubit_count)]
         self.layer_width = []
@@ -145,7 +145,9 @@ class MatplotlibDrawer:
             "}": (0.1896, 0.1188),
         }
 
-        gate_info_part = [{"raw_text":"wire", "width":WID} for _ in range(self.qubit_count)]
+        gate_info_part = [
+            {"raw_text": "wire", "width": WID} for _ in range(self.qubit_count)
+        ]
         gate_num = circuit.get_gate_count()
 
         for i in range(gate_num):
@@ -166,23 +168,27 @@ class MatplotlibDrawer:
             if len(control_index_list) > 0:
                 for qubit in range(self.qubit_count):
                     self.gate_info[qubit].append(gate_info_part[qubit])
-                    gate_info_part[qubit] = {"raw_text":"wire", "width":WID}
+                    gate_info_part[qubit] = {"raw_text": "wire", "width": WID}
 
                 for target_index in target_index_list:
                     if target_index == target_index_list[0]:
                         gate_info_part[target_index]["raw_text"] = gate_name
                         gate_info_part[target_index]["text"] = name_latex
-                        gate_info_part[target_index]["width"] = self.get_text_width(gate_name)
+                        gate_info_part[target_index]["width"] = self.get_text_width(
+                            gate_name
+                        )
                         gate_info_part[target_index]["height"] = HIG
                         gate_info_part[target_index]["size"] = len(target_index_list)
                         gate_info_part[target_index]["control_bit"] = control_index_list
                     else:
-                        gate_info_part[target_index]["width"] = self.get_text_width(gate_name)
+                        gate_info_part[target_index]["width"] = self.get_text_width(
+                            gate_name
+                        )
                         gate_info_part[target_index]["raw_text"] = "ghost"
 
                 for qubit in range(self.qubit_count):
                     self.gate_info[qubit].append(gate_info_part[qubit])
-                    gate_info_part[qubit] = {"raw_text":"wire","width":WID}
+                    gate_info_part[qubit] = {"raw_text": "wire", "width": WID}
 
                 continue
 
@@ -194,36 +200,41 @@ class MatplotlibDrawer:
             if conflict:
                 for qubit in range(self.qubit_count):
                     self.gate_info[qubit].append(gate_info_part[qubit])
-                    gate_info_part[qubit] = {"raw_text":"wire","width":WID}
+                    gate_info_part[qubit] = {"raw_text": "wire", "width": WID}
 
             for target_index in target_index_list:
                 if target_index == target_index_list[0]:
                     gate_info_part[target_index]["raw_text"] = gate_name
                     gate_info_part[target_index]["text"] = name_latex
-                    gate_info_part[target_index]["width"] = self.get_text_width(gate_name)
+                    gate_info_part[target_index]["width"] = self.get_text_width(
+                        gate_name
+                    )
                     gate_info_part[target_index]["height"] = HIG
                     gate_info_part[target_index]["size"] = len(target_index_list)
                     gate_info_part[target_index]["control_bit"] = control_index_list
                 else:
-                    gate_info_part[target_index]["width"] = self.get_text_width(gate_name)
+                    gate_info_part[target_index]["width"] = self.get_text_width(
+                        gate_name
+                    )
                     gate_info_part[target_index]["raw_text"] = "ghost"
         for qubit in range(self.qubit_count):
             self.gate_info[qubit].append(gate_info_part[qubit])
-        
+
         self.layer_width = [WID for _ in range(len(self.gate_info))]
         for i in range(len(self.gate_info)):
             for j in range(self.qubit_count):
-                self.layer_width[i] = max(self.layer_width[i], self.gate_info[j][i]['width'])
+                self.layer_width[i] = max(
+                    self.layer_width[i], self.gate_info[j][i]["width"]
+                )
 
-
-    def get_text_width(self, text):
+    def get_text_width(self, text: str) -> int:
         width = 0
-        if 'sqrt' in text:
-            width+=0.0583
-            text = text.replace('sqrt', '')
-        if 'dag' in text:
-            width+=0.0583
-            text = text.replace('dag', '')
+        if "sqrt" in text:
+            width += 0.0583
+            text = text.replace("sqrt", "")
+        if "dag" in text:
+            width += 0.0583
+            text = text.replace("dag", "")
         for character in text:
-            width+=self._char_list[character][1]
+            width += self._char_list[character][1]
         return width
