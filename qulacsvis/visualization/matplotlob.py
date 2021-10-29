@@ -178,7 +178,7 @@ class MatplotlibDrawer:
                             gate_name
                         )
                         gate_info_part[target_index]["height"] = HIG
-                        gate_info_part[target_index]["size"] = len(target_index_list)
+                        gate_info_part[target_index]["target_bit"] = target_index_list
                         gate_info_part[target_index]["control_bit"] = control_index_list
                     else:
                         gate_info_part[target_index]["width"] = self.get_text_width(
@@ -210,7 +210,7 @@ class MatplotlibDrawer:
                         gate_name
                     )
                     gate_info_part[target_index]["height"] = HIG
-                    gate_info_part[target_index]["size"] = len(target_index_list)
+                    gate_info_part[target_index]["target_bit"] = target_index_list
                     gate_info_part[target_index]["control_bit"] = control_index_list
                 else:
                     gate_info_part[target_index]["width"] = self.get_text_width(
