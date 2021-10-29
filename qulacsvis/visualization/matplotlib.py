@@ -149,12 +149,36 @@ class MPLCircuitlDrawer:
 
         self._text(xpos, ypos, gate["text"])
 
+    def _gate_with_size(
+        self, gate: GateData, col: int, row: int, multi_gate_size: int
+    ) -> None:
+        ypos = (
+            col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+            + (col + multi_gate_size - 1) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+        ) * 0.5
+        xpos = row * (GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT)
+        multi_gate_height = gate["height"] * multi_gate_size + GATE_MARGIN_RIGHT * (
+            multi_gate_size - 1
+        )
+        box = patches.Rectangle(
+            xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * multi_gate_height),
+            width=gate["width"],
+            height=multi_gate_height,
+            facecolor="w",
+            edgecolor="k",
+            linewidth=3,
+            zorder=PORDER_GATE,
+        )
+        self._ax.add_patch(box)
+
+        self._text(xpos, ypos, gate["text"])
+
     def _multi_gate(self, gate: GateData, col: int, row: int) -> None:
         ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
             GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
         )
         multi_gate_data: GateData = {
-            "text": "",
+            "text": gate["text"],
             "width": gate["width"],
             "height": gate["height"],
             "target_bit": [],
@@ -162,13 +186,37 @@ class MPLCircuitlDrawer:
             "raw_text": gate["raw_text"],
         }
 
+        gate["target_bit"].sort()
+        connected_group = []
+        connected_bit_list = []
         for target_bit in gate["target_bit"]:
-            to_ypos = target_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
-            self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
-            self._gate(multi_gate_data, target_bit, row)
+            if connected_bit_list == []:
+                connected_bit_list.append(target_bit)
+                continue
 
-        multi_gate_data["text"] = gate["text"]
-        self._gate(multi_gate_data, gate["target_bit"][0], row)
+            if target_bit - 1 in connected_bit_list:
+                connected_bit_list.append(target_bit)
+            else:
+                connected_group.append(connected_bit_list)
+                connected_bit_list = [target_bit]
+
+        connected_group.append(connected_bit_list)
+
+        # 名前付きで表示
+        connected_bit_list = connected_group[0]
+        self._gate_with_size(
+            multi_gate_data, connected_bit_list[0], row, len(connected_bit_list)
+        )
+        # 名前無しで表示
+        multi_gate_data["text"] = ""
+        for connected_bit_list in connected_group[1:]:
+            self._gate_with_size(
+                multi_gate_data, connected_bit_list[0], row, len(connected_bit_list)
+            )
+
+        ypos = min(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+        to_ypos = max(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+        self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
 
     def _cnot(self, gate: GateData, col: int, row: int) -> None:
         TARGET_QUBIT_RADIUS: Final[float] = 0.4
