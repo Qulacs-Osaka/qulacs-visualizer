@@ -116,7 +116,7 @@ class MPLCircuitlDrawer:
         horizontalalignment: str = "center",
         verticalalignment: str = "center",
         fontsize: int = 13,
-        color: str = "r",
+        color: str = "k",
         clip_on: bool = True,
         zorder: int = PORDER_TEXT,
     ) -> None:
@@ -140,8 +140,8 @@ class MPLCircuitlDrawer:
             xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * gate["height"]),
             width=gate["width"],
             height=gate["height"],
-            facecolor="b",  # 塗りつぶし色
-            edgecolor="g",  # 辺の色
+            facecolor="w",  # 塗りつぶし色
+            edgecolor="k",  # 辺の色
             linewidth=3,
             zorder=PORDER_GATE,
         )
@@ -165,7 +165,7 @@ class MPLCircuitlDrawer:
 
         for target_bit in gate["target_bit"]:
             to_ypos = target_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
-            self._line((xpos, ypos), (xpos, to_ypos), lc="r", lw=10)
+            self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
             self._gate(multi_gate_data, target_bit, row)
 
         multi_gate_data["text"] = gate["text"]
@@ -195,14 +195,12 @@ class MPLCircuitlDrawer:
         self._line(
             (xpos, ypos - TARGET_QUBIT_RADIUS),
             (xpos, ypos + TARGET_QUBIT_RADIUS),
-            lc="k",
             zorder=PORDER_TEXT,
         )
         # -
         self._line(
             (xpos - TARGET_QUBIT_RADIUS, ypos),
             (xpos + TARGET_QUBIT_RADIUS, ypos),
-            lc="k",
             zorder=PORDER_TEXT,
         )
 
@@ -211,10 +209,14 @@ class MPLCircuitlDrawer:
             self._line(
                 (xpos, ypos),
                 (xpos, to_ypos),
-                lc="r",
             )
             ctl = patches.Circle(
-                xy=(xpos, to_ypos), radius=0.2, fc="g", ec="r", zorder=PORDER_GATE
+                xy=(xpos, to_ypos),
+                radius=0.2,
+                fc="k",
+                ec="w",
+                linewidth=0,
+                zorder=PORDER_GATE,
             )
             self._ax.add_patch(ctl)
 
@@ -229,20 +231,17 @@ class MPLCircuitlDrawer:
             self._line(
                 (xpos, ypos),
                 (xpos, to_ypos),
-                lc="r",
             )
             # draw target qubit's "x" mark
             # \
             self._line(
                 (xpos - TARGET_QUBIT_MARK_SIZE, to_ypos - TARGET_QUBIT_MARK_SIZE),
                 (xpos + TARGET_QUBIT_MARK_SIZE, to_ypos + TARGET_QUBIT_MARK_SIZE),
-                lc="k",
             )
             # /
             self._line(
                 (xpos + TARGET_QUBIT_MARK_SIZE, to_ypos - TARGET_QUBIT_MARK_SIZE),
                 (xpos - TARGET_QUBIT_MARK_SIZE, to_ypos + TARGET_QUBIT_MARK_SIZE),
-                lc="k",
             )
 
 
