@@ -14,8 +14,8 @@ GateData = TypedDict(
         "width": float,
         "height": float,
         "raw_text": str,
-        "target_bit": Optional[List[int]],
-        "control_bit": Optional[List[int]],
+        "target_bit": List[int],
+        "control_bit": List[int],
     },
 )
 
