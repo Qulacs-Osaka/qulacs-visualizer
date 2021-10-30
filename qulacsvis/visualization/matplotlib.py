@@ -149,6 +149,22 @@ class MPLCircuitlDrawer:
 
         self._text(xpos, ypos, gate["text"])
 
+        for control_bit in gate["control_bit"]:
+            to_ypos = control_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+            self._line(
+                (xpos, ypos),
+                (xpos, to_ypos),
+            )
+            ctl = patches.Circle(
+                xy=(xpos, to_ypos),
+                radius=0.2,
+                fc="k",
+                ec="w",
+                linewidth=0,
+                zorder=PORDER_GATE,
+            )
+            self._ax.add_patch(ctl)
+
     def _gate_with_size(
         self, gate: GateData, col: int, row: int, multi_gate_size: int
     ) -> None:
@@ -217,6 +233,22 @@ class MPLCircuitlDrawer:
         ypos = min(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
         to_ypos = max(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
         self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
+
+        for control_bit in gate["control_bit"]:
+            to_ypos = control_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+            self._line(
+                (xpos, ypos),
+                (xpos, to_ypos),
+            )
+            ctl = patches.Circle(
+                xy=(xpos, to_ypos),
+                radius=0.2,
+                fc="k",
+                ec="w",
+                linewidth=0,
+                zorder=PORDER_GATE,
+            )
+            self._ax.add_patch(ctl)
 
     def _cnot(self, gate: GateData, col: int, row: int) -> None:
         TARGET_QUBIT_RADIUS: Final[float] = 0.4
