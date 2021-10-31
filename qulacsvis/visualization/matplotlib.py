@@ -35,9 +35,8 @@ class MPLCircuitlDrawer:
     def __init__(self, circuit: QuantumCircuit, *, scale: float = 1.0):
         self._figure = plt.figure()
         self._ax = self._figure.add_subplot(111)
-        self._ax.axis("on")
-        self._ax.grid()
         self._ax.set_aspect("equal")
+        self._ax.axis("off")
 
         self._circuit = circuit
         self._parser = CircuitParser(circuit)
@@ -46,7 +45,7 @@ class MPLCircuitlDrawer:
         # 図の描画サイズの倍率
         self._fig_scale_factor = scale
 
-    def draw(self):  # type: ignore
+    def draw(self, *, debug: bool = False):  # type: ignore
         circuit_layer_count = len(self._circuit_data[0])
         sum_layer_width = (
             sum(self._parser.layer_width) + circuit_layer_count * GATE_MARGIN_RIGHT
@@ -106,6 +105,10 @@ class MPLCircuitlDrawer:
             fig_width * self._fig_scale_factor,
             fig_height * self._fig_scale_factor,
         )
+
+        if debug:
+            self._ax.axis("on")
+            self._ax.grid()
 
         return self._figure
 
