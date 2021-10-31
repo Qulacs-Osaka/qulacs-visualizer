@@ -6,8 +6,9 @@ from qulacs import QuantumCircuit
 from typing_extensions import Final, TypedDict
 
 GATE_DEFAULT_WIDTH = 1
-GATE_DEFAULT_HEIGHT = 1
+GATE_DEFAULT_HEIGHT = 1.5
 GATE_MARGIN_RIGHT = 0.5
+GATE_MARGIN_BOTTOM = 0.5
 
 
 GateData = TypedDict(
@@ -44,63 +45,67 @@ class MPLCircuitlDrawer:
         self._circuit_data = self._parser.gate_info
         # 図の描画サイズの倍率
         self._fig_scale_factor = scale
-        # 図の横幅(1個のゲートサイズ x 1行のゲート数)
-        self._fig_width = len(self._circuit_data[0]) * (
-            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
-        )
-        # 図の縦幅(1個のゲートサイズ x qubit数)
-        self._fig_height = self._parser.qubit_count * (
-            GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT
-        )
-        # 比率を保ったまま拡大
-        self._figure.set_size_inches(
-            self._fig_width * self._fig_scale_factor,
-            self._fig_height * self._fig_scale_factor,
-        )
 
     def draw(self):  # type: ignore
-        self._ax.set_xlim(-3, self._fig_width)
-        self._ax.set_ylim(self._fig_height, -1)  # (max, min)にすると吊り下げになる
-
-        # for col in range(10):
-        #     for row in range(10):
-        #         self._gate(col,row,0)
-        GATE_RIGHT_MARGIN = 0.5
-        max_line_length = (
-            max([len(line) for line in self._circuit_data])
-            * (GATE_DEFAULT_WIDTH + GATE_RIGHT_MARGIN)
-            - GATE_RIGHT_MARGIN
+        circuit_layer_count = len(self._circuit_data[0])
+        sum_layer_width = (
+            sum(self._parser.layer_width) + circuit_layer_count * GATE_MARGIN_RIGHT
         )
-        for i, line in enumerate(self._circuit_data):
-            line_ypos = i * (GATE_DEFAULT_HEIGHT + GATE_RIGHT_MARGIN)
+
+        for qubit in range(self._parser.qubit_count):
+            line_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
             self._text(
                 -2,
                 line_ypos,
-                "$q_{" + str(i) + "}$",
+                "$q_{" + str(qubit) + "}$",
                 fontsize=20,
             )
 
             self._line(
                 (-1, line_ypos),
                 (
-                    max_line_length,
+                    sum_layer_width - GATE_MARGIN_RIGHT,
                     line_ypos,
                 ),
             )
 
-            for j, gate in enumerate(line):
+        layer_xpos = 0.0
+
+        for layer in range(circuit_layer_count):
+            for qubit in range(self._parser.qubit_count):
+                qubit_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+                gate = self._circuit_data[qubit][layer]
                 if gate["raw_text"] == "ghost":
                     continue
                 elif gate["raw_text"] == "wire":
                     continue
                 elif gate["raw_text"] == "CNOT":
-                    self._cnot(gate, i, j)
+                    self._cnot(gate, (layer_xpos, qubit_ypos))
                 elif gate["raw_text"] == "SWAP":
-                    self._swap(gate, i, j)
+                    self._swap(gate, (layer_xpos, qubit_ypos))
                 elif len(gate["target_bit"]) > 1:
-                    self._multi_gate(gate, i, j)
+                    self._multi_gate(gate, (layer_xpos, qubit_ypos))
                 else:
-                    self._gate(gate, i, j)
+                    self._gate(gate, (layer_xpos, qubit_ypos))
+
+            layer_xpos += self._parser.layer_width[layer] + GATE_MARGIN_RIGHT
+
+        fig_width = sum_layer_width
+        fig_height = (
+            self._parser.qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+            - GATE_MARGIN_BOTTOM
+        )
+
+        self._ax.set_xlim(-3, fig_width)
+        self._ax.set_ylim(
+            fig_height, -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_BOTTOM
+        )  # (max, min)にすると吊り下げになる
+
+        # 比率を保ったまま拡大
+        self._figure.set_size_inches(
+            fig_width * self._fig_scale_factor,
+            fig_height * self._fig_scale_factor,
+        )
 
         return self._figure
 
@@ -148,10 +153,8 @@ class MPLCircuitlDrawer:
             zorder=zorder,
         )
 
-    def _gate(self, gate: GateData, col: int, row: int) -> None:
-        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
-            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
-        )
+    def _gate(self, gate: GateData, xy: Tuple[float, float]) -> None:
+        xpos, ypos = xy
         box = patches.Rectangle(
             xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * gate["height"]),
             width=gate["width"],
@@ -162,21 +165,24 @@ class MPLCircuitlDrawer:
             zorder=PORDER_GATE,
         )
         self._ax.add_patch(box)
-
         self._text(xpos, ypos, gate["text"])
-
         self._control_bits(gate["control_bit"], (xpos, ypos))
 
     def _gate_with_size(
-        self, gate: GateData, col: int, row: int, multi_gate_size: int
+        self, gate: GateData, xy: Tuple[float, float], multi_gate_size: int
     ) -> None:
+        xpos, ypos = xy
+        # sizeを持つゲートのy座標の中点を求める
         ypos = (
-            col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
-            + (col + multi_gate_size - 1) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+            ypos
+            + (
+                ypos
+                + (multi_gate_size - 1) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+            )
         ) * 0.5
-        xpos = row * (GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT)
-        multi_gate_height = gate["height"] * multi_gate_size + GATE_MARGIN_RIGHT * (
-            multi_gate_size - 1
+        multi_gate_height = (
+            GATE_DEFAULT_HEIGHT * multi_gate_size
+            + GATE_MARGIN_RIGHT * (multi_gate_size - 1)
         )
         box = patches.Rectangle(
             xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * multi_gate_height),
@@ -191,10 +197,9 @@ class MPLCircuitlDrawer:
 
         self._text(xpos, ypos, gate["text"])
 
-    def _multi_gate(self, gate: GateData, col: int, row: int) -> None:
-        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
-            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
-        )
+    def _multi_gate(self, gate: GateData, xy: Tuple[float, float]) -> None:
+        xpos, ypos = xy
+
         multi_gate_data: GateData = {
             "text": gate["text"],
             "width": gate["width"],
@@ -222,27 +227,30 @@ class MPLCircuitlDrawer:
 
         # 名前付きで表示
         connected_bit_list = connected_group[0]
+        group_x = xpos
+        group_y = connected_bit_list[0] * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
         self._gate_with_size(
-            multi_gate_data, connected_bit_list[0], row, len(connected_bit_list)
+            multi_gate_data,
+            (group_x, group_y),
+            len(connected_bit_list),
         )
         # 名前無しで表示
         multi_gate_data["text"] = ""
         for connected_bit_list in connected_group[1:]:
+            group_y = connected_bit_list[0] * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
             self._gate_with_size(
-                multi_gate_data, connected_bit_list[0], row, len(connected_bit_list)
+                multi_gate_data, (group_x, group_y), len(connected_bit_list)
             )
 
-        ypos = min(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
-        to_ypos = max(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+        ypos = min(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+        to_ypos = max(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
         self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
 
         self._control_bits(gate["control_bit"], (xpos, ypos))
 
-    def _cnot(self, gate: GateData, col: int, row: int) -> None:
+    def _cnot(self, gate: GateData, xy: Tuple[float, float]) -> None:
+        xpos, ypos = xy
         TARGET_QUBIT_RADIUS: Final[float] = 0.4
-        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
-            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
-        )
 
         if gate["control_bit"] is None:
             raise ValueError("control_bit is None")
@@ -294,11 +302,9 @@ class MPLCircuitlDrawer:
             )
             self._ax.add_patch(ctl)
 
-    def _swap(self, gate: GateData, col: int, row: int) -> None:
+    def _swap(self, gate: GateData, xy: Tuple[float, float]) -> None:
+        xpos, ypos = xy
         TARGET_QUBIT_MARK_SIZE: Final[float] = 0.1
-        ypos, xpos = col * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT), row * (
-            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
-        )
 
         for target_bit in gate["target_bit"]:
             to_ypos = target_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
