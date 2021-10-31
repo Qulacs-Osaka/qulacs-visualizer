@@ -16,9 +16,10 @@ def circuit_drawer(
     circuit: QuantumCircuit,
     output_method: Optional[str] = None,
     *,
-    ppi: int = 150,
     verbose: bool = False,
     dot: str = "large",
+    ppi: int = 150,
+    scale: float = 1.0,
 ) -> Union[str, Image.Image, None]:
     """
     Draws a circuit diagram of a circuit.
@@ -27,16 +28,22 @@ def circuit_drawer(
     ----------
     circuit : qulacs.QuantumCircuit
         The quantum circuit to be drawn.
-    output_method : Optional[str]
+    output_method : Optional[str], optional
         Set the output method for the drawn circuit.
         If None, the output method is set to 'text'.
-    ppi : int
-        The pixels per inch of the output image.
-    verbose : bool
+    verbose : bool, optional
+        (output_method='text')
         If True, a number will be added to the gate.
         Gates are numbered in the order in which they are added to the circuit.
-    dot: str
+    dot: str, optional
+        (output_method='text')
         Dot style to mean control qubit(default="large")
+    ppi : int, optional
+        (output_method='latex')
+        The pixels per inch of the output image.
+    scale : float, optional
+        (output_method='mpl')
+        The scale of the output image.
 
     Returns
     -------
@@ -105,12 +112,12 @@ def circuit_drawer(
         return _generate_latex_source(circuit)
 
     elif output_method == "mpl":
-        mpl_drawer = MPLCircuitlDrawer(circuit)
+        mpl_drawer = MPLCircuitlDrawer(circuit, scale=scale)
         mpl_drawer.draw()  # type: ignore
         plt.show()
         return None
 
     else:
         raise ValueError(
-            "Invalid output_method. Valid options are: 'text', 'latex', 'latex_source'."
+            "Invalid output_method. Valid options are: 'text', 'latex', 'latex_source', 'mpl'."
         )

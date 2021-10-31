@@ -31,20 +31,36 @@ PORDER_TEXT: Final[int] = 6
 
 
 class MPLCircuitlDrawer:
-    def __init__(self, circuit: QuantumCircuit):
+    def __init__(self, circuit: QuantumCircuit, *, scale: float = 1.0):
         self._figure = plt.figure()
         self._ax = self._figure.add_subplot(111)
         self._ax.axis("on")
         self._ax.grid()
         self._ax.set_aspect("equal")
-        self._figure.set_size_inches(18.5, 10.5)
 
         self._circuit = circuit
-        self._circuit_data = parse_circuit(self._circuit)
+        self._parser = CircuitParser(circuit)
+        # self._circuit_data = parse_circuit(self._circuit)
+        self._circuit_data = self._parser.gate_info
+        # 図の描画サイズの倍率
+        self._fig_scale_factor = scale
+        # 図の横幅(1個のゲートサイズ x 1行のゲート数)
+        self._fig_width = len(self._circuit_data[0]) * (
+            GATE_DEFAULT_WIDTH + GATE_MARGIN_RIGHT
+        )
+        # 図の縦幅(1個のゲートサイズ x qubit数)
+        self._fig_height = self._parser.qubit_count * (
+            GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT
+        )
+        # 比率を保ったまま拡大
+        self._figure.set_size_inches(
+            self._fig_width * self._fig_scale_factor,
+            self._fig_height * self._fig_scale_factor,
+        )
 
     def draw(self):  # type: ignore
-        self._ax.set_xlim(-3, 15)
-        self._ax.set_ylim(15, -1)  # (max, min)にすると吊り下げになる
+        self._ax.set_xlim(-3, self._fig_width)
+        self._ax.set_ylim(self._fig_height, -1)  # (max, min)にすると吊り下げになる
 
         # for col in range(10):
         #     for row in range(10):
@@ -126,7 +142,7 @@ class MPLCircuitlDrawer:
             text,
             horizontalalignment=horizontalalignment,
             verticalalignment=verticalalignment,
-            fontsize=fontsize,
+            fontsize=fontsize * self._fig_scale_factor,
             color=color,
             clip_on=clip_on,
             zorder=zorder,
