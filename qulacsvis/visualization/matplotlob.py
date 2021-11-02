@@ -234,7 +234,7 @@ class MatplotlibDrawer:
                         )
                         layer_info[target_index]["raw_text"] = "ghost"
 
-            self.append_layer(layer_info, default_value)
+        self.append_layer(layer_info, default_value)
 
         self.layer_width = [WID for _ in range(len(self.gate_info[0]))]
         for i in range(len(self.gate_info[0])):

@@ -24,22 +24,6 @@ def test_matplotlib_init() -> None:
                 "control_bit": [],
             },
             {
-                "raw_text": "wire",
-                "width": 0.65,
-                "height": 0.65,
-                "text": "",
-                "target_bit": [],
-                "control_bit": [],
-            },
-            {
-                "raw_text": "wire",
-                "width": 0.65,
-                "height": 0.65,
-                "text": "",
-                "target_bit": [],
-                "control_bit": [],
-            },
-            {
                 "raw_text": "DenseMatrix",
                 "width": 1.173,
                 "height": 0.65,
@@ -66,27 +50,11 @@ def test_matplotlib_init() -> None:
         ],
         [
             {
-                "raw_text": "wire",
-                "width": 0.65,
-                "height": 0.65,
-                "text": "",
-                "target_bit": [],
-                "control_bit": [],
-            },
-            {
                 "raw_text": "Y",
                 "width": 0.65,
                 "height": 0.65,
                 "text": "$Y$",
                 "target_bit": [1],
-                "control_bit": [],
-            },
-            {
-                "raw_text": "wire",
-                "width": 0.65,
-                "height": 0.65,
-                "text": "",
-                "target_bit": [],
                 "control_bit": [],
             },
             {
@@ -115,22 +83,6 @@ def test_matplotlib_init() -> None:
             },
         ],
         [
-            {
-                "raw_text": "wire",
-                "width": 0.65,
-                "height": 0.65,
-                "text": "",
-                "target_bit": [],
-                "control_bit": [],
-            },
-            {
-                "raw_text": "wire",
-                "width": 0.65,
-                "height": 0.65,
-                "text": "",
-                "target_bit": [],
-                "control_bit": [],
-            },
             {
                 "raw_text": "Z",
                 "width": 0.65,
