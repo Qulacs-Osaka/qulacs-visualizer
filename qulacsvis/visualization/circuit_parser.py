@@ -23,6 +23,26 @@ CircuitData = List[List[GateData]]
 
 
 class CircuitParser:
+    """
+    Parse quantum circuit into a list of gate data.
+
+    Parameters
+    ----------
+    circuit : QuantumCircuit
+        Quantum circuit to be parsed.
+
+    Attributes
+    ----------
+    qubit_count : int
+        Number of qubits in the circuit.
+    gate_info : CircuitData
+        List of gate data.
+    layer_width : List[float]
+        Width of each layer.
+    gate_dict : Dict[str, str]
+        A dictionary mapping gate names to their latex representation.
+    """
+
     def __init__(self, circuit: QuantumCircuit):
         self.qubit_count = circuit.get_qubit_count()
         self.gate_info: CircuitData = [[] for _ in range(self.qubit_count)]
@@ -142,6 +162,16 @@ class CircuitParser:
                 self.gate_info[j][i]["width"] = self.layer_width[i]
 
     def append_layer(self, layer_info: List[GateData], default_value: GateData) -> None:
+        """
+        Append a layer to the layer_info.
+
+        Parameters
+        ----------
+        layer_info : List[GateData]
+            A list of gate data.
+        default_value : GateData
+            A default value of gate data.
+        """
         is_blank = True
         for qubit in range(self.qubit_count):
             if layer_info[qubit]["raw_text"] != "wire":
