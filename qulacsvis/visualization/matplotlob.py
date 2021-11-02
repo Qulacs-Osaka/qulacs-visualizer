@@ -191,10 +191,16 @@ class MatplotlibDrawer:
             gate_name = gate.get_name()
             name_latex = self.gate_dict[gate_name]
 
-            if len(control_index_list) > 0:
+            if len(control_index_list) > 0 or gate_name == "SWAP":
+                is_blank = True
                 for qubit in range(self.qubit_count):
-                    self.gate_info[qubit].append(gate_info_part[qubit])
-                    gate_info_part[qubit] = copy.deepcopy(default_value)
+                    if gate_info_part[qubit]["raw_text"] != "wire":
+                        is_blank = False
+
+                if not is_blank:
+                    for qubit in range(self.qubit_count):
+                        self.gate_info[qubit].append(gate_info_part[qubit])
+                        gate_info_part[qubit] = copy.deepcopy(default_value)
 
                 for target_index in target_index_list:
                     if target_index == target_index_list[0]:
@@ -244,15 +250,23 @@ class MatplotlibDrawer:
                     )
                     gate_info_part[target_index]["raw_text"] = "ghost"
 
-        for qubit in range(self.qubit_count):
-            self.gate_info[qubit].append(gate_info_part[qubit])
+            is_blank = True
+            for qubit in range(self.qubit_count):
+                if gate_info_part[qubit]["raw_text"] != "wire":
+                    is_blank = False
 
-        self.layer_width = [WID for _ in range(len(self.gate_info))]
-        for i in range(len(self.gate_info)):
+            if not is_blank:
+                for qubit in range(self.qubit_count):
+                    self.gate_info[qubit].append(gate_info_part[qubit])
+
+        self.layer_width = [WID for _ in range(len(self.gate_info[0]))]
+        for i in range(len(self.gate_info[0])):
             for j in range(self.qubit_count):
                 self.layer_width[i] = max(
                     self.layer_width[i], self.gate_info[j][i]["width"]
                 )
+            for j in range(self.qubit_count):
+                self.gate_info[j][i]["width"] = self.layer_width[i]
 
     def get_text_width(self, text: str) -> float:
         width = 0.0
