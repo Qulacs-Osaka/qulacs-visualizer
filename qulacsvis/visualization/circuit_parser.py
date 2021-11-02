@@ -4,8 +4,8 @@ from typing import List
 from qulacs import QuantumCircuit
 from typing_extensions import TypedDict
 
-gate_default_width = 1.0
-gate_default_height = 1.5
+GATE_DEFAULT_WIDTH = 1.0
+GATE_DEFAULT_HEIGHT = 1.5
 
 GateData = TypedDict(
     "GateData",
@@ -89,8 +89,8 @@ class CircuitParser:
 
         default_value: GateData = {
             "raw_text": "wire",
-            "width": gate_default_width,
-            "height": gate_default_height,
+            "width": GATE_DEFAULT_WIDTH,
+            "height": GATE_DEFAULT_HEIGHT,
             "text": "",
             "target_bit": [],
             "control_bit": [],
@@ -121,12 +121,12 @@ class CircuitParser:
                     if target_index == target_index_list[0]:
                         layer_info[target_index]["raw_text"] = gate_name
                         layer_info[target_index]["text"] = name_latex
-                        layer_info[target_index]["width"] = gate_default_width
-                        layer_info[target_index]["height"] = gate_default_height
+                        layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
+                        layer_info[target_index]["height"] = GATE_DEFAULT_HEIGHT
                         layer_info[target_index]["target_bit"] = target_index_list
                         layer_info[target_index]["control_bit"] = control_index_list
                     else:
-                        layer_info[target_index]["width"] = gate_default_width
+                        layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
                         layer_info[target_index]["raw_text"] = "ghost"
                 self.append_layer(layer_info, default_value)
 
@@ -142,17 +142,17 @@ class CircuitParser:
                     if target_index == target_index_list[0]:
                         layer_info[target_index]["raw_text"] = gate_name
                         layer_info[target_index]["text"] = name_latex
-                        layer_info[target_index]["width"] = gate_default_width
-                        layer_info[target_index]["height"] = gate_default_height
+                        layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
+                        layer_info[target_index]["height"] = GATE_DEFAULT_HEIGHT
                         layer_info[target_index]["target_bit"] = target_index_list
                         layer_info[target_index]["control_bit"] = control_index_list
                     else:
-                        layer_info[target_index]["width"] = gate_default_width
+                        layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
                         layer_info[target_index]["raw_text"] = "ghost"
 
         self.append_layer(layer_info, default_value)
 
-        self.layer_width = [gate_default_width for _ in range(len(self.gate_info[0]))]
+        self.layer_width = [GATE_DEFAULT_WIDTH for _ in range(len(self.gate_info[0]))]
         for i in range(len(self.gate_info[0])):
             for j in range(self.qubit_count):
                 self.layer_width[i] = max(
