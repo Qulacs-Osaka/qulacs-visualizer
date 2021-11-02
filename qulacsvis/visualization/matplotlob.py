@@ -171,7 +171,7 @@ class MatplotlibDrawer:
             "target_bit": [],
             "control_bit": [],
         }
-        gate_info_part: List[GateData] = [
+        layer_info: List[GateData] = [
             copy.deepcopy(default_value) for _ in range(self.qubit_count)
         ]
         gate_num = circuit.get_gate_count()
@@ -192,72 +192,49 @@ class MatplotlibDrawer:
             name_latex = self.gate_dict[gate_name]
 
             if len(control_index_list) > 0 or gate_name == "SWAP":
-                is_blank = True
-                for qubit in range(self.qubit_count):
-                    if gate_info_part[qubit]["raw_text"] != "wire":
-                        is_blank = False
+                self.append_layer(layer_info, default_value)
+                for target_index in target_index_list:
+                    if target_index == target_index_list[0]:
+                        layer_info[target_index]["raw_text"] = gate_name
+                        layer_info[target_index]["text"] = name_latex
+                        layer_info[target_index]["width"] = self.get_text_width(
+                            gate_name
+                        )
+                        layer_info[target_index]["height"] = HIG
+                        layer_info[target_index]["target_bit"] = target_index_list
+                        layer_info[target_index]["control_bit"] = control_index_list
+                    else:
+                        layer_info[target_index]["width"] = self.get_text_width(
+                            gate_name
+                        )
+                        layer_info[target_index]["raw_text"] = "ghost"
+                self.append_layer(layer_info, default_value)
 
-                if not is_blank:
-                    for qubit in range(self.qubit_count):
-                        self.gate_info[qubit].append(gate_info_part[qubit])
-                        gate_info_part[qubit] = copy.deepcopy(default_value)
+            else:
+                conflict = False
+                for target_index in target_index_list:
+                    if layer_info[target_index]["raw_text"] != "wire":
+                        conflict = True
+                if conflict:
+                    self.append_layer(layer_info, default_value)
 
                 for target_index in target_index_list:
                     if target_index == target_index_list[0]:
-                        gate_info_part[target_index]["raw_text"] = gate_name
-                        gate_info_part[target_index]["text"] = name_latex
-                        gate_info_part[target_index]["width"] = self.get_text_width(
+                        layer_info[target_index]["raw_text"] = gate_name
+                        layer_info[target_index]["text"] = name_latex
+                        layer_info[target_index]["width"] = self.get_text_width(
                             gate_name
                         )
-                        gate_info_part[target_index]["height"] = HIG
-                        gate_info_part[target_index]["target_bit"] = target_index_list
-                        gate_info_part[target_index]["control_bit"] = control_index_list
+                        layer_info[target_index]["height"] = HIG
+                        layer_info[target_index]["target_bit"] = target_index_list
+                        layer_info[target_index]["control_bit"] = control_index_list
                     else:
-                        gate_info_part[target_index]["width"] = self.get_text_width(
+                        layer_info[target_index]["width"] = self.get_text_width(
                             gate_name
                         )
-                        gate_info_part[target_index]["raw_text"] = "ghost"
+                        layer_info[target_index]["raw_text"] = "ghost"
 
-                for qubit in range(self.qubit_count):
-                    self.gate_info[qubit].append(gate_info_part[qubit])
-                    gate_info_part[qubit] = copy.deepcopy(default_value)
-
-                continue
-
-            conflict = False
-            for target_index in target_index_list:
-                if gate_info_part[target_index]["raw_text"] != "wire":
-                    conflict = True
-
-            if conflict:
-                for qubit in range(self.qubit_count):
-                    self.gate_info[qubit].append(gate_info_part[qubit])
-                    gate_info_part[qubit] = copy.deepcopy(default_value)
-
-            for target_index in target_index_list:
-                if target_index == target_index_list[0]:
-                    gate_info_part[target_index]["raw_text"] = gate_name
-                    gate_info_part[target_index]["text"] = name_latex
-                    gate_info_part[target_index]["width"] = self.get_text_width(
-                        gate_name
-                    )
-                    gate_info_part[target_index]["height"] = HIG
-                    gate_info_part[target_index]["target_bit"] = target_index_list
-                    gate_info_part[target_index]["control_bit"] = control_index_list
-                else:
-                    gate_info_part[target_index]["width"] = self.get_text_width(
-                        gate_name
-                    )
-                    gate_info_part[target_index]["raw_text"] = "ghost"
-
-            is_blank = True
-            for qubit in range(self.qubit_count):
-                if gate_info_part[qubit]["raw_text"] != "wire":
-                    is_blank = False
-
-            if not is_blank:
-                for qubit in range(self.qubit_count):
-                    self.gate_info[qubit].append(gate_info_part[qubit])
+            self.append_layer(layer_info, default_value)
 
         self.layer_width = [WID for _ in range(len(self.gate_info[0]))]
         for i in range(len(self.gate_info[0])):
@@ -279,3 +256,13 @@ class MatplotlibDrawer:
         for character in text:
             width += self._char_list[character][1]
         return width
+
+    def append_layer(self, layer_info: List[GateData], default_value: GateData) -> None:
+        is_blank = True
+        for qubit in range(self.qubit_count):
+            if layer_info[qubit]["raw_text"] != "wire":
+                is_blank = False
+        if not is_blank:
+            for qubit in range(self.qubit_count):
+                self.gate_info[qubit].append(layer_info[qubit])
+                layer_info[qubit] = copy.deepcopy(default_value)
