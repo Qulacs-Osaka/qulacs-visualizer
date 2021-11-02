@@ -3,26 +3,16 @@ from typing import List, Tuple
 from matplotlib import patches
 from matplotlib import pyplot as plt
 from qulacs import QuantumCircuit
-from typing_extensions import Final, TypedDict
+from typing_extensions import Final
+from .circuit_parser import (
+    CircuitParser,
+    CircuitData,
+    GateData,
+    GATE_DEFAULT_HEIGHT,
+)
 
-GATE_DEFAULT_WIDTH = 1
-GATE_DEFAULT_HEIGHT = 1.5
 GATE_MARGIN_RIGHT = 0.5
 GATE_MARGIN_BOTTOM = 0.5
-
-
-GateData = TypedDict(
-    "GateData",
-    {
-        "text": str,
-        "width": float,
-        "height": float,
-        "raw_text": str,
-        "target_bit": List[int],
-        "control_bit": List[int],
-    },
-)
-CircuitData = List[List[GateData]]
 
 PORDER_GATE: Final[int] = 5
 PORDER_LINE: Final[int] = 3
@@ -41,7 +31,7 @@ class MPLCircuitlDrawer:
         self._circuit = circuit
         self._parser = CircuitParser(circuit)
         # self._circuit_data = parse_circuit(self._circuit)
-        self._circuit_data = self._parser.gate_info
+        self._circuit_data: CircuitData = self._parser.gate_info
         # 図の描画サイズの倍率
         self._fig_scale_factor = scale
 
@@ -326,154 +316,3 @@ class MPLCircuitlDrawer:
                 (xpos + TARGET_QUBIT_MARK_SIZE, to_ypos - TARGET_QUBIT_MARK_SIZE),
                 (xpos - TARGET_QUBIT_MARK_SIZE, to_ypos + TARGET_QUBIT_MARK_SIZE),
             )
-
-
-def parse_circuit(circuit: QuantumCircuit) -> CircuitData:
-    arr: CircuitData = [
-        [
-            {
-                "text": r"$I$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "I",
-                "target_bit": [0],
-                "control_bit": [],
-            },
-            {
-                "text": r"$X$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "X",
-                "target_bit": [0],
-                "control_bit": [],
-            },
-            {
-                "text": r"$Y$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "Y",
-                "target_bit": [0],
-                "control_bit": [],
-            },
-            {
-                "text": r"$Z$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "Z",
-                "target_bit": [0],
-                "control_bit": [],
-            },
-            {
-                "text": r"$H$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "H",
-                "target_bit": [0],
-                "control_bit": [],
-            },
-            {
-                "text": r"$S$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "S",
-                "target_bit": [0],
-                "control_bit": [],
-            },
-        ],
-        [
-            {
-                "text": r"$S^\dagger$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "Sdag",
-                "target_bit": [1],
-                "control_bit": [],
-            },
-            {
-                "text": r"$T$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "T",
-                "target_bit": [1],
-                "control_bit": [],
-            },
-            {
-                "text": r"$T^\dagger$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "Tdag",
-                "target_bit": [1],
-                "control_bit": [],
-            },
-        ],
-        [
-            {
-                "text": r"$CNOT$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "CNOT",
-                "target_bit": [2],
-                "control_bit": [3, 4],
-            },
-            {
-                "text": r"$ghost$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "ghost",
-                "target_bit": [],
-                "control_bit": [],
-            },
-            {
-                "text": r"$SWAP$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "SWAP",
-                "target_bit": [2, 3],
-                "control_bit": [],
-            },
-            {
-                "text": r"$DeM$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "DenseMatrix",
-                "target_bit": [2, 3, 4],
-                "control_bit": [],
-            },
-            {
-                "text": r"$DeM$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "DenseMatrix",
-                "target_bit": [2, 4],
-                "control_bit": [],
-            },
-        ],
-        [
-            {
-                "text": r"$ghost$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "ghost",
-                "target_bit": [],
-                "control_bit": [],
-            },
-            {
-                "text": r"$CNOT$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "CNOT",
-                "target_bit": [],
-                "control_bit": [2, 4],
-            },
-            {
-                "text": r"$ghost$",
-                "width": GATE_DEFAULT_WIDTH,
-                "height": GATE_DEFAULT_HEIGHT,
-                "raw_text": "ghost",
-                "target_bit": [],
-                "control_bit": [],
-            },
-        ],
-        [],
-    ]
-    return arr
