@@ -4,8 +4,8 @@ from typing import List
 from qulacs import QuantumCircuit
 from typing_extensions import TypedDict
 
-WID = 0.65
-HIG = 0.65
+gate_default_width = 1.0
+gate_default_height = 1.5
 
 GateData = TypedDict(
     "GateData",
@@ -22,7 +22,7 @@ GateData = TypedDict(
 CircuitData = List[List[GateData]]
 
 
-class MatplotlibDrawer:
+class CircuitParser:
     def __init__(self, circuit: QuantumCircuit):
         self.qubit_count = circuit.get_qubit_count()
         self.gate_info: CircuitData = [[] for _ in range(self.qubit_count)]
@@ -66,107 +66,11 @@ class MatplotlibDrawer:
             "ParametricRZ": r"$pRZ$",
             "ParametricPauliRotation": r"$pPR$",
         }
-        self._char_list = {
-            " ": (0.0958, 0.0583),
-            "!": (0.1208, 0.0729),
-            '"': (0.1396, 0.0875),
-            "#": (0.2521, 0.1562),
-            "$": (0.1917, 0.1167),
-            "%": (0.2854, 0.1771),
-            "&": (0.2333, 0.1458),
-            "'": (0.0833, 0.0521),
-            "(": (0.1167, 0.0729),
-            ")": (0.1167, 0.0729),
-            "*": (0.15, 0.0938),
-            "+": (0.25, 0.1562),
-            ",": (0.0958, 0.0583),
-            "-": (0.1083, 0.0667),
-            ".": (0.0958, 0.0604),
-            "/": (0.1021, 0.0625),
-            "0": (0.1875, 0.1167),
-            "1": (0.1896, 0.1167),
-            "2": (0.1917, 0.1188),
-            "3": (0.1917, 0.1167),
-            "4": (0.1917, 0.1188),
-            "5": (0.1917, 0.1167),
-            "6": (0.1896, 0.1167),
-            "7": (0.1917, 0.1188),
-            "8": (0.1896, 0.1188),
-            "9": (0.1917, 0.1188),
-            ":": (0.1021, 0.0604),
-            ";": (0.1021, 0.0604),
-            "<": (0.25, 0.1542),
-            "=": (0.25, 0.1562),
-            ">": (0.25, 0.1542),
-            "?": (0.1583, 0.0979),
-            "@": (0.2979, 0.1854),
-            "A": (0.2062, 0.1271),
-            "B": (0.2042, 0.1271),
-            "C": (0.2083, 0.1292),
-            "D": (0.2312, 0.1417),
-            "E": (0.1875, 0.1167),
-            "F": (0.1708, 0.1062),
-            "G": (0.2312, 0.1438),
-            "H": (0.225, 0.1396),
-            "I": (0.0875, 0.0542),
-            "J": (0.0875, 0.0542),
-            "K": (0.1958, 0.1208),
-            "L": (0.1667, 0.1042),
-            "M": (0.2583, 0.1604),
-            "N": (0.225, 0.1396),
-            "O": (0.2354, 0.1458),
-            "P": (0.1812, 0.1125),
-            "Q": (0.2354, 0.1458),
-            "R": (0.2083, 0.1292),
-            "S": (0.1896, 0.1188),
-            "T": (0.1854, 0.1125),
-            "U": (0.2208, 0.1354),
-            "V": (0.2062, 0.1271),
-            "W": (0.2958, 0.1833),
-            "X": (0.2062, 0.1271),
-            "Y": (0.1833, 0.1125),
-            "Z": (0.2042, 0.1271),
-            "[": (0.1167, 0.075),
-            "\\": (0.1021, 0.0625),
-            "]": (0.1167, 0.0729),
-            "^": (0.2521, 0.1562),
-            "_": (0.1521, 0.0938),
-            "`": (0.15, 0.0938),
-            "a": (0.1854, 0.1146),
-            "b": (0.1917, 0.1167),
-            "c": (0.1646, 0.1021),
-            "d": (0.1896, 0.1188),
-            "e": (0.1854, 0.1146),
-            "f": (0.1042, 0.0667),
-            "g": (0.1896, 0.1188),
-            "h": (0.1896, 0.1188),
-            "i": (0.0854, 0.0521),
-            "j": (0.0854, 0.0521),
-            "k": (0.1729, 0.1083),
-            "l": (0.0854, 0.0521),
-            "m": (0.2917, 0.1812),
-            "n": (0.1896, 0.1188),
-            "o": (0.1833, 0.1125),
-            "p": (0.1917, 0.1167),
-            "q": (0.1896, 0.1188),
-            "r": (0.125, 0.0771),
-            "s": (0.1562, 0.0958),
-            "t": (0.1167, 0.0729),
-            "u": (0.1896, 0.1188),
-            "v": (0.1771, 0.1104),
-            "w": (0.2458, 0.1521),
-            "x": (0.1771, 0.1104),
-            "y": (0.1771, 0.1104),
-            "z": (0.1562, 0.0979),
-            "{": (0.1917, 0.1188),
-            "|": (0.1, 0.0604),
-            "}": (0.1896, 0.1188),
-        }
 
         default_value: GateData = {
             "raw_text": "wire",
-            "width": WID,
-            "height": HIG,
+            "width": gate_default_width,
+            "height": gate_default_height,
             "text": "",
             "target_bit": [],
             "control_bit": [],
@@ -197,16 +101,12 @@ class MatplotlibDrawer:
                     if target_index == target_index_list[0]:
                         layer_info[target_index]["raw_text"] = gate_name
                         layer_info[target_index]["text"] = name_latex
-                        layer_info[target_index]["width"] = self.get_text_width(
-                            gate_name
-                        )
-                        layer_info[target_index]["height"] = HIG
+                        layer_info[target_index]["width"] = gate_default_width
+                        layer_info[target_index]["height"] = gate_default_height
                         layer_info[target_index]["target_bit"] = target_index_list
                         layer_info[target_index]["control_bit"] = control_index_list
                     else:
-                        layer_info[target_index]["width"] = self.get_text_width(
-                            gate_name
-                        )
+                        layer_info[target_index]["width"] = gate_default_width
                         layer_info[target_index]["raw_text"] = "ghost"
                 self.append_layer(layer_info, default_value)
 
@@ -222,21 +122,17 @@ class MatplotlibDrawer:
                     if target_index == target_index_list[0]:
                         layer_info[target_index]["raw_text"] = gate_name
                         layer_info[target_index]["text"] = name_latex
-                        layer_info[target_index]["width"] = self.get_text_width(
-                            gate_name
-                        )
-                        layer_info[target_index]["height"] = HIG
+                        layer_info[target_index]["width"] = gate_default_width
+                        layer_info[target_index]["height"] = gate_default_height
                         layer_info[target_index]["target_bit"] = target_index_list
                         layer_info[target_index]["control_bit"] = control_index_list
                     else:
-                        layer_info[target_index]["width"] = self.get_text_width(
-                            gate_name
-                        )
+                        layer_info[target_index]["width"] = gate_default_width
                         layer_info[target_index]["raw_text"] = "ghost"
 
         self.append_layer(layer_info, default_value)
 
-        self.layer_width = [WID for _ in range(len(self.gate_info[0]))]
+        self.layer_width = [gate_default_width for _ in range(len(self.gate_info[0]))]
         for i in range(len(self.gate_info[0])):
             for j in range(self.qubit_count):
                 self.layer_width[i] = max(
@@ -244,18 +140,6 @@ class MatplotlibDrawer:
                 )
             for j in range(self.qubit_count):
                 self.gate_info[j][i]["width"] = self.layer_width[i]
-
-    def get_text_width(self, text: str) -> float:
-        width = 0.0
-        if "sqrt" in text:
-            width += 0.0583
-            text = text.replace("sqrt", "")
-        if "dag" in text:
-            width += 0.0583
-            text = text.replace("dag", "")
-        for character in text:
-            width += self._char_list[character][1]
-        return width
 
     def append_layer(self, layer_info: List[GateData], default_value: GateData) -> None:
         is_blank = True
