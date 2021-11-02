@@ -3,7 +3,7 @@ from qulacsvis.visualization.matplotlob import MatplotlibDrawer
 
 
 def test_matplotlib_init() -> None:
-    circuit = QuantumCircuit(2)
+    circuit = QuantumCircuit(3)
     circuit.add_X_gate(0)
     circuit.add_Y_gate(1)
     circuit.add_Z_gate(2)
@@ -17,10 +17,26 @@ def test_matplotlib_init() -> None:
         [
             {
                 "raw_text": "X",
-                "width": 0.1271,
+                "width": 0.65,
                 "height": 0.65,
                 "text": "$X$",
                 "target_bit": [0],
+                "control_bit": [],
+            },
+            {
+                "raw_text": "wire",
+                "width": 0.65,
+                "height": 0.65,
+                "text": "",
+                "target_bit": [],
+                "control_bit": [],
+            },
+            {
+                "raw_text": "wire",
+                "width": 0.65,
+                "height": 0.65,
+                "text": "",
+                "target_bit": [],
                 "control_bit": [],
             },
             {
@@ -33,7 +49,7 @@ def test_matplotlib_init() -> None:
             },
             {
                 "raw_text": "CNOT",
-                "width": 0.5271000000000001,
+                "width": 0.65,
                 "height": 0.65,
                 "text": "$\\targ$",
                 "target_bit": [0],
@@ -50,11 +66,27 @@ def test_matplotlib_init() -> None:
         ],
         [
             {
+                "raw_text": "wire",
+                "width": 0.65,
+                "height": 0.65,
+                "text": "",
+                "target_bit": [],
+                "control_bit": [],
+            },
+            {
                 "raw_text": "Y",
-                "width": 0.1125,
+                "width": 0.65,
                 "height": 0.65,
                 "text": "$Y$",
                 "target_bit": [1],
+                "control_bit": [],
+            },
+            {
+                "raw_text": "wire",
+                "width": 0.65,
+                "height": 0.65,
+                "text": "",
+                "target_bit": [],
                 "control_bit": [],
             },
             {
@@ -84,8 +116,24 @@ def test_matplotlib_init() -> None:
         ],
         [
             {
+                "raw_text": "wire",
+                "width": 0.65,
+                "height": 0.65,
+                "text": "",
+                "target_bit": [],
+                "control_bit": [],
+            },
+            {
+                "raw_text": "wire",
+                "width": 0.65,
+                "height": 0.65,
+                "text": "",
+                "target_bit": [],
+                "control_bit": [],
+            },
+            {
                 "raw_text": "Z",
-                "width": 0.1271,
+                "width": 0.65,
                 "height": 0.65,
                 "text": "$Z$",
                 "target_bit": [2],
@@ -93,7 +141,7 @@ def test_matplotlib_init() -> None:
             },
             {
                 "raw_text": "wire",
-                "width": 0.65,
+                "width": 1.173,
                 "height": 0.65,
                 "text": "",
                 "target_bit": [],
@@ -109,7 +157,7 @@ def test_matplotlib_init() -> None:
             },
             {
                 "raw_text": "X",
-                "width": 0.1271,
+                "width": 0.65,
                 "height": 0.65,
                 "text": "$X$",
                 "target_bit": [2],
