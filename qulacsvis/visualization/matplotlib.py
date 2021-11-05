@@ -68,8 +68,8 @@ class MPLCircuitlDrawer:
             self._text(
                 -2,
                 line_ypos,
-                "$q_{" + str(qubit) + "}$",
-                fontsize=20,
+                r"$q_{" + str(qubit) + r"}$",
+                fontsize=30,
             )
 
             self._line(
@@ -130,7 +130,7 @@ class MPLCircuitlDrawer:
         text: str,
         horizontalalignment: str = "center",
         verticalalignment: str = "center",
-        fontsize: int = 13,
+        fontsize: int = 20,
         color: str = "k",
         clip_on: bool = True,
         zorder: int = PORDER_TEXT,
@@ -155,7 +155,7 @@ class MPLCircuitlDrawer:
             height=gate["height"],
             facecolor="w",  # 塗りつぶし色
             edgecolor="k",  # 辺の色
-            linewidth=3,
+            linewidth=2.4,
             zorder=PORDER_GATE,
         )
         self._ax.add_patch(box)
@@ -184,7 +184,7 @@ class MPLCircuitlDrawer:
             height=multi_gate_height,
             facecolor="w",
             edgecolor="k",
-            linewidth=3,
+            linewidth=2.4,
             zorder=PORDER_GATE,
         )
         self._ax.add_patch(box)
@@ -288,7 +288,7 @@ class MPLCircuitlDrawer:
             )
             ctl = patches.Circle(
                 xy=(to_xpos, to_ypos),
-                radius=0.2,
+                radius=0.15,
                 fc="k",
                 ec="w",
                 linewidth=0,
@@ -298,7 +298,7 @@ class MPLCircuitlDrawer:
 
     def _swap(self, gate: GateData, xy: Tuple[float, float]) -> None:
         xpos, ypos = xy
-        TARGET_QUBIT_MARK_SIZE: Final[float] = 0.1
+        TARGET_QUBIT_MARK_SIZE: Final[float] = 0.2
 
         for target_bit in gate["target_bit"]:
             to_ypos = target_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
