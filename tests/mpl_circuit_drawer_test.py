@@ -8,4 +8,4 @@ if __name__ == "__main__":
     circuit.add_Z_gate(2)
 
     mpl_drawer = MPLCircuitlDrawer(circuit)
-    mpl_drawer.draw()  # type: ignore
+    mpl_drawer.draw()

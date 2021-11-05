@@ -1,28 +1,51 @@
 from typing import List, Tuple
 
+import matplotlib
 from matplotlib import patches
 from matplotlib import pyplot as plt
 from qulacs import QuantumCircuit
 from typing_extensions import Final
-from .circuit_parser import (
-    CircuitParser,
-    CircuitData,
-    GateData,
-    GATE_DEFAULT_HEIGHT,
-)
 
-GATE_MARGIN_RIGHT = 0.5
-GATE_MARGIN_BOTTOM = 0.5
-GATE_MARGIN_TOP = 0.5
+from .circuit_parser import GATE_DEFAULT_HEIGHT, CircuitData, CircuitParser, GateData
 
-PORDER_GATE: Final[int] = 5
-PORDER_LINE: Final[int] = 3
-PORDER_REGLINE: Final[int] = 2
-PORDER_GRAY: Final[int] = 3
-PORDER_TEXT: Final[int] = 6
+GATE_MARGIN_RIGHT: Final[float] = 0.5
+GATE_MARGIN_BOTTOM: Final[float] = 0.5
+GATE_MARGIN_TOP: Final[float] = 0.5
+
+PORDER_LINE: Final[int] = 2
+PORDER_GATE: Final[int] = 3
+PORDER_TEXT: Final[int] = 4
 
 
 class MPLCircuitlDrawer:
+    """
+    Drawing a circuit using Matplotlib.
+
+    Parameters
+    ----------
+    circuit : QuantumCircuit
+        A quantum circuit to be drawn.
+    dpi : int optional default=72
+        The resolution of the figure.
+    scale : float optional default=0.7
+        The scale of the figure.
+
+    Examples
+    --------
+    >>> from qulacs import QuantumCircuit
+    >>> from qulacsvis.visualization import MPLCircuitlDrawer
+    >>> import matplotlib.pyplot as plt
+    >>>
+    >>> circuit = QuantumCircuit(3)
+    >>> circuit.add_X_gate(0)
+    >>> circuit.add_Y_gate(1)
+    >>> circuit.add_Z_gate(2)
+    >>>
+    >>> drawer = MPLCircuitlDrawer(circuit)
+    >>> drawer.draw()
+    >>> plt.show()
+    """
+
     def __init__(self, circuit: QuantumCircuit, *, dpi: int = 72, scale: float = 0.7):
         self._figure = plt.figure(dpi=dpi)
         self._ax = self._figure.add_subplot(111)
@@ -31,12 +54,23 @@ class MPLCircuitlDrawer:
 
         self._circuit = circuit
         self._parser = CircuitParser(circuit)
-        # self._circuit_data = parse_circuit(self._circuit)
         self._circuit_data: CircuitData = self._parser.gate_info
-        # 図の描画サイズの倍率
         self._fig_scale_factor = scale
 
-    def draw(self, *, debug: bool = True):  # type: ignore
+    def draw(self, *, debug: bool = False) -> matplotlib.figure.Figure:
+        """
+        Draw the circuit.
+
+        Parameters
+        ----------
+        debug : bool optional default=False
+            If True, draw the circuit with the axes of the figure.
+
+        Returns
+        -------
+        self._figure : matplotlib.figure.Figure
+            The figure of the circuit.
+        """
         if debug:
             self._ax.axis("on")
             self._ax.grid()
@@ -51,11 +85,10 @@ class MPLCircuitlDrawer:
             - GATE_MARGIN_BOTTOM
         )
 
-        QUBIT_LABEL_AREA = 3
-        self._ax.set_xlim(-QUBIT_LABEL_AREA, circuit_width)
-        self._ax.set_ylim(
-            circuit_height, -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_TOP
-        )  # (max, min)にすると吊り下げになる
+        QUBIT_LABEL_WIDTH = 3
+        self._ax.set_xlim(-QUBIT_LABEL_WIDTH, circuit_width)
+        # y軸は下向きが正
+        self._ax.set_ylim(circuit_height, -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_TOP)
 
         fig_width = abs(self._ax.get_xlim()[1] - self._ax.get_xlim()[0])
         fig_heigth = abs(self._ax.get_ylim()[1] - self._ax.get_ylim()[0])
@@ -84,8 +117,8 @@ class MPLCircuitlDrawer:
 
         for layer in range(circuit_layer_count):
             for qubit in range(self._parser.qubit_count):
-                qubit_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
                 gate = self._circuit_data[qubit][layer]
+                qubit_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
                 if gate["raw_text"] == "ghost":
                     continue
                 elif gate["raw_text"] == "wire":
@@ -112,6 +145,25 @@ class MPLCircuitlDrawer:
         lw: float = 2.0,
         zorder: int = PORDER_LINE,
     ) -> None:
+        """
+        Draw a line.
+
+        Parameters
+        ----------
+        from_xy : Tuple[float, float]
+            The position of the start point.
+        to_xy : Tuple[float, float]
+            The position of the end point.
+        lc : str optional default="k"
+            The color of the line.
+        ls : str optional default="-"
+            The style of the line.
+        lw : float optional default=2.0
+            The width of the line.
+        zorder : int optional default=PORDER_LINE
+            The zorder of the line.
+        """
+
         from_x, from_y = from_xy
         to_x, to_y = to_xy
         self._ax.plot(
@@ -135,6 +187,35 @@ class MPLCircuitlDrawer:
         clip_on: bool = True,
         zorder: int = PORDER_TEXT,
     ) -> None:
+        """
+        Draw a text.
+
+        Parameters
+        ----------
+        x : float
+            The x position of the text.
+        y : float
+            The y position of the text.
+        text : str
+            The text to be drawn.
+        horizontalalignment : str optional default="center"
+            The horizontal alignment of the text.
+        verticalalignment : str optional default="center"
+            The vertical alignment of the text.
+        fontsize : int optional default=20
+            The font size of the text.
+        color : str optional default="k"
+            The color of the text.
+        clip_on : bool optional default=True
+            If True, the text will be clipped.
+        zorder : int optional default=PORDER_TEXT
+            The zorder of the text.
+
+        Notes
+        -----
+        The fontsize will be adjusted by _fig_scale_factor.
+        """
+
         self._ax.text(
             x,
             y,
@@ -148,13 +229,25 @@ class MPLCircuitlDrawer:
         )
 
     def _gate(self, gate: GateData, xy: Tuple[float, float]) -> None:
+        """
+        Draw a gate.
+
+        Parameters
+        ----------
+        gate : GateData
+            The gate data to be drawn.
+        xy : Tuple[float, float]
+            The position of the gate.
+        """
+
         xpos, ypos = xy
         box = patches.Rectangle(
+            # The gate is centered.
             xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * gate["height"]),
             width=gate["width"],
             height=gate["height"],
-            facecolor="w",  # 塗りつぶし色
-            edgecolor="k",  # 辺の色
+            facecolor="w",
+            edgecolor="k",
             linewidth=2.4,
             zorder=PORDER_GATE,
         )
@@ -165,6 +258,19 @@ class MPLCircuitlDrawer:
     def _gate_with_size(
         self, gate: GateData, xy: Tuple[float, float], multi_gate_size: int
     ) -> None:
+        """
+        Draw a gate with a specified size.
+
+        Parameters
+        ----------
+        gate : GateData
+            The gate data to be drawn.
+        xy : Tuple[float, float]
+            The position of the gate with the smallest index among the target bits.
+        multi_gate_size : int
+            The size of the gate.
+        """
+
         xpos, ypos = xy
         # sizeを持つゲートのy座標の中点を求める
         ypos = (
@@ -179,6 +285,7 @@ class MPLCircuitlDrawer:
             + GATE_MARGIN_RIGHT * (multi_gate_size - 1)
         )
         box = patches.Rectangle(
+            # The gate is centered.
             xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * multi_gate_height),
             width=gate["width"],
             height=multi_gate_height,
@@ -192,6 +299,17 @@ class MPLCircuitlDrawer:
         self._text(xpos, ypos, gate["text"])
 
     def _multi_gate(self, gate: GateData, xy: Tuple[float, float]) -> None:
+        """
+        Draw a multi-gate. (e.g., DensityMatrixGate)
+
+        Parameters
+        ----------
+        gate : GateData
+            The gate data to be drawn.
+        xy : Tuple[float, float]
+            The position of the gate with the smallest index among the target bits.
+        """
+
         xpos, ypos = xy
 
         multi_gate_data: GateData = {
@@ -205,7 +323,7 @@ class MPLCircuitlDrawer:
 
         gate["target_bit"].sort()
         connected_group = []
-        connected_bit_list = []
+        connected_bit_list: List[int] = []
         for target_bit in gate["target_bit"]:
             if connected_bit_list == []:
                 connected_bit_list.append(target_bit)
@@ -236,6 +354,7 @@ class MPLCircuitlDrawer:
                 multi_gate_data, (group_x, group_y), len(connected_bit_list)
             )
 
+        # ゲート間をつなぐ灰色のライン
         ypos = min(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
         to_ypos = max(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
         self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
@@ -243,6 +362,22 @@ class MPLCircuitlDrawer:
         self._control_bits(gate["control_bit"], (xpos, ypos))
 
     def _cnot(self, gate: GateData, xy: Tuple[float, float]) -> None:
+        """
+        Draw a CNOT gate.
+
+        Parameters
+        ----------
+        gate : GateData
+            The gate data to be drawn.
+        xy : Tuple[float, float]
+            The position of the gate indicating the target bit of CNOT.
+
+        Raise
+        -----
+        ValueError
+            If the gate does not have a control bit.
+        """
+
         xpos, ypos = xy
         TARGET_QUBIT_RADIUS: Final[float] = 0.4
 
@@ -278,6 +413,17 @@ class MPLCircuitlDrawer:
     def _control_bits(
         self, control_bits: List[int], xy_from: Tuple[float, float]
     ) -> None:
+        """
+        Draw control bits.
+
+        Parameters
+        ----------
+        control_bits : List[int]
+            The control bits to be drawn.
+        xy_from : Tuple[float, float]
+            The position of the gate from which the control bits are connected.
+        """
+
         for control_bit in control_bits:
             to_ypos = control_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
             to_xpos = xy_from[0]
@@ -297,6 +443,17 @@ class MPLCircuitlDrawer:
             self._ax.add_patch(ctl)
 
     def _swap(self, gate: GateData, xy: Tuple[float, float]) -> None:
+        """
+        Draw a SWAP gate.
+
+        Parameters
+        ----------
+        gate : GateData
+            The gate data to be drawn.
+        xy : Tuple[float, float]
+            The position of the gate with the smaller index among the target bits.
+        """
+
         xpos, ypos = xy
         TARGET_QUBIT_MARK_SIZE: Final[float] = 0.2
 
