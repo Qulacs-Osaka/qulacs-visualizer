@@ -13,6 +13,7 @@ from .circuit_parser import (
 
 GATE_MARGIN_RIGHT = 0.5
 GATE_MARGIN_BOTTOM = 0.5
+GATE_MARGIN_TOP = 0.5
 
 PORDER_GATE: Final[int] = 5
 PORDER_LINE: Final[int] = 3
@@ -22,8 +23,8 @@ PORDER_TEXT: Final[int] = 6
 
 
 class MPLCircuitlDrawer:
-    def __init__(self, circuit: QuantumCircuit, *, scale: float = 1.0):
-        self._figure = plt.figure()
+    def __init__(self, circuit: QuantumCircuit, *, dpi: int = 72, scale: float = 0.7):
+        self._figure = plt.figure(dpi=dpi)
         self._ax = self._figure.add_subplot(111)
         self._ax.set_aspect("equal")
         self._ax.axis("off")
@@ -35,10 +36,31 @@ class MPLCircuitlDrawer:
         # 図の描画サイズの倍率
         self._fig_scale_factor = scale
 
-    def draw(self, *, debug: bool = False):  # type: ignore
+    def draw(self, *, debug: bool = True):  # type: ignore
+        if debug:
+            self._ax.axis("on")
+            self._ax.grid()
+
         circuit_layer_count = len(self._circuit_data[0])
-        sum_layer_width = (
+
+        circuit_width = (
             sum(self._parser.layer_width) + circuit_layer_count * GATE_MARGIN_RIGHT
+        )
+        circuit_height = (
+            self._parser.qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+            - GATE_MARGIN_BOTTOM
+        )
+
+        QUBIT_LABEL_AREA = 3
+        self._ax.set_xlim(-QUBIT_LABEL_AREA, circuit_width)
+        self._ax.set_ylim(
+            circuit_height, -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_TOP
+        )  # (max, min)にすると吊り下げになる
+
+        fig_width = abs(self._ax.get_xlim()[1] - self._ax.get_xlim()[0])
+        fig_heigth = abs(self._ax.get_ylim()[1] - self._ax.get_ylim()[0])
+        self._figure.set_size_inches(
+            fig_width * self._fig_scale_factor, fig_heigth * self._fig_scale_factor
         )
 
         for qubit in range(self._parser.qubit_count):
@@ -53,7 +75,7 @@ class MPLCircuitlDrawer:
             self._line(
                 (-1, line_ypos),
                 (
-                    sum_layer_width - GATE_MARGIN_RIGHT,
+                    circuit_width - GATE_MARGIN_RIGHT,
                     line_ypos,
                 ),
             )
@@ -78,27 +100,6 @@ class MPLCircuitlDrawer:
                     self._gate(gate, (layer_xpos, qubit_ypos))
 
             layer_xpos += self._parser.layer_width[layer] + GATE_MARGIN_RIGHT
-
-        fig_width = sum_layer_width
-        fig_height = (
-            self._parser.qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
-            - GATE_MARGIN_BOTTOM
-        )
-
-        self._ax.set_xlim(-3, fig_width)
-        self._ax.set_ylim(
-            fig_height, -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_BOTTOM
-        )  # (max, min)にすると吊り下げになる
-
-        # 比率を保ったまま拡大
-        self._figure.set_size_inches(
-            fig_width * self._fig_scale_factor,
-            fig_height * self._fig_scale_factor,
-        )
-
-        if debug:
-            self._ax.axis("on")
-            self._ax.grid()
 
         return self._figure
 

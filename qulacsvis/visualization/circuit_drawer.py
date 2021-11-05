@@ -19,7 +19,8 @@ def circuit_drawer(
     verbose: bool = False,
     dot: str = "large",
     ppi: int = 150,
-    scale: float = 1.0,
+    dpi: int = 72,
+    scale: float = 0.7
 ) -> Union[str, Image.Image, None]:
     """
     Draws a circuit diagram of a circuit.
@@ -112,7 +113,7 @@ def circuit_drawer(
         return _generate_latex_source(circuit)
 
     elif output_method == "mpl":
-        mpl_drawer = MPLCircuitlDrawer(circuit, scale=scale)
+        mpl_drawer = MPLCircuitlDrawer(circuit, dpi=dpi, scale=scale)
         mpl_drawer.draw()  # type: ignore
         plt.show()
         return None
