@@ -9,6 +9,7 @@ from typing_extensions import Final
 from .circuit_parser import GATE_DEFAULT_HEIGHT, CircuitData, CircuitParser, GateData
 
 GATE_MARGIN_RIGHT: Final[float] = 0.5
+GATE_MARGIN_LEFT: Final[float] = 0.5
 GATE_MARGIN_BOTTOM: Final[float] = 0.5
 GATE_MARGIN_TOP: Final[float] = 0.5
 
@@ -97,14 +98,17 @@ class MPLCircuitlDrawer:
             + circuit_layer_count * GATE_MARGIN_RIGHT
             - self._parser.layer_width[0] / 2
         )
+        circuit_min_x = -self._parser.layer_width[0] / 2 - GATE_MARGIN_LEFT
         circuit_max_y = (
             self._parser.qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
             - GATE_MARGIN_BOTTOM
             - GATE_DEFAULT_HEIGHT / 2
         )
 
-        QUBIT_LABEL_WIDTH = 3
-        self._ax.set_xlim(-QUBIT_LABEL_WIDTH, circuit_max_x + GATE_MARGIN_RIGHT)
+        QUBIT_LABEL_WIDTH = 2
+        self._ax.set_xlim(
+            circuit_min_x - QUBIT_LABEL_WIDTH, circuit_max_x + GATE_MARGIN_RIGHT
+        )
         self._ax.set_ylim(
             circuit_max_y + GATE_MARGIN_BOTTOM,
             -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_TOP,
@@ -119,14 +123,14 @@ class MPLCircuitlDrawer:
         for qubit in range(self._parser.qubit_count):
             line_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
             self._text(
-                -2,
+                circuit_min_x - 1,
                 line_ypos,
                 r"$q_{" + str(qubit) + r"}$",
                 fontsize=30,
             )
 
             self._line(
-                (-1, line_ypos),
+                (circuit_min_x, line_ypos),
                 (
                     circuit_max_x,
                     line_ypos,
