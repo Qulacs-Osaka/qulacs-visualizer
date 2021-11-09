@@ -130,7 +130,7 @@ class MPLCircuitlDrawer:
                 elif len(gate["target_bit"]) > 1:
                     self._multi_gate(gate, (layer_xpos, qubit_ypos))
                 else:
-                    self._gate(gate, (layer_xpos, qubit_ypos))
+                    self._gate_with_size(gate, (layer_xpos, qubit_ypos), 1)
 
             layer_xpos += self._parser.layer_width[layer] + GATE_MARGIN_RIGHT
 
@@ -228,33 +228,6 @@ class MPLCircuitlDrawer:
             zorder=zorder,
         )
 
-    def _gate(self, gate: GateData, xy: Tuple[float, float]) -> None:
-        """
-        Draw a gate.
-
-        Parameters
-        ----------
-        gate : GateData
-            The gate data to be drawn.
-        xy : Tuple[float, float]
-            The position of the gate.
-        """
-
-        xpos, ypos = xy
-        box = patches.Rectangle(
-            # The gate is centered.
-            xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * gate["height"]),
-            width=gate["width"],
-            height=gate["height"],
-            facecolor="w",
-            edgecolor="k",
-            linewidth=2.4,
-            zorder=PORDER_GATE,
-        )
-        self._ax.add_patch(box)
-        self._text(xpos, ypos, gate["text"])
-        self._control_bits(gate["control_bit"], (xpos, ypos))
-
     def _gate_with_size(
         self, gate: GateData, xy: Tuple[float, float], multi_gate_size: int
     ) -> None:
@@ -295,8 +268,8 @@ class MPLCircuitlDrawer:
             zorder=PORDER_GATE,
         )
         self._ax.add_patch(box)
-
         self._text(xpos, ypos, gate["text"])
+        self._control_bits(gate["control_bit"], (xpos, ypos))
 
     def _multi_gate(self, gate: GateData, xy: Tuple[float, float]) -> None:
         """
