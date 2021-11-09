@@ -279,7 +279,7 @@ class MPLCircuitlDrawer:
         ) * 0.5
         multi_gate_height = (
             GATE_DEFAULT_HEIGHT * multi_gate_size
-            + GATE_MARGIN_RIGHT * (multi_gate_size - 1)
+            + GATE_MARGIN_BOTTOM * (multi_gate_size - 1)
         )
         box = patches.Rectangle(
             # The gate is centered.
