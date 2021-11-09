@@ -92,18 +92,23 @@ class MPLCircuitlDrawer:
 
         circuit_layer_count = len(self._circuit_data[0])
 
-        circuit_width = (
-            sum(self._parser.layer_width) + circuit_layer_count * GATE_MARGIN_RIGHT
+        circuit_max_x = (
+            sum(self._parser.layer_width)
+            + circuit_layer_count * GATE_MARGIN_RIGHT
+            - self._parser.layer_width[0] / 2
         )
-        circuit_height = (
+        circuit_max_y = (
             self._parser.qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
             - GATE_MARGIN_BOTTOM
+            - GATE_DEFAULT_HEIGHT / 2
         )
 
         QUBIT_LABEL_WIDTH = 3
-        self._ax.set_xlim(-QUBIT_LABEL_WIDTH, circuit_width)
-        # y軸は下向きが正
-        self._ax.set_ylim(circuit_height, -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_TOP)
+        self._ax.set_xlim(-QUBIT_LABEL_WIDTH, circuit_max_x + GATE_MARGIN_RIGHT)
+        self._ax.set_ylim(
+            circuit_max_y + GATE_MARGIN_BOTTOM,
+            -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_TOP,
+        )
 
         fig_width = abs(self._ax.get_xlim()[1] - self._ax.get_xlim()[0])
         fig_heigth = abs(self._ax.get_ylim()[1] - self._ax.get_ylim()[0])
@@ -123,7 +128,7 @@ class MPLCircuitlDrawer:
             self._line(
                 (-1, line_ypos),
                 (
-                    circuit_width - GATE_MARGIN_RIGHT,
+                    circuit_max_x,
                     line_ypos,
                 ),
             )
