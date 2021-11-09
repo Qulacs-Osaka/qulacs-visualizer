@@ -294,38 +294,17 @@ class MPLCircuitlDrawer:
             "raw_text": gate["raw_text"],
         }
 
-        gate["target_bit"].sort()
-        connected_group = []
-        connected_bit_list: List[int] = []
-        for target_bit in gate["target_bit"]:
-            if connected_bit_list == []:
-                connected_bit_list.append(target_bit)
-                continue
+        groups_of_adjacent_gates = self._grouping_adjacent_gates(gate["target_bit"])
 
-            if target_bit - 1 in connected_bit_list:
-                connected_bit_list.append(target_bit)
-            else:
-                connected_group.append(connected_bit_list)
-                connected_bit_list = [target_bit]
-
-        connected_group.append(connected_bit_list)
-
-        # 名前付きで表示
-        connected_bit_list = connected_group[0]
-        group_x = xpos
-        group_y = connected_bit_list[0] * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
-        self._gate_with_size(
-            multi_gate_data,
-            (group_x, group_y),
-            len(connected_bit_list),
-        )
-        # 名前無しで表示
-        multi_gate_data["text"] = ""
-        for connected_bit_list in connected_group[1:]:
-            group_y = connected_bit_list[0] * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+        for i, adjacent_gates in enumerate(groups_of_adjacent_gates):
+            group_x = xpos
+            group_y = adjacent_gates[0] * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
             self._gate_with_size(
-                multi_gate_data, (group_x, group_y), len(connected_bit_list)
+                multi_gate_data, (group_x, group_y), len(adjacent_gates)
             )
+            if i == 0:
+                # 1つのグループ(multi_gate)にだけ名前を表示し、それ以外は非表示にする
+                multi_gate_data["text"] = ""
 
         # ゲート間をつなぐ灰色のライン
         ypos = min(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
@@ -333,6 +312,44 @@ class MPLCircuitlDrawer:
         self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
 
         self._control_bits(gate["control_bit"], (xpos, ypos))
+
+    def _grouping_adjacent_gates(self, target_bits: List[int]) -> List[List[int]]:
+        """
+        Grouping adjacent gates.
+
+        Parameters
+        ----------
+        target_bit : List[int]
+            The target bit list.
+
+        Returns
+        -------
+        List[List[int]]
+            The grouped target bit list.
+
+        Examples
+        --------
+        >>> target_bits = [1, 2, 3, 5, 7, 8]
+        >>> print(_grouping_adjacent_gates(target_bits))
+        >>> [[1, 2, 3], [5], [7, 8]]
+        """
+
+        target_bits.sort()
+        groups = []
+        adjacent_gates: List[int] = []
+        for target_bit in target_bits:
+            if adjacent_gates == []:
+                adjacent_gates.append(target_bit)
+                continue
+
+            if target_bit - 1 in adjacent_gates:
+                adjacent_gates.append(target_bit)
+            else:
+                groups.append(adjacent_gates)
+                adjacent_gates = [target_bit]
+
+        groups.append(adjacent_gates)
+        return groups
 
     def _cnot(self, gate: GateData, xy: Tuple[float, float]) -> None:
         """
