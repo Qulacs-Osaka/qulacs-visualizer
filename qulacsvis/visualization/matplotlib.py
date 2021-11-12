@@ -6,7 +6,13 @@ from matplotlib import pyplot as plt
 from qulacs import QuantumCircuit
 from typing_extensions import Final
 
-from .circuit_parser import GATE_DEFAULT_HEIGHT, CircuitData, CircuitParser, GateData
+from .circuit_parser import (
+    GATE_DEFAULT_HEIGHT,
+    GATE_DEFAULT_WIDTH,
+    CircuitData,
+    CircuitParser,
+    GateData,
+)
 
 GATE_MARGIN_RIGHT: Final[float] = 0.5
 GATE_MARGIN_LEFT: Final[float] = 0.5
@@ -92,6 +98,9 @@ class MPLCircuitlDrawer:
             self._ax.grid()
 
         circuit_layer_count = len(self._circuit_data[0])
+        # When the input is an empty quantum circuit
+        if self._parser.layer_width == []:
+            self._parser.layer_width = [GATE_DEFAULT_WIDTH]
         # X/Y coordinates of the area where the circuit will be drawn.
         # Used to resize the figure.
         # In particular, the X coordinate is also used
