@@ -92,7 +92,10 @@ class MPLCircuitlDrawer:
             self._ax.grid()
 
         circuit_layer_count = len(self._circuit_data[0])
-
+        # X/Y coordinates of the area where the circuit will be drawn.
+        # Used to resize the figure.
+        # In particular, the X coordinate is also used
+        # as the right end (max_x) and left end (min_x) coordinates of the circuit wire.
         circuit_max_x = (
             sum(self._parser.layer_width)
             + circuit_layer_count * GATE_MARGIN_RIGHT
@@ -105,6 +108,7 @@ class MPLCircuitlDrawer:
             - GATE_DEFAULT_HEIGHT / 2
         )
 
+        # Determine the size of the figure (drawing size of the circuit + margins)
         QUBIT_LABEL_WIDTH = 2
         self._ax.set_xlim(
             circuit_min_x - QUBIT_LABEL_WIDTH, circuit_max_x + GATE_MARGIN_RIGHT
@@ -114,12 +118,14 @@ class MPLCircuitlDrawer:
             -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_TOP,
         )
 
+        # Enlarge/reduce the shape while keeping the aspect ratio
         fig_width = abs(self._ax.get_xlim()[1] - self._ax.get_xlim()[0])
         fig_heigth = abs(self._ax.get_ylim()[1] - self._ax.get_ylim()[0])
         self._figure.set_size_inches(
             fig_width * self._fig_scale_factor, fig_heigth * self._fig_scale_factor
         )
 
+        # Draw a Qubit label for the number of Qubits in the quantum circuit and a wire
         for qubit in range(self._parser.qubit_count):
             line_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
             self._text(
@@ -137,8 +143,10 @@ class MPLCircuitlDrawer:
                 ),
             )
 
+        # x-coordinate of the layer currently being drawn
         layer_xpos = 0.0
 
+        # Draw a gate for each layer
         for layer in range(circuit_layer_count):
             for qubit in range(self._parser.qubit_count):
                 gate = self._circuit_data[qubit][layer]
@@ -156,6 +164,7 @@ class MPLCircuitlDrawer:
                 else:
                     self._gate_with_size(gate, (layer_xpos, qubit_ypos), 1)
 
+            # Determine the x-coordinate of the next layer
             layer_xpos += self._parser.layer_width[layer] + GATE_MARGIN_RIGHT
 
         return self._figure
@@ -269,7 +278,7 @@ class MPLCircuitlDrawer:
         """
 
         xpos, ypos = xy
-        # sizeを持つゲートのy座標の中点を求める
+        # Find the midpoint of the y-coordinate of the gate with size
         ypos = (
             ypos
             + (
@@ -327,10 +336,10 @@ class MPLCircuitlDrawer:
                 multi_gate_data, (group_x, group_y), len(adjacent_gates)
             )
             if i == 0:
-                # 1つのグループ(multi_gate)にだけ名前を表示し、それ以外は非表示にする
+                # Show the name only for the first group (multi_gate) and hide the rest
                 multi_gate_data["text"] = ""
 
-        # ゲート間をつなぐ灰色のライン
+        # Gray line connecting the gates
         ypos = min(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
         to_ypos = max(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
         self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
