@@ -1,17 +1,19 @@
-from typing import List
+from typing import Dict
 
 import numpy as np
 from qulacs import QuantumCircuit
 from qulacs.gate import CNOT, SWAP, TOFFOLI, DenseMatrix, to_matrix_gate
 
 
-def load_circuit_data() -> List[QuantumCircuit]:
-    circuits = []
-    circuits.append(simple_circuit1())
-    circuits.append(simple_circuit2())
-    circuits.append(circuit_with_CZgate())
-    circuits.append(circuit_with_DenseMatrix_SWAP())
-    circuits.append(circuit_with_DeM_with_multiple_target_bits())
+def load_circuit_data() -> Dict[str, QuantumCircuit]:
+    circuits = {}
+    circuits["simple_circuit1"] = simple_circuit1()
+    circuits["simple_circuit2"] = simple_circuit2()
+    circuits["circuit_with_CZgate"] = circuit_with_CZgate()
+    circuits["circuit_with_DenseMatrix_SWAP"] = circuit_with_DenseMatrix_SWAP()
+    circuits[
+        "circuit_with_DeM_with_multiple_target_bits"
+    ] = circuit_with_DeM_with_multiple_target_bits()
     return circuits
 
 
