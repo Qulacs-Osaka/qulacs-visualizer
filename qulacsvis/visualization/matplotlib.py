@@ -34,7 +34,7 @@ class MPLCircuitlDrawer:
         A quantum circuit to be drawn.
     dpi : int optional default=72
         The resolution of the figure.
-    scale : float optional default=0.7
+    scale : float optional default=0.6
         The scale of the figure.
 
     Attributes
@@ -68,8 +68,9 @@ class MPLCircuitlDrawer:
     >>> plt.show()
     """
 
-    def __init__(self, circuit: QuantumCircuit, *, dpi: int = 72, scale: float = 0.7):
+    def __init__(self, circuit: QuantumCircuit, *, dpi: int = 72, scale: float = 0.6):
         self._figure = plt.figure(dpi=dpi)
+        self._figure.subplots_adjust(left=0, right=1, bottom=0, top=1)
         self._ax = self._figure.add_subplot(111)
         self._ax.set_aspect("equal")
         self._ax.axis("off")

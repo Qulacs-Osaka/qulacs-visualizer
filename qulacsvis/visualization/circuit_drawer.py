@@ -20,7 +20,7 @@ def circuit_drawer(
     dot: str = "large",
     ppi: int = 150,
     dpi: int = 72,
-    scale: float = 0.7,
+    scale: float = 0.6,
 ) -> Union[str, Image.Image, None]:
     """
     Draws a circuit diagram of a circuit.
@@ -32,17 +32,20 @@ def circuit_drawer(
     output_method : Optional[str], optional
         Set the output method for the drawn circuit.
         If None, the output method is set to 'text'.
-    verbose : bool, optional
+    verbose : bool optional default=False
         (output_method='text')
         If True, a number will be added to the gate.
         Gates are numbered in the order in which they are added to the circuit.
-    dot: str, optional
+    dot: str optional default='large'
         (output_method='text')
         Dot style to mean control qubit(default="large")
-    ppi : int, optional
+    ppi : int optional default=150
         (output_method='latex')
         The pixels per inch of the output image.
-    scale : float, optional
+    dpi : int optional default=72
+        (output_method='mpl')
+        The dots per inch of the output image.
+    scale : float optional default=0.6
         (output_method='mpl')
         The scale of the output image.
 
