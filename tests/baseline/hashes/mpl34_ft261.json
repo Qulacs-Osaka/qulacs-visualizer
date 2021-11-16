@@ -1,0 +1,7 @@
+{
+  "tests.matplotlib_test.test_draw_with_mpl[simple_circuit1]": "299ed4dcbac7191f8c0ccbde67c3c1ad5eec30dbf28efdb8884febc01b89434d",
+  "tests.matplotlib_test.test_draw_with_mpl[simple_circuit2]": "a148246cd020026b11a305b4478019439ce344112f9184108f6e0bd09f871709",
+  "tests.matplotlib_test.test_draw_with_mpl[circuit_with_CZgate]": "1e5874bebf84bfcc2cc0cc44603a8db41dbd5a70c8f0be119e586d866485ca58",
+  "tests.matplotlib_test.test_draw_with_mpl[circuit_with_DenseMatrix_SWAP]": "390d4c444debbb06d64f8ffd90f5a4f23020906d1d867f68cccafaf14d10f818",
+  "tests.matplotlib_test.test_draw_with_mpl[circuit_with_DeM_with_multiple_target_bits]": "8c1ec6e5080a97443582b458171866b7069e76824816e541904bb033f54294f7"
+}
