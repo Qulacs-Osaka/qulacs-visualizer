@@ -1,0 +1,708 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>qulacsvis.visualization.matplotlib &mdash; qulacsvis 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> qulacsvis
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">qulacsvis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qulacsvis.visualization.matplotlib</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qulacsvis.visualization.matplotlib</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">patches</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Final</span>
+
+<span class="kn">from</span> <span class="nn">.circuit_parser</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GATE_DEFAULT_HEIGHT</span><span class="p">,</span>
+    <span class="n">GATE_DEFAULT_WIDTH</span><span class="p">,</span>
+    <span class="n">CircuitData</span><span class="p">,</span>
+    <span class="n">CircuitParser</span><span class="p">,</span>
+    <span class="n">GateData</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">GATE_MARGIN_RIGHT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">GATE_MARGIN_LEFT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">GATE_MARGIN_BOTTOM</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">GATE_MARGIN_TOP</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="n">PORDER_LINE</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">PORDER_GATE</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">PORDER_TEXT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+
+
+<div class="viewcode-block" id="MPLCircuitlDrawer"><a class="viewcode-back" href="../../../qulacsvis.visualization.matplotlib.html#qulacsvis.visualization.matplotlib.MPLCircuitlDrawer">[docs]</a><span class="k">class</span> <span class="nc">MPLCircuitlDrawer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Drawing a circuit using Matplotlib.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    circuit : QuantumCircuit</span>
+<span class="sd">        A quantum circuit to be drawn.</span>
+<span class="sd">    dpi : int optional default=72</span>
+<span class="sd">        The resolution of the figure.</span>
+<span class="sd">    scale : float optional default=0.6</span>
+<span class="sd">        The scale of the figure.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _figure : matplotlib.figure.Figure</span>
+<span class="sd">        The figure of the circuit.</span>
+<span class="sd">    _ax : matplotlib.axes.Axes</span>
+<span class="sd">        The axes of the figure.</span>
+<span class="sd">    _circuit : QuantumCircuit</span>
+<span class="sd">        The quantum circuit to be drawn.</span>
+<span class="sd">    _parser : CircuitParser</span>
+<span class="sd">        The parser of the quantum circuit.</span>
+<span class="sd">    _circuit_data : CircuitData</span>
+<span class="sd">        The data of the quantum circuit after parsing by CircuitParser.</span>
+<span class="sd">    _fig_scale_factor : float</span>
+<span class="sd">        The scale factor of the figure.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from qulacs import QuantumCircuit</span>
+<span class="sd">    &gt;&gt;&gt; from qulacsvis.visualization import MPLCircuitlDrawer</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; circuit = QuantumCircuit(3)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_X_gate(0)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_Y_gate(1)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_Z_gate(2)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; drawer = MPLCircuitlDrawer(circuit)</span>
+<span class="sd">    &gt;&gt;&gt; drawer.draw()</span>
+<span class="sd">    &gt;&gt;&gt; plt.show()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">72</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">circuit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span> <span class="o">=</span> <span class="n">CircuitParser</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">:</span> <span class="n">CircuitData</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">gate_info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig_scale_factor</span> <span class="o">=</span> <span class="n">scale</span>
+
+<div class="viewcode-block" id="MPLCircuitlDrawer.draw"><a class="viewcode-back" href="../../../qulacsvis.visualization.matplotlib.html#qulacsvis.visualization.matplotlib.MPLCircuitlDrawer.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw the circuit.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        debug : bool optional default=False</span>
+<span class="sd">            If True, draw the circuit with the axes of the figure.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self._figure : matplotlib.figure.Figure</span>
+<span class="sd">            The figure of the circuit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;on&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="n">circuit_layer_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># When the input is an empty quantum circuit</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span> <span class="o">=</span> <span class="p">[</span><span class="n">GATE_DEFAULT_WIDTH</span><span class="p">]</span>
+        <span class="c1"># X/Y coordinates of the area where the circuit will be drawn.</span>
+        <span class="c1"># Used to resize the figure.</span>
+        <span class="c1"># In particular, the X coordinate is also used</span>
+        <span class="c1"># as the right end (max_x) and left end (min_x) coordinates of the circuit wire.</span>
+        <span class="n">circuit_max_x</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">circuit_layer_count</span> <span class="o">*</span> <span class="n">GATE_MARGIN_RIGHT</span>
+            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="n">circuit_min_x</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">GATE_MARGIN_LEFT</span>
+        <span class="n">circuit_max_y</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">qubit_count</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+            <span class="o">-</span> <span class="n">GATE_MARGIN_BOTTOM</span>
+            <span class="o">-</span> <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Determine the size of the figure (drawing size of the circuit + margins)</span>
+        <span class="n">QUBIT_LABEL_WIDTH</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span>
+            <span class="n">circuit_min_x</span> <span class="o">-</span> <span class="n">QUBIT_LABEL_WIDTH</span><span class="p">,</span> <span class="n">circuit_max_x</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span>
+            <span class="n">circuit_max_y</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">GATE_MARGIN_TOP</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Enlarge/reduce the shape while keeping the aspect ratio</span>
+        <span class="n">fig_width</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">fig_heigth</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span>
+            <span class="n">fig_width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig_scale_factor</span><span class="p">,</span> <span class="n">fig_heigth</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig_scale_factor</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Draw a Qubit label for the number of Qubits in the quantum circuit and a wire</span>
+        <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">qubit_count</span><span class="p">):</span>
+            <span class="n">line_ypos</span> <span class="o">=</span> <span class="n">qubit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">(</span>
+                <span class="n">circuit_min_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">line_ypos</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;$q_{&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">qubit</span><span class="p">)</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;}$&quot;</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">circuit_min_x</span><span class="p">,</span> <span class="n">line_ypos</span><span class="p">),</span>
+                <span class="p">(</span>
+                    <span class="n">circuit_max_x</span><span class="p">,</span>
+                    <span class="n">line_ypos</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="c1"># x-coordinate of the layer currently being drawn</span>
+        <span class="n">layer_xpos</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Draw a gate for each layer</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_layer_count</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">qubit_count</span><span class="p">):</span>
+                <span class="n">gate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span>
+                <span class="n">qubit_ypos</span> <span class="o">=</span> <span class="n">qubit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;raw_text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ghost&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;raw_text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;wire&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;raw_text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_cnot</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="p">(</span><span class="n">layer_xpos</span><span class="p">,</span> <span class="n">qubit_ypos</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;raw_text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SWAP&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_swap</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="p">(</span><span class="n">layer_xpos</span><span class="p">,</span> <span class="n">qubit_ypos</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="p">[</span><span class="s2">&quot;target_bit&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_multi_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="p">(</span><span class="n">layer_xpos</span><span class="p">,</span> <span class="n">qubit_ypos</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_gate_with_size</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="p">(</span><span class="n">layer_xpos</span><span class="p">,</span> <span class="n">qubit_ypos</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># Determine the x-coordinate of the next layer</span>
+            <span class="n">layer_xpos</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span></div>
+
+    <span class="k">def</span> <span class="nf">_line</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">from_xy</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+        <span class="n">to_xy</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+        <span class="n">lc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="n">ls</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">lw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">PORDER_LINE</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw a line.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        from_xy : Tuple[float, float]</span>
+<span class="sd">            The position of the start point.</span>
+<span class="sd">        to_xy : Tuple[float, float]</span>
+<span class="sd">            The position of the end point.</span>
+<span class="sd">        lc : str optional default=&quot;k&quot;</span>
+<span class="sd">            The color of the line.</span>
+<span class="sd">        ls : str optional default=&quot;-&quot;</span>
+<span class="sd">            The style of the line.</span>
+<span class="sd">        lw : float optional default=2.0</span>
+<span class="sd">            The width of the line.</span>
+<span class="sd">        zorder : int optional default=PORDER_LINE</span>
+<span class="sd">            The zorder of the line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">from_x</span><span class="p">,</span> <span class="n">from_y</span> <span class="o">=</span> <span class="n">from_xy</span>
+        <span class="n">to_x</span><span class="p">,</span> <span class="n">to_y</span> <span class="o">=</span> <span class="n">to_xy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">from_x</span><span class="p">,</span> <span class="n">to_x</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">from_y</span><span class="p">,</span> <span class="n">to_y</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">lc</span><span class="p">,</span>
+            <span class="n">linestyle</span><span class="o">=</span><span class="n">ls</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="n">zorder</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_text</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">horizontalalignment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="n">verticalalignment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="n">fontsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="n">clip_on</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">PORDER_TEXT</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw a text.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            The x position of the text.</span>
+<span class="sd">        y : float</span>
+<span class="sd">            The y position of the text.</span>
+<span class="sd">        text : str</span>
+<span class="sd">            The text to be drawn.</span>
+<span class="sd">        horizontalalignment : str optional default=&quot;center&quot;</span>
+<span class="sd">            The horizontal alignment of the text.</span>
+<span class="sd">        verticalalignment : str optional default=&quot;center&quot;</span>
+<span class="sd">            The vertical alignment of the text.</span>
+<span class="sd">        fontsize : int optional default=20</span>
+<span class="sd">            The font size of the text.</span>
+<span class="sd">        color : str optional default=&quot;k&quot;</span>
+<span class="sd">            The color of the text.</span>
+<span class="sd">        clip_on : bool optional default=True</span>
+<span class="sd">            If True, the text will be clipped.</span>
+<span class="sd">        zorder : int optional default=PORDER_TEXT</span>
+<span class="sd">            The zorder of the text.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The fontsize will be adjusted by _fig_scale_factor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="n">y</span><span class="p">,</span>
+            <span class="n">text</span><span class="p">,</span>
+            <span class="n">horizontalalignment</span><span class="o">=</span><span class="n">horizontalalignment</span><span class="p">,</span>
+            <span class="n">verticalalignment</span><span class="o">=</span><span class="n">verticalalignment</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig_scale_factor</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">clip_on</span><span class="o">=</span><span class="n">clip_on</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="n">zorder</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_gate_with_size</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">,</span> <span class="n">xy</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">multi_gate_size</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw a gate with a specified size.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gate : GateData</span>
+<span class="sd">            The gate data to be drawn.</span>
+<span class="sd">        xy : Tuple[float, float]</span>
+<span class="sd">            The position of the gate with the smallest index among the target bits.</span>
+<span class="sd">        multi_gate_size : int</span>
+<span class="sd">            The size of the gate.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">=</span> <span class="n">xy</span>
+        <span class="c1"># Find the midpoint of the y-coordinate of the gate with size</span>
+        <span class="n">ypos</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">ypos</span>
+            <span class="o">+</span> <span class="p">(</span>
+                <span class="n">ypos</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">multi_gate_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+        <span class="n">multi_gate_height</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">*</span> <span class="n">multi_gate_size</span>
+            <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span> <span class="o">*</span> <span class="p">(</span><span class="n">multi_gate_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">box</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span>
+            <span class="c1"># The gate is centered.</span>
+            <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">xpos</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">],</span> <span class="n">ypos</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">multi_gate_height</span><span class="p">),</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">gate</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">],</span>
+            <span class="n">height</span><span class="o">=</span><span class="n">multi_gate_height</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="n">PORDER_GATE</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">,</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">gate</span><span class="p">[</span><span class="s2">&quot;control_bit&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_multi_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">,</span> <span class="n">xy</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw a multi-gate. (e.g., DensityMatrixGate)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gate : GateData</span>
+<span class="sd">            The gate data to be drawn.</span>
+<span class="sd">        xy : Tuple[float, float]</span>
+<span class="sd">            The position of the gate with the smallest index among the target bits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">=</span> <span class="n">xy</span>
+
+        <span class="n">multi_gate_data</span><span class="p">:</span> <span class="n">GateData</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;target_bit&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;control_bit&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;raw_text&quot;</span><span class="p">:</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;raw_text&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+
+        <span class="n">groups_of_adjacent_gates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grouping_adjacent_gates</span><span class="p">(</span><span class="n">gate</span><span class="p">[</span><span class="s2">&quot;target_bit&quot;</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">adjacent_gates</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">groups_of_adjacent_gates</span><span class="p">):</span>
+            <span class="n">group_x</span> <span class="o">=</span> <span class="n">xpos</span>
+            <span class="n">group_y</span> <span class="o">=</span> <span class="n">adjacent_gates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gate_with_size</span><span class="p">(</span>
+                <span class="n">multi_gate_data</span><span class="p">,</span> <span class="p">(</span><span class="n">group_x</span><span class="p">,</span> <span class="n">group_y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">adjacent_gates</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Show the name only for the first group (multi_gate) and hide the rest</span>
+                <span class="n">multi_gate_data</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Gray line connecting the gates</span>
+        <span class="n">ypos</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gate</span><span class="p">[</span><span class="s2">&quot;target_bit&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+        <span class="n">to_ypos</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gate</span><span class="p">[</span><span class="s2">&quot;target_bit&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">((</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span> <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">to_ypos</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lc</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">gate</span><span class="p">[</span><span class="s2">&quot;control_bit&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_grouping_adjacent_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_bits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Grouping adjacent gates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target_bit : List[int]</span>
+<span class="sd">            The target bit list.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[List[int]]</span>
+<span class="sd">            The grouped target bit list.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; target_bits = [1, 2, 3, 5, 7, 8]</span>
+<span class="sd">        &gt;&gt;&gt; print(_grouping_adjacent_gates(target_bits))</span>
+<span class="sd">        &gt;&gt;&gt; [[1, 2, 3], [5], [7, 8]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">target_bits</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">adjacent_gates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">target_bit</span> <span class="ow">in</span> <span class="n">target_bits</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">adjacent_gates</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="n">adjacent_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target_bit</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">target_bit</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">adjacent_gates</span><span class="p">:</span>
+                <span class="n">adjacent_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target_bit</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">adjacent_gates</span><span class="p">)</span>
+                <span class="n">adjacent_gates</span> <span class="o">=</span> <span class="p">[</span><span class="n">target_bit</span><span class="p">]</span>
+
+        <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">adjacent_gates</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">groups</span>
+
+    <span class="k">def</span> <span class="nf">_cnot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">,</span> <span class="n">xy</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw a CNOT gate.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gate : GateData</span>
+<span class="sd">            The gate data to be drawn.</span>
+<span class="sd">        xy : Tuple[float, float]</span>
+<span class="sd">            The position of the gate indicating the target bit of CNOT.</span>
+
+<span class="sd">        Raise</span>
+<span class="sd">        -----</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the gate does not have a control bit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">=</span> <span class="n">xy</span>
+        <span class="n">TARGET_QUBIT_RADIUS</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.4</span>
+
+        <span class="k">if</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;control_bit&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;control_bit is None&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;control_bit&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;control_bit is empty&quot;</span><span class="p">)</span>
+
+        <span class="n">target</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span>
+            <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">TARGET_QUBIT_RADIUS</span><span class="p">,</span>
+            <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
+            <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="n">PORDER_GATE</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="c1"># draw target qubit&#39;s &quot;+&quot; mark</span>
+        <span class="c1"># |</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">-</span> <span class="n">TARGET_QUBIT_RADIUS</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">+</span> <span class="n">TARGET_QUBIT_RADIUS</span><span class="p">),</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="n">PORDER_TEXT</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># -</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">xpos</span> <span class="o">-</span> <span class="n">TARGET_QUBIT_RADIUS</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">xpos</span> <span class="o">+</span> <span class="n">TARGET_QUBIT_RADIUS</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="n">PORDER_TEXT</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">gate</span><span class="p">[</span><span class="s2">&quot;control_bit&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_control_bits</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">control_bits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">xy_from</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw control bits.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        control_bits : List[int]</span>
+<span class="sd">            The control bits to be drawn.</span>
+<span class="sd">        xy_from : Tuple[float, float]</span>
+<span class="sd">            The position of the gate from which the control bits are connected.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">control_bit</span> <span class="ow">in</span> <span class="n">control_bits</span><span class="p">:</span>
+            <span class="n">to_ypos</span> <span class="o">=</span> <span class="n">control_bit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span><span class="p">)</span>
+            <span class="n">to_xpos</span> <span class="o">=</span> <span class="n">xy_from</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">(</span>
+                <span class="n">xy_from</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">to_xpos</span><span class="p">,</span> <span class="n">to_ypos</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">ctl</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span>
+                <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">to_xpos</span><span class="p">,</span> <span class="n">to_ypos</span><span class="p">),</span>
+                <span class="n">radius</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+                <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">zorder</span><span class="o">=</span><span class="n">PORDER_GATE</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">ctl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">,</span> <span class="n">xy</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw a SWAP gate.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gate : GateData</span>
+<span class="sd">            The gate data to be drawn.</span>
+<span class="sd">        xy : Tuple[float, float]</span>
+<span class="sd">            The position of the gate with the smaller index among the target bits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">=</span> <span class="n">xy</span>
+        <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+        <span class="k">for</span> <span class="n">target_bit</span> <span class="ow">in</span> <span class="n">gate</span><span class="p">[</span><span class="s2">&quot;target_bit&quot;</span><span class="p">]:</span>
+            <span class="n">to_ypos</span> <span class="o">=</span> <span class="n">target_bit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">to_ypos</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="c1"># draw target qubit&#39;s &quot;x&quot; mark</span>
+            <span class="c1"># \</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">xpos</span> <span class="o">-</span> <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">,</span> <span class="n">to_ypos</span> <span class="o">-</span> <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">xpos</span> <span class="o">+</span> <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">,</span> <span class="n">to_ypos</span> <span class="o">+</span> <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="c1"># /</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">xpos</span> <span class="o">+</span> <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">,</span> <span class="n">to_ypos</span> <span class="o">-</span> <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">xpos</span> <span class="o">-</span> <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">,</span> <span class="n">to_ypos</span> <span class="o">+</span> <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">),</span>
+            <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Qulacs-Osaka.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

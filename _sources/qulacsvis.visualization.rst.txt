@@ -10,6 +10,7 @@ Submodules
    qulacsvis.visualization.circuit_drawer
    qulacsvis.visualization.circuit_parser
    qulacsvis.visualization.latex
+   qulacsvis.visualization.matplotlib
    qulacsvis.visualization.text
 
 Module contents

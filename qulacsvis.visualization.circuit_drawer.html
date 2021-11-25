@@ -159,31 +159,40 @@
 <span id="qulacsvis-visualization-circuit-drawer-module"></span><h1>qulacsvis.visualization.circuit_drawer module<a class="headerlink" href="#module-qulacsvis.visualization.circuit_drawer" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="qulacsvis.visualization.circuit_drawer.circuit_drawer">
-<span class="sig-prename descclassname"><span class="pre">qulacsvis.visualization.circuit_drawer.</span></span><span class="sig-name descname"><span class="pre">circuit_drawer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">qulacs.QuantumCircuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_method</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppi</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'large'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/qulacsvis/visualization/circuit_drawer.html#circuit_drawer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qulacsvis.visualization.circuit_drawer.circuit_drawer" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">qulacsvis.visualization.circuit_drawer.</span></span><span class="sig-name descname"><span class="pre">circuit_drawer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">qulacs.QuantumCircuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'large'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/qulacsvis/visualization/circuit_drawer.html#circuit_drawer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qulacsvis.visualization.circuit_drawer.circuit_drawer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws a circuit diagram of a circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>circuit</strong> (<em>qulacs.QuantumCircuit</em>) – The quantum circuit to be drawn.</p></li>
-<li><p><strong>output_method</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Set the output method for the drawn circuit.
+<li><p><strong>output_method</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Set the output method for the drawn circuit.
 If None, the output method is set to ‘text’.</p></li>
-<li><p><strong>ppi</strong> (<em>int</em>) – The pixels per inch of the output image.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – If True, a number will be added to the gate.
+<li><p><strong>verbose</strong> (<em>bool optional default=False</em>) – (output_method=’text’)
+If True, a number will be added to the gate.
 Gates are numbered in the order in which they are added to the circuit.</p></li>
-<li><p><strong>dot</strong> (<em>str</em>) – Dot style to mean control qubit(default=”large”)</p></li>
+<li><p><strong>dot</strong> (<em>str optional default='large'</em>) – (output_method=’text’)
+Dot style to mean control qubit(default=”large”)</p></li>
+<li><p><strong>ppi</strong> (<em>int optional default=150</em>) – (output_method=’latex’)
+The pixels per inch of the output image.</p></li>
+<li><p><strong>dpi</strong> (<em>int optional default=72</em>) – (output_method=’mpl’)
+The dots per inch of the output image.</p></li>
+<li><p><strong>scale</strong> (<em>float optional default=0.6</em>) – (output_method=’mpl’)
+The scale of the output image.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The output of the circuit drawer.
 If output_method is ‘text’, the output is a None. Circuit is output to stdout.
 If output_method is ‘latex’, the output is an Image.Image object.
-If output_method is ‘latex_source’, the output is a string.</p>
+If output_method is ‘latex_source’, the output is a string.
+If output_method is ‘mpl’, the output is a None.
+Circuit is drawn to a matplotlib figure.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Union[str, Image.Image, None]</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the output_method is not ‘text’, ‘latex’, or ‘latex_source’.</p>
+<dd class="field-even"><p><strong>ValueError</strong> – If output_method is not ‘text’, ‘latex’, ‘latex_source’, or ‘mpl’.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
