@@ -80,6 +80,14 @@ make test
 アサーションに失敗すると赤色で内容が表示されます． それが表示されなければ全てのテストに通っています．
 
 テストには `pytest` を使用しています． 詳しい使い方は[ドキュメント](https://docs.pytest.org/en/6.2.x/)を参照してください．
+また、matplotlibで生成した画像をテストするために、[pytest-mpl](https://github.com/matplotlib/pytest-mpl)を利用しています。
+
+テスト用の画像データはGit LFSを用いて管理されています。詳しくは、ドキュメントを参照してください。
+Git LFSをインストールした後、以下のコマンドで画像ファイルを取得することが出来ます。
+
+```bash
+git lfs pull
+```
 
 ## CI
 

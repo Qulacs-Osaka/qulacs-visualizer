@@ -15,12 +15,14 @@ Qulacs = "^0.3.0"
 temp = "^2020.7.2"
 Pillow = "^8.3.2"
 numpy = "^1.21.2"
+matplotlib = "^3.4.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 Sphinx = "^4.1.2"
 sphinx-rtd-theme = "^0.5.2"
 pysen = {version = "^0.9.1", extras = ["lint"]}
+pytest-mpl = "^0.13"
 
 [tool.pysen]
 version = "0.9"
@@ -35,7 +37,7 @@ line_length = 88
 
 [[tool.pysen.lint.mypy_targets]]
   paths = [
-    "./tests/"
+    "."
   ]
 
 [build-system]
