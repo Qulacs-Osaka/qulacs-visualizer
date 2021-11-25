@@ -21,7 +21,7 @@ matplotlib = "^3.4.3"
 pytest = "^6.2.5"
 Sphinx = "^4.1.2"
 sphinx-rtd-theme = "^0.5.2"
-pysen = {version = "^0.9.1", extras = ["lint"]}
+pysen = {version = "^0.10.1", extras = ["lint"]}
 pytest-mpl = "^0.13"
 
 [tool.pysen]
