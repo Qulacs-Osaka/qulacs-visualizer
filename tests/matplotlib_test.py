@@ -16,7 +16,6 @@ baseline_dir = "baseline"
 ftv = matplotlib.ft2font.__freetype_version__.replace(".", "")
 hash_filename = f"mpl{MPL_VERSION.major}{MPL_VERSION.minor}_ft{ftv}.json"
 hash_library = Path(__file__).parent / "baseline" / "hashes" / hash_filename
-print(hash_library)
 
 WIN = sys.platform.startswith("win")
 
@@ -25,8 +24,13 @@ WIN = sys.platform.startswith("win")
 DEFAULT_TOLERANCE = 10 if WIN else 2
 
 """
-generate hash_library
-poetry run pytest --mpl-generate-hash-library=tests/baseline/hashes/mpl34_ft261.json
+How to generate hash_library
+1. Check "hash_filename"
+2. Run `poetry run pytest --mpl-generate-hash-library=tests/baseline/hashes/{hash_filename}`
+
+e.g.,
+When hash_filename is "mpl35_ft261.json", run the following command.
+`poetry run pytest --mpl-generate-hash-library=tests/baseline/hashes/mpl35_ft261.json`
 """
 
 testdatas = load_circuit_data()

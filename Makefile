@@ -6,11 +6,11 @@ all: format lint test
 
 .PHONY: test
 test:
-	$(PYTEST)
+	$(PYTEST) --mpl
 
 .PHONY: test-with-latex
 test-with-latex:
-	$(PYTEST) --runlatex
+	$(PYTEST) --mpl --runlatex
 
 .PHONY: lint
 lint:
