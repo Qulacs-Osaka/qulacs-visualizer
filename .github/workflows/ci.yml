@@ -1,16 +1,15 @@
-name: pytest
+name: CI
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
-  pytest:
+  static-analysis:
     strategy:
       matrix:
         os: ["ubuntu-latest"]
         python-version: [3.8, "3.9.6"]
-    defaults:
-      run:
-        shell: bash
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -25,13 +24,14 @@ jobs:
           virtualenvs-in-project: true
 
       - name: Load cached venv
-        id: cached-pip-wheels
+        id: cached-poetry-deps
         uses: actions/cache@v2
         with:
           path: ./.venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
+        if: steps.cached-poetry-deps.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
       - name: Install library
@@ -40,5 +40,5 @@ jobs:
       - name: Check format & lint
         run: make lint
 
-      - name: Run pytest
+      - name: Run test
         run: make test
