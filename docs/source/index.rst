@@ -23,6 +23,7 @@ Example
 *******
 
 For more information, see the `documentation <https://qulacs-osaka.github.io/qulacs-visualizer/qulacsvis.visualization.circuit_drawer.html>`_ of the ``circuit_drawer()`` function. The documentation describes the other options available.
+Or See also :ref:`how_to_use_options`.
 
 ------------------
 Text-Based Drawing

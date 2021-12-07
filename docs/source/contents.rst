@@ -7,9 +7,8 @@ Documentation for qulacsvis
    :caption: Contents:
 
    index
+   options
    modules
-   qulacsvis.visualization.circuit_drawer
-
 
 Indices and tables
 ==================
