@@ -41,6 +41,20 @@ circuit.add_X_gate(2)
 
 circuit_drawer(circuit)
 ```
+```
+   ___     ___     ___
+  | X |   |DeM|   |CX |
+--|   |---|   |---|   |----------
+  |___|   |   |   |___|
+   ___    |   |     |
+  | Y |   |   |     |
+--|   |---|   |-----|------------
+  |___|   |___|     |
+   ___              |      ___
+  | Z |             |     | X |
+--|   |-------------●-----|   |--
+  |___|                   |___|
+```
 
 ### Matplotlib Drawing
 
@@ -54,6 +68,8 @@ circuit_drawer(circuit, output_method="mpl")
 # or 
 circuit_drawer(circuit, "mpl")
 ```
+
+![sample_circuit1.png](tests/images/simple_circuit1.png)
 
 ## License
 
