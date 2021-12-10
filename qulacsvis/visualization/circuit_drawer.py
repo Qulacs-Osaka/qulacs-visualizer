@@ -5,6 +5,7 @@ from typing import Optional, Union
 import matplotlib.pyplot as plt
 from PIL import Image
 from qulacs import QuantumCircuit
+
 from qulacsvis.utils.latex import _LatexCompiler, _PDFtoImage
 
 from .latex import _generate_latex_source
