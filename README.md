@@ -71,6 +71,16 @@ circuit_drawer(circuit, "mpl")
 
 ![sample_circuit1.png](tests/images/simple_circuit1.png)
 
+## LaTeX Drawing
+
+**The LaTeX drawing function is currently under implementation and may not work correctly.**
+
+### Requirement
+
+If you want to use LaTeX for drawing, you need to have a local environment where you can run LaTeX (pdflatex).
+You will also need the [qcircuit package](https://github.com/CQuIC/qcircuit).
+[TeX Live](https://www.tug.org/texlive/) and [MiKTeX](https://miktex.org/) have the qcircuit package installed by default.
+
 ## License
 
 [MIT License](LICENSE)
