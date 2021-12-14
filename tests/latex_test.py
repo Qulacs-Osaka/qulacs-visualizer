@@ -2,6 +2,7 @@ import os
 import tempfile
 
 import pytest
+
 from qulacsvis.utils.latex import _LatexCompiler, _PDFtoImage
 
 
