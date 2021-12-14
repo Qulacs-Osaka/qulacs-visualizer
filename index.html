@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome to qulacsvis’s documentation! &mdash; qulacsvis 0.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -75,21 +76,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="welcome-to-qulacsvis-s-documentation">
+  <section id="welcome-to-qulacsvis-s-documentation">
 <h1>Welcome to qulacsvis’s documentation!<a class="headerlink" href="#welcome-to-qulacsvis-s-documentation" title="Permalink to this headline"></a></h1>
 <p>qulacs-visualizer is a quantum circuit drawing library for <a class="reference external" href="https://github.com/qulacs/qulacs">qulacs</a>. This library only supports Python and is not available in C/C++.</p>
-<div class="section" id="installation">
+<section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
 <p>Install using pip from PyPI:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install qulacsvis
 </pre></div>
 </div>
-</div>
-<div class="section" id="example">
+</section>
+<section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h2>
 <p>For more information, see the <a class="reference external" href="https://qulacs-osaka.github.io/qulacs-visualizer/qulacsvis.visualization.circuit_drawer.html">documentation</a> of the <code class="docutils literal notranslate"><span class="pre">circuit_drawer()</span></code> function. The documentation describes the other options available.
 Or See also <a class="reference internal" href="options.html#how-to-use-options"><span class="std std-ref">How to use options</span></a>.</p>
-<div class="section" id="text-based-drawing">
+<section id="text-based-drawing">
 <h3>Text-Based Drawing<a class="headerlink" href="#text-based-drawing" title="Permalink to this headline"></a></h3>
 <p>In text-based mode, draws the circuit as ASCII art. This mode is the default behavior.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
@@ -121,8 +122,8 @@ Or See also <a class="reference internal" href="options.html#how-to-use-options"
 <span class="go">      |___|                   |___|</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="matplotlib-drawing">
+</section>
+<section id="matplotlib-drawing">
 <h3>Matplotlib Drawing<a class="headerlink" href="#matplotlib-drawing" title="Permalink to this headline"></a></h3>
 <p>To use another drawing method, you can specify it by setting a value to the <code class="docutils literal notranslate"><span class="pre">output_method</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">circuit_drawer()</span></code> function.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">output_method</span></code> can be omitted.</p>
@@ -132,12 +133,12 @@ Or See also <a class="reference internal" href="options.html#how-to-use-options"
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure align-default">
+<figure class="align-default">
 <img alt="simple_circuit1.png" src="_images/simple_circuit1.png" />
-</div>
-</div>
-</div>
-</div>
+</figure>
+</section>
+</section>
+</section>
 
 
            </div>
