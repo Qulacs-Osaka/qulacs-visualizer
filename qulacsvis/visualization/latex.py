@@ -1,4 +1,5 @@
 from qulacs import QuantumCircuit
+
 from qulacsvis.visualization.circuit_parser import CircuitParser
 
 
@@ -58,9 +59,9 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
         gate_latex_part = [r"\qw" for _ in range(qubit_count)]
         for j in range(qubit_count):
             gate_data = parser.gate_info[j][i]
-            name_latex_part = gate_dict[gate_data['raw_text']]
-            target_index_list = gate_data['target_bit']
-            control_index_list = gate_data['control_bit']
+            name_latex_part = gate_dict[gate_data["raw_text"]]
+            target_index_list = gate_data["target_bit"]
+            control_index_list = gate_data["control_bit"]
 
             for target_index in target_index_list:
                 name_latex = ""
@@ -82,7 +83,6 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
                     r"\ctrl{" + str(target_index_list[0] - control_index) + r"}"
                 )
 
-        
         for qubit in range(qubit_count):
             gate_latex[qubit].append(gate_latex_part[qubit])
 
