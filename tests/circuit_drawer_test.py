@@ -1,12 +1,12 @@
 import os
+from typing import Any
 
 import pytest
-
-from qulacsvis import circuit_drawer
 from qulacs import QuantumCircuit
 
-from .circuit_test_data import load_circuit_data, empty_circuit
-from typing import Any
+from qulacsvis import circuit_drawer
+
+from .circuit_test_data import empty_circuit, load_circuit_data
 
 EXPECTED_STR_PATH = "tests/baseline/text_circuit_drawer/"
 
