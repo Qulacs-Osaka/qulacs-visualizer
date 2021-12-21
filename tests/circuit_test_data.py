@@ -88,7 +88,7 @@ def swap_circuit() -> QuantumCircuit:
 
 
 def multiple_swap_gates_should_not_overlap() -> QuantumCircuit:
-    circuit = QuantumCircuit(3)
+    circuit = QuantumCircuit(4)
     circuit.add_SWAP_gate(0, 2)
     circuit.add_SWAP_gate(1, 3)
     return circuit
