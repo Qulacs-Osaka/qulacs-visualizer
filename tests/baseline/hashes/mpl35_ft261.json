@@ -10,7 +10,6 @@
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[multiple_swap_gates_should_not_overlap]": "8be081b456274d961e57fc889af6de19d1f5dfdc478bad04bbb7836bdcfc7d2c",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_circuit]": "c7c63af373c98c889225545022708b6bd8c3413ed982e16a627b7daad7bcd014",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_with_multiple_target_bits]": "3fd715948b15a53f3be85624a67c1ed94040a6050b37c700d2200fc3125b92af",
-  "tests.mpl_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_with_multiple_target_bits_should_not_overlap]": "dee3849ceb17595879b2069632bd9556672be4fb2e2f40959cb55bff8c9ce172",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[multiple_dense_matrix_gate]": "0a800d25942991981dfbb692f35ef1e085042c04c6015c63a4ce741f021cb237",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[circuit_converts_cnot_to_matrix_gate]": "408f4d122ee90ebf76ee779ee265e11afbad5cc0e54ccba6ea564a2e07747b83",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[xyz_horizontal_circuit]": "cca05dd53e59318f13e9df64abfe94e7bd49a927f8c7c79d71d1be890d472fa3",
