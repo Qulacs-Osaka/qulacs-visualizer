@@ -26,7 +26,7 @@ DEFAULT_TOLERANCE = 10 if WIN else 2
 
 """
 How to generate hash_library
-1. Check "hash_filename"
+1. Check "hash_filename".
 2. Run `poetry run pytest --mpl-generate-hash-library=tests/baseline/hashes/{hash_filename}`
 
 e.g.,
