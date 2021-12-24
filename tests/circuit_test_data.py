@@ -20,15 +20,14 @@ def load_circuit_data() -> Dict[str, QuantumCircuit]:
     ] = multiple_swap_gates_should_not_overlap()
     circuits["dense_matrix_gate_circuit"] = dense_matrix_gate_circuit()
     circuits[
-        "dense_matrix_gate_with_multiple_target_bits"
-    ] = dense_matrix_gate_with_multiple_target_bits()
+        "dense_matrix_gate_with_target_bits"
+    ] = dense_matrix_gate_with_target_bits()
     circuits[
-        "dense_matrix_gate_with_multiple_target_bits_should_not_overlap"
-    ] = dense_matrix_gate_with_multiple_target_bits_should_not_overlap()
-    circuits["multiple_dense_matrix_gate"] = multiple_dense_matrix_gate()
+        "dense_matrix_gate_with_separated_target_bits"
+    ] = dense_matrix_gate_with_separated_target_bits()
     circuits[
-        "circuit_converts_cnot_to_matrix_gate"
-    ] = circuit_converts_cnot_to_matrix_gate()
+        "dense_matrix_gate_should_not_overlap"
+    ] = dense_matrix_gate_should_not_overlap()
     circuits["xyz_horizontal_circuit"] = xyz_horizontal_circuit()
     circuits["xyz_vertical_circuit"] = xyz_vertical_circuit()
     return circuits
@@ -102,7 +101,19 @@ def dense_matrix_gate_circuit() -> QuantumCircuit:
     return circuit
 
 
-def dense_matrix_gate_with_multiple_target_bits() -> QuantumCircuit:
+def dense_matrix_gate_with_target_bits() -> QuantumCircuit:
+    circuit = QuantumCircuit(3)
+    # CCX0,1, 2
+    cx_gate = CNOT(1, 2)
+    cx_mat_gate = to_matrix_gate(cx_gate)
+    control_index = 0
+    control_with_value = 1
+    cx_mat_gate.add_control_qubit(control_index, control_with_value)
+    circuit.add_gate(cx_mat_gate)
+    return circuit
+
+
+def dense_matrix_gate_with_separated_target_bits() -> QuantumCircuit:
     circuit = QuantumCircuit(5)
     mat = np.identity(2 ** 3)
     # 3-qubit gate applied to [0,3,4], and [1] qubit is control-qubit
@@ -114,7 +125,7 @@ def dense_matrix_gate_with_multiple_target_bits() -> QuantumCircuit:
     return circuit
 
 
-def dense_matrix_gate_with_multiple_target_bits_should_not_overlap() -> QuantumCircuit:
+def dense_matrix_gate_should_not_overlap() -> QuantumCircuit:
     circuit = QuantumCircuit(5)
     mat = np.identity(2 ** 3)
     # 3-qubit gate applied to [0,2,4]
@@ -122,29 +133,6 @@ def dense_matrix_gate_with_multiple_target_bits_should_not_overlap() -> QuantumC
     # 2-qubit gate applied to [1,3]
     mat = np.identity(2 ** 2)
     circuit.add_dense_matrix_gate([1, 3], mat)
-    return circuit
-
-
-def multiple_dense_matrix_gate() -> QuantumCircuit:
-    circuit = QuantumCircuit(3)
-    circuit.add_dense_matrix_gate(
-        [0, 1], [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]
-    )
-    circuit.add_dense_matrix_gate(
-        [1, 2], [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]
-    )
-    return circuit
-
-
-def circuit_converts_cnot_to_matrix_gate() -> QuantumCircuit:
-    circuit = QuantumCircuit(3)
-    # CCX0,1, 2
-    cx_gate = CNOT(1, 2)
-    cx_mat_gate = to_matrix_gate(cx_gate)
-    control_index = 0
-    control_with_value = 1
-    cx_mat_gate.add_control_qubit(control_index, control_with_value)
-    circuit.add_gate(cx_mat_gate)
     return circuit
 
 
