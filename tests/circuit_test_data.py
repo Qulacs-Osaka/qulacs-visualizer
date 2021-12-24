@@ -28,6 +28,7 @@ def load_circuit_data() -> Dict[str, QuantumCircuit]:
     circuits[
         "dense_matrix_gate_should_not_overlap"
     ] = dense_matrix_gate_should_not_overlap()
+    circuits["toffoli_gate_circuit"] = toffoli_gate_circuit()
     circuits["xyz_horizontal_circuit"] = xyz_horizontal_circuit()
     circuits["xyz_vertical_circuit"] = xyz_vertical_circuit()
     return circuits
