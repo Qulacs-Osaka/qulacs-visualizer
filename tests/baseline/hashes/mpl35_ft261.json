@@ -11,6 +11,7 @@
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_circuit]": "c7c63af373c98c889225545022708b6bd8c3413ed982e16a627b7daad7bcd014",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_with_target_bits]": "408f4d122ee90ebf76ee779ee265e11afbad5cc0e54ccba6ea564a2e07747b83",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_with_separated_target_bits]": "3fd715948b15a53f3be85624a67c1ed94040a6050b37c700d2200fc3125b92af",
+  "tests.mpl_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_should_not_overlap]": "a3ed4d3de9e66b6cc87cb8b76915f50ecf439bc75f70f66ca8e97e8263287863",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[toffoli_gate_circuit]": "68c3d4d5dfaf4b6b3e2a70110080b86a9daa0bcb039b78b056cc41147cd10338",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[xyz_horizontal_circuit]": "cca05dd53e59318f13e9df64abfe94e7bd49a927f8c7c79d71d1be890d472fa3",
   "tests.mpl_circuit_drawer_test.test_draw_with_mpl[xyz_vertical_circuit]": "7140a418857a87693c097b06d6601d411ef579932d815e2b9cc417691e0d2cd6"
