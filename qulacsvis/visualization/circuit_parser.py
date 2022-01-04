@@ -112,43 +112,30 @@ class CircuitParser:
                 continue
             target_index_list = gate.get_target_index_list()
             control_index_list = gate.get_control_index_list()
+            index_list = target_index_list + control_index_list
             gate_name = gate.get_name()
             name_latex = self.gate_dict[gate_name]
 
-            if len(control_index_list) > 0 or gate_name == "SWAP":
-                self.append_layer(layer_info, default_value)
-                for target_index in target_index_list:
-                    if target_index == target_index_list[0]:
-                        layer_info[target_index]["raw_text"] = gate_name
-                        layer_info[target_index]["text"] = name_latex
-                        layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
-                        layer_info[target_index]["height"] = GATE_DEFAULT_HEIGHT
-                        layer_info[target_index]["target_bit"] = target_index_list
-                        layer_info[target_index]["control_bit"] = control_index_list
-                    else:
-                        layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
-                        layer_info[target_index]["raw_text"] = "ghost"
+            conflict = False
+            for index in range(min(index_list), max(index_list) + 1):
+                if layer_info[index]["raw_text"] != "wire":
+                    conflict = True
+            if conflict:
                 self.append_layer(layer_info, default_value)
 
-            else:
-                conflict = False
-                for target_index in target_index_list:
-                    if layer_info[target_index]["raw_text"] != "wire":
-                        conflict = True
-                if conflict:
-                    self.append_layer(layer_info, default_value)
-
-                for target_index in target_index_list:
-                    if target_index == target_index_list[0]:
-                        layer_info[target_index]["raw_text"] = gate_name
-                        layer_info[target_index]["text"] = name_latex
-                        layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
-                        layer_info[target_index]["height"] = GATE_DEFAULT_HEIGHT
-                        layer_info[target_index]["target_bit"] = target_index_list
-                        layer_info[target_index]["control_bit"] = control_index_list
-                    else:
-                        layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
-                        layer_info[target_index]["raw_text"] = "ghost"
+            for index in range(min(index_list), max(index_list) + 1):
+                layer_info[index]["raw_text"] = "used"
+            for target_index in target_index_list:
+                if target_index == target_index_list[0]:
+                    layer_info[target_index]["raw_text"] = gate_name
+                    layer_info[target_index]["text"] = name_latex
+                    layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
+                    layer_info[target_index]["height"] = GATE_DEFAULT_HEIGHT
+                    layer_info[target_index]["target_bit"] = target_index_list
+                    layer_info[target_index]["control_bit"] = control_index_list
+                else:
+                    layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
+                    layer_info[target_index]["raw_text"] = "ghost"
 
         self.append_layer(layer_info, default_value)
 
@@ -177,6 +164,9 @@ class CircuitParser:
             if layer_info[qubit]["raw_text"] != "wire":
                 is_blank = False
         if not is_blank:
+            for qubit in range(self.qubit_count):
+                if layer_info[qubit]["raw_text"] == "used":
+                    layer_info[qubit]["raw_text"] = "wire"
             for qubit in range(self.qubit_count):
                 self.gate_info[qubit].append(layer_info[qubit])
                 layer_info[qubit] = copy.deepcopy(default_value)
