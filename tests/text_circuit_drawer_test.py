@@ -8,7 +8,7 @@ from qulacsvis import circuit_drawer
 
 from .circuit_test_data import empty_circuit, load_circuit_data
 
-EXPECTED_STR_PATH = "tests/baseline/text_circuit_drawer/"
+BASELINE_DIR_PATH = "tests/baseline/text_circuit_drawer/"
 
 circuit_data = load_circuit_data()
 # empty_circuit will throw an IndexError Exception
@@ -21,7 +21,7 @@ for key, circuit in circuit_data.items():
         (
             pytest.param(
                 circuit,
-                os.path.join(EXPECTED_STR_PATH, key + ".txt"),
+                os.path.join(BASELINE_DIR_PATH, key + ".txt"),
                 id=key,
             )
         )
