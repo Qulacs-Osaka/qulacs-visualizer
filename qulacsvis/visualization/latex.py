@@ -30,7 +30,7 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
         "Pauli-rotation": r"{PR}",
         "CZ": r"{CZ}",
         "CNOT": r"\targ",
-        "SWAP": r"{SWAP}",
+        "SWAP": r"\qswap",
         "Reflection": r"{Ref}",
         "ReversibleBoolean": r"{ReB}",
         "DenseMatrix": r"{DeM}",
@@ -41,7 +41,7 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
         "ParametricRY": r"{pRY}",
         "ParametricRZ": r"{pRZ}",
         "ParametricPauliRotation": r"{pPR}",
-        "wire": r"¥qw",
+        "wire": r"\qw",
         "ghost": "ghost",
     }
     parser = CircuitParser(circuit)
@@ -62,6 +62,11 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
             name_latex_part = gate_dict[gate_data["raw_text"]]
             target_index_list = gate_data["target_bit"]
             control_index_list = gate_data["control_bit"]
+            if name_latex_part==r"\qswap":
+                for target_index in target_index_list:
+                    gate_latex_part[target_index] = name_latex_part
+                gate_latex_part[target_index_list[0]] += r"\qwx[" + str(target_index_list[-1]-target_index_list[0]) + r"]"
+                continue
 
             for target_index in target_index_list:
                 name_latex = ""
@@ -70,13 +75,33 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
                         name_latex = name_latex_part
                     else:
                         name_latex = r"\gate" + name_latex_part
+                    gate_latex_part[target_index] = name_latex
                 else:
-                    if target_index == target_index_list[0]:
-                        name_latex = r"\multigate{" + str(len(target_index_list)) + r"}"
-                        name_latex += name_latex_part
-                    else:
-                        name_latex = r"\ghost" + name_latex_part
-                gate_latex_part[target_index] = name_latex
+                    rle = []
+                    index = target_index_list[0]
+                    size = 1
+                    for t_index in target_index_list[1:]:
+                        if t_index==index+size:
+                            size+=1
+                        else:
+                            rle.append((index,size))
+                            index = t_index
+                            size = 1
+                    rle.append((index,size))
+                    for rle_index in range(len(rle)):
+                        index,size = rle[rle_index]
+                        if size==1:
+                            name_latex = r"\gate" + name_latex_part
+                            gate_latex_part[index] = name_latex
+                        else:
+                            name_latex = r"\multigate{" + str(size-1) + r"}" + name_latex_part
+                            gate_latex_part[index] = name_latex
+                            for k in range(1,size):
+                                name_latex = r"\ghost" + name_latex_part
+                                gate_latex_part[index+k] = name_latex
+                        if rle_index+1<len(rle):
+                            next_index = rle[rle_index+1][0]
+                            gate_latex_part[index+size-1] += r"\qwx[" + str(next_index-index-size+1) +r"]"
 
             for control_index in control_index_list:
                 gate_latex_part[control_index] = (
