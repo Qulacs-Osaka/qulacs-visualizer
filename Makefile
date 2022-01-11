@@ -46,7 +46,7 @@ lint:
 
 .PHONY: type
 type:
-	$(TYPE_CHECKER) $(PROJECT_DIR)
+	$(TYPE_CHECKER) $(CHECK_DIR)
 
 .PHONY: serve
 serve: html
