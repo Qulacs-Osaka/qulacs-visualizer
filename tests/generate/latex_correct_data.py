@@ -15,7 +15,5 @@ if __name__ == "__main__":
 
     for name, circuit in test_data.items():
         img = circuit_drawer(circuit, "latex")
-        fig, ax = plt.subplots()
-        ax.imshow(img)
-        plt.savefig(os.path.join(OUTPUT_DIR, name + ".png"))
+        img.save(os.path.join(OUTPUT_DIR, name + ".png"))
         print(f'Saved image to {os.path.join(OUTPUT_DIR, name + ".png")}')
