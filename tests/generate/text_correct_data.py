@@ -34,3 +34,4 @@ if __name__ == "__main__":
         with open(os.path.join(BASELINE_DIR, name + ".txt"), "w") as f:
             f.write("\n".join(output))
             f.write("\n")
+        print(f'Saved output to {os.path.join(BASELINE_DIR, name + ".txt")}')

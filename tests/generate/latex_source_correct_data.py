@@ -19,3 +19,4 @@ if __name__ == "__main__":
                 f.write(src)
             else:
                 print("Error: `src` is not a string", file=sys.stderr)
+        print(f'Saved output to {os.path.join(BASELINE_DIR, name + ".txt")}')

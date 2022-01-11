@@ -18,3 +18,4 @@ if __name__ == "__main__":
         fig, ax = plt.subplots()
         ax.imshow(img)
         plt.savefig(os.path.join(OUTPUT_DIR, name + ".png"))
+        print(f'Saved image to {os.path.join(OUTPUT_DIR, name + ".png")}')

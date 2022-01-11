@@ -17,3 +17,4 @@ if __name__ == "__main__":
         drawer = MPLCircuitlDrawer(circuit)
         fig = drawer.draw()
         plt.savefig(os.path.join(OUTPUT_DIR, name + ".png"))
+        print(f'Saved image to {os.path.join(OUTPUT_DIR, name + ".png")}')
