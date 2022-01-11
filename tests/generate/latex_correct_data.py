@@ -1,8 +1,8 @@
 import os
 import sys
 
-import matplotlib.pyplot as plt
 from qulacsvis import circuit_drawer
+from PIL import Image
 
 sys.path.append(os.path.join("tests"))
 
@@ -15,5 +15,8 @@ if __name__ == "__main__":
 
     for name, circuit in test_data.items():
         img = circuit_drawer(circuit, "latex")
-        img.save(os.path.join(OUTPUT_DIR, name + ".png"))
-        print(f'Saved image to {os.path.join(OUTPUT_DIR, name + ".png")}')
+        if isinstance(img, Image.Image):
+            img.save(os.path.join(OUTPUT_DIR, f"{name}.png"))
+            print(f'Saved image to {os.path.join(OUTPUT_DIR, name + ".png")}')
+        else:
+            print("img is not an Image.Image", file=sys.stderr)
