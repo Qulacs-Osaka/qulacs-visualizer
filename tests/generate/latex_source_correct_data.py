@@ -17,6 +17,6 @@ if __name__ == "__main__":
         with open(os.path.join(BASELINE_DIR, name + ".txt"), "w") as f:
             if isinstance(src, str):
                 f.write(src)
+                print(f'Saved output to {os.path.join(BASELINE_DIR, name + ".txt")}')
             else:
                 print("Error: `src` is not a string", file=sys.stderr)
-        print(f'Saved output to {os.path.join(BASELINE_DIR, name + ".txt")}')
