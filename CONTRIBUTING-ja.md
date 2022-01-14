@@ -82,6 +82,24 @@ make test
 テストには `pytest` を使用しています． 詳しい使い方は[ドキュメント](https://docs.pytest.org/en/6.2.x/)を参照してください．
 また、matplotlibで生成した画像をテストするために、[pytest-mpl](https://github.com/matplotlib/pytest-mpl)を利用しています。
 
+### Generate correct answers for testing
+
+コードを変更した場合、出力結果が変化する場合があります。変更後が正しい場合は正解データを生成しなおしてください。
+それぞれ、以下のコマンドを用いることが出来ます。
+
+LaTeXを使う場合、環境変数に`USE_LATEX=yes`をセットする必要があります。デフォルトは`USE_LATEX=no`です。
+
+```bash
+# Text-Based Drawing
+make gen-text
+# Matplotlib Drawing
+make gen-mpl
+# LaTeX Drawing
+make gen-latex USE_LATEX=yes
+# Output LaTeX source
+make gen-latex-source
+```
+
 ## CI
 
 GitHub Actions で CI を実行します． 基本的に CI に通らないとマージできません．
