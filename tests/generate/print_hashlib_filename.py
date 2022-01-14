@@ -9,9 +9,4 @@ if __name__ == "__main__":
     hash_filename = f"mpl{MPL_VERSION.major}{MPL_VERSION.minor}_ft{ftv}.json"
     hash_library = os.path.join("tests", "baseline", "hashes", hash_filename)
 
-    print(f"MPL_VERSION: {MPL_VERSION}")
-    print(f"ftv: {ftv}")
-    print(f"hash_filename: {hash_filename}")
-    print()
-    print("** To generate the hash library, please execute the following command. **")
-    print(f"poetry run pytest --mpl-generate-hash-library={hash_library}")
+    print(hash_library)
