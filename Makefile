@@ -74,8 +74,13 @@ gen-text:
 	poetry run python $(GENERATE_SCRIPT_DIR)/text_correct_data.py
 
 .PHONY: gen-latex
-gen-latex: gen-hashlib
+gen-latex:
+ifeq "$(USE_LATEX)" "yes"
+	@make gen-hashlib
 	poetry run python $(GENERATE_SCRIPT_DIR)/latex_correct_data.py
+else
+	@echo "LaTeX is not enabled in Makefile. Use 'make gen-latex USE_LATEX=yes' to enable."
+endif
 
 .PHONY: gen-latex-source
 gen-latex-source:
