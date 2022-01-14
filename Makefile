@@ -9,6 +9,15 @@ PROJECT_DIR := qulacsvis
 CHECK_DIR := $(PROJECT_DIR) tests
 PORT := 8000
 
+GENERATE_SCRIPT_DIR := tests/generate
+USE_LATEX?=no
+
+ifeq "$(USE_LATEX)" "yes"
+	PYTEST_OPT_LATEX=--runlatex
+else
+	PYTEST_OPT_LATEX=
+endif
+
 # If this project is not ready to pass mypy, remove `type` below.
 .PHONY: check
 check: format lint type
@@ -59,3 +68,24 @@ html: api
 .PHONY: api
 api:
 	$(SPHINX_APIDOC) -f -e -o doc/source $(PROJECT_DIR)
+
+.PHONY: gen-text
+gen-text:
+	poetry run python $(GENERATE_SCRIPT_DIR)/text_correct_data.py
+
+.PHONY: gen-latex
+gen-latex: gen-hashlib
+	poetry run python $(GENERATE_SCRIPT_DIR)/latex_correct_data.py
+
+.PHONY: gen-latex-source
+gen-latex-source:
+	poetry run python $(GENERATE_SCRIPT_DIR)/latex_source_correct_data.py
+
+.PHONY: gen-mpl
+gen-mpl: gen-hashlib
+	poetry run python $(GENERATE_SCRIPT_DIR)/mpl_correct_data.py
+
+.PHONY: gen-hashlib
+gen-hashlib:
+	poetry run python $(GENERATE_SCRIPT_DIR)/print_hashlib_filename.py \
+	 | xargs -I{} poetry run pytest --mpl-generate-hash-library={} $(PYTEST_OPT_LATEX)
