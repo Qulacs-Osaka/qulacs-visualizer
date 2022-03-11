@@ -2,11 +2,12 @@ import sys
 from pathlib import Path
 
 import matplotlib
+import matplotlib.pyplot as plt
 import pytest
 from packaging.version import Version
 from qulacs import QuantumCircuit
 
-from qulacsvis.visualization import MPLCircuitlDrawer
+from qulacsvis import circuit_drawer
 
 from .circuit_test_data import load_circuit_data
 
@@ -26,7 +27,7 @@ DEFAULT_TOLERANCE = 10 if WIN else 2
 
 """
 How to generate hash_library
-1. Check "hash_filename"
+1. Check "hash_filename".
 2. Run `poetry run pytest --mpl-generate-hash-library=tests/baseline/hashes/{hash_filename}`
 
 e.g.,
@@ -37,11 +38,13 @@ When hash_filename is "mpl35_ft261.json", run the following command.
 testdatas = load_circuit_data()
 
 
+@pytest.mark.runlatex
 @pytest.mark.parametrize(
     "circuit", list(testdatas.values()), ids=list(testdatas.keys())
 )
 @pytest.mark.mpl_image_compare(hash_library=hash_library)
 def test_draw_with_mpl(circuit: QuantumCircuit) -> matplotlib.figure.Figure:
-    drawer = MPLCircuitlDrawer(circuit)
-    fig = drawer.draw()
+    img = circuit_drawer(circuit, "latex")
+    fig, ax = plt.subplots()
+    ax.imshow(img)
     return fig

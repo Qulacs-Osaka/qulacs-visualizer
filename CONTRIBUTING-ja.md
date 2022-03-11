@@ -73,8 +73,11 @@ git push
 2. そのファイルの中に `test_` で始まる関数を作ります． 
 3. テストを実行します．
 
+LaTeXを使う場合、環境変数に`USE_LATEX=yes`をセットする必要があります。デフォルトは`USE_LATEX=no`です。
+
 ```bash
 make test
+# LaTeX Drawingのテストも行う場合
 ```
 
 アサーションに失敗すると赤色で内容が表示されます． それが表示されなければ全てのテストに通っています．
@@ -82,11 +85,22 @@ make test
 テストには `pytest` を使用しています． 詳しい使い方は[ドキュメント](https://docs.pytest.org/en/6.2.x/)を参照してください．
 また、matplotlibで生成した画像をテストするために、[pytest-mpl](https://github.com/matplotlib/pytest-mpl)を利用しています。
 
-テスト用の画像データはGit LFSを用いて管理されています。詳しくは、ドキュメントを参照してください。
-Git LFSをインストールした後、以下のコマンドで画像ファイルを取得することが出来ます。
+### Generate correct answers for testing
+
+コードを変更した場合、出力結果が変化する場合があります。変更後が正しい場合は正解データを生成しなおしてください。
+それぞれ、以下のコマンドを用いることが出来ます。
+
+LaTeXを使う場合、環境変数に`USE_LATEX=yes`をセットする必要があります。デフォルトは`USE_LATEX=no`です。
 
 ```bash
-git lfs pull
+# Text-Based Drawing
+make gen-text
+# Matplotlib Drawing
+make gen-mpl
+# LaTeX Drawing
+make gen-latex USE_LATEX=yes
+# Output LaTeX source
+make gen-latex-source
 ```
 
 ## CI

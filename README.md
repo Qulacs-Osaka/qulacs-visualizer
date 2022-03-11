@@ -69,7 +69,7 @@ circuit_drawer(circuit, output_method="mpl")
 circuit_drawer(circuit, "mpl")
 ```
 
-![sample_circuit1.png](tests/images/simple_circuit1.png)
+![sample_circuit1.png](docs/source/_static/simple_circuit1.png)
 
 ## LaTeX Drawing
 
