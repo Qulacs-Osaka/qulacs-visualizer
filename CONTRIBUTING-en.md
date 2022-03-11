@@ -74,8 +74,12 @@ Write tests when you develop a new feature. Tests are executed automatically.
 2. Create a function whose name starts with `test_`. 
 3. Then run tests.
 
+If you use LaTeX, you need to set the environment variable `USE_LATEX=yes`. The default is `USE_LATEX=no`.
+
 ```bash
 make test
+# If you also want to test LaTeX Drawing
+make test USE_LATEX=yes
 ```
 
 If assertion fail, error contents are displayed with red. If you do not see that, all test are successful.

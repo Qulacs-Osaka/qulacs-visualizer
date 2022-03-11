@@ -27,11 +27,7 @@ ci: format_check lint type
 
 .PHONY: test
 test:
-	$(PYTEST) -v --mpl
-
-.PHONY: test-with-latex
-test-with-latex:
-	$(PYTEST) -v --mpl --runlatex
+	$(PYTEST) -v --mpl $(PYTEST_OPT_LATEX)
 
 tests/%.py: FORCE
 	$(PYTEST) $@
