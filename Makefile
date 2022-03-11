@@ -65,6 +65,10 @@ html: api
 api:
 	$(SPHINX_APIDOC) -f -e -o doc/source $(PROJECT_DIR)
 
+.PHONY: gen-circuit-parser
+gen-circuit-parser:
+	poetry run python $(GENERATE_SCRIPT_DIR)/circuit_parser_data.py
+
 .PHONY: gen-text
 gen-text:
 	poetry run python $(GENERATE_SCRIPT_DIR)/text_correct_data.py
