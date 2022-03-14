@@ -137,9 +137,10 @@ The documentation is built and deployed on pushing(merged from PR) to `main` bra
 
 ### Build document
 
-Run following command.
+Move to the `docs` folder and run the command to generate the documentation.
 
 ```bash
+cd docs
 make html
 ```
 
