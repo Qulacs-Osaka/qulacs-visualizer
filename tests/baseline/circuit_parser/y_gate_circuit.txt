@@ -1,0 +1,14 @@
+[
+    [
+        {
+            "control_bit": [],
+            "height": 1.5,
+            "raw_text": "Y",
+            "target_bit": [
+                0
+            ],
+            "text": "$Y$",
+            "width": 1.0
+        }
+    ]
+]

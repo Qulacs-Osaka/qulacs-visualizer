@@ -1,0 +1,46 @@
+[
+    [
+        {
+            "control_bit": [],
+            "height": 1.5,
+            "raw_text": "wire",
+            "target_bit": [],
+            "text": "",
+            "width": 1.0
+        },
+        {
+            "control_bit": [
+                1
+            ],
+            "height": 1.5,
+            "raw_text": "CZ",
+            "target_bit": [
+                0
+            ],
+            "text": "$CZ$",
+            "width": 1.0
+        }
+    ],
+    [
+        {
+            "control_bit": [
+                0
+            ],
+            "height": 1.5,
+            "raw_text": "CZ",
+            "target_bit": [
+                1
+            ],
+            "text": "$CZ$",
+            "width": 1.0
+        },
+        {
+            "control_bit": [],
+            "height": 1.5,
+            "raw_text": "wire",
+            "target_bit": [],
+            "text": "",
+            "width": 1.0
+        }
+    ]
+]
