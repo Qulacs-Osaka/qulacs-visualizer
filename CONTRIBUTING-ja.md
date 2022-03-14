@@ -137,9 +137,10 @@ pip install git+https://github.com/Qulacs-Osaka/qulacs-visualizer
 
 ### Build document
 
-以下のコマンドを実行します。
+`docs` フォルダに移動し、コマンドを実行することで、ドキュメントを生成することが出来ます。
 
 ```bash
+cd docs
 make html
 ```
 
