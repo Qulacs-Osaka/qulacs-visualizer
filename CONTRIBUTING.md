@@ -95,6 +95,8 @@ You can use the following commands for each.
 If you use LaTeX, you need to set the environment variable `USE_LATEX=yes`. The default is `USE_LATEX=no`.
 
 ```bash
+# Circuit Parser
+make gen-circuit-parser
 # Text-Based Drawing
 make gen-text
 # Matplotlib Drawing
