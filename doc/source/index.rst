@@ -6,11 +6,11 @@
 Welcome to qulacsvis's documentation!
 =====================================
 
-qulacs-visualizer is a quantum circuit drawing library for `qulacs <https://github.com/qulacs/qulacs>`_. This library only supports Python and is not available in C/C++.
+qulacs-visualizer is a quantum circuit drawing library for `qulacs <https://github.com/qulacs/qulacs>`_. This library only supports Python. Not available in C/C++.
 
-************
+============
 Installation
-************
+============
 
 Install using pip from PyPI:
 
@@ -18,16 +18,16 @@ Install using pip from PyPI:
 
       pip install qulacsvis
 
-*******
+=======
 Example
-*******
+=======
 
 For more information, see the `documentation <https://qulacs-osaka.github.io/qulacs-visualizer/qulacsvis.visualization.circuit_drawer.html>`_ of the ``circuit_drawer()`` function. The documentation describes the other options available.
 Or See also :ref:`how_to_use_options`.
 
-------------------
+******************
 Text-Based Drawing
-------------------
+******************
 
 In text-based mode, draws the circuit as ASCII art. This mode is the default behavior.
 
@@ -60,18 +60,33 @@ In text-based mode, draws the circuit as ASCII art. This mode is the default beh
       |___|                   |___|
 
 
-------------------
+******************
 Matplotlib Drawing
-------------------
+******************
 
-To use another drawing method, you can specify it by setting a value to the ``output_method`` argument of the ``circuit_drawer()`` function.
+To use another drawing method, you can specify it by setting a value to the ``output_method`` argument of the ``circuit_drawer()`` function. For matplotlib drawing, set ``output_method="mpl"``.
 
-The ``output_method`` can be omitted.
-
->>> # Matplotlib Drawing
->>> circuit_drawer(circuit, output_method="mpl")
->>> # or
 >>> circuit_drawer(circuit, "mpl")
 
-.. figure:: _static/simple_circuit1.png
-    :alt: simple_circuit1.png
+.. figure:: _static/circuit_matplotlib_drawing.png
+    :alt: circuit_matplotlib_drawing.png
+
+
+*************
+LaTeX Drawing
+*************
+
+For LaTeX drawing, set ``output_method="latex"``.
+
+>>> circuit_drawer(circuit, "latex")
+
+.. figure:: _static/circuit_latex_drawing.png
+    :alt: circuit_latex_drawing.png
+
+-----------
+Requirement
+-----------
+
+If you want to use LaTeX for drawing, you need to have a local environment where you can run LaTeX (pdflatex).
+You will also need the `qcircuit package <https://github.com/CQuIC/qcircuit>`_.
+`TeX Live <https://www.tug.org/texlive/>`_ and `MiKTeX <https://miktex.org/>`_ have the qcircuit package installed by default.

@@ -71,8 +71,6 @@ In most cases, use ``scale``, but adjust the ``dpi`` if you want to generate a s
 LaTeX Drawing
 *************
 
-**The LaTeX drawing function is currently under implementation and may not work correctly.**
-
 -----------------
 Change image size
 -----------------
