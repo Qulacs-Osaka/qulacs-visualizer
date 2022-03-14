@@ -83,6 +83,26 @@ For LaTeX drawing, set ``output_method="latex"``.
 .. figure:: _static/circuit_latex_drawing.png
     :alt: circuit_latex_drawing.png
 
+If you want to output LaTeX code, set ``output_method="latex_source"``.
+
+>>> print(circuit_drawer(circuit, "latex_source"))
+
+.. code-block:: latex
+
+  \documentclass[border=2px]{standalone}
+  \usepackage[braket, qm]{qcircuit}
+  \usepackage{graphicx}
+
+  \begin{document}
+      \scalebox{1.0}{
+      \Qcircuit @C=1.0em @R=0.2em @!R { \\
+          \nghost{ {q}_{0} : } & \lstick{ {q}_{0} :  } & \gate{X} & \multigate{1}{DeM} & \targ & \qw \\
+          \nghost{ {q}_{1} : } & \lstick{ {q}_{1} :  } & \gate{Y} & \ghost{DeM} & \qw & \qw \\
+          \nghost{ {q}_{2} : } & \lstick{ {q}_{2} :  } & \gate{Z} & \qw & \ctrl{-2} & \gate{X} \\
+      }}
+  \end{document}
+
+
 -----------
 Requirement
 -----------
