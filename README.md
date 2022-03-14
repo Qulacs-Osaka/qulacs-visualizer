@@ -4,7 +4,14 @@
 
 qulacs-visualizer is a quantum circuit drawing library for [qulacs](https://github.com/qulacs/qulacs). This library only supports Python. Not available in C/C++.
 
-qulacs-visualizer supports text-based drawing and drawing using [matplotlib](https://github.com/matplotlib/matplotlib). We plan to add support for drawing using LaTeX and outputting LaTeX code using the [qcircuit package](https://github.com/CQuIC/qcircuit).
+qulacs-visualizer supports the following methods.
+
+- Text-Based Drawing
+- Matplotlib Drawing
+  - using [matplotlib](https://github.com/matplotlib/matplotlib)
+- LaTeX Drawing
+  - using LaTeX and the [qcircuit package](https://github.com/CQuIC/qcircuit)
+
 
 ## Quick Install
 
