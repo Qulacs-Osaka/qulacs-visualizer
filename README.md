@@ -65,7 +65,7 @@ To use another drawing method, you can specify it by setting a value to the `out
 circuit_drawer(circuit, "mpl")
 ```
 
-![circuit_matplotlib_drawing.png](docs/source/_static/circuit_matplotlib_drawing.png)
+![circuit_matplotlib_drawing.png](doc/source/_static/circuit_matplotlib_drawing.png)
 
 ## LaTeX Drawing
 
@@ -75,7 +75,7 @@ For LaTeX drawing, set `output_method="latex"`.
 circuit_drawer(circuit, "latex")
 ```
 
-![circuit_latex_drawing.png](docs/source/_static/circuit_latex_drawing.png)
+![circuit_latex_drawing.png](doc/source/_static/circuit_latex_drawing.png)
 
 ### Requirement
 
