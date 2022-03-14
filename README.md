@@ -87,7 +87,7 @@ circuit_drawer(circuit, "latex")
 If you want to output LaTeX code, set `output_method="latex_source"`.
 
 ```py
-circuit_drawer(circuit, "latex_source")
+print(circuit_drawer(circuit, "latex_source"))
 ```
 
 ```latex
