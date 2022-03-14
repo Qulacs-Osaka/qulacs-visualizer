@@ -121,14 +121,6 @@ The build will generate `*.whl` and `*.tar.gz` in the `dist` folder as artifacts
 poetry build
 ```
 
-## Installation
-
-You can install qulacs-visualizer from the GitHub repository.
-
-```bash
-pip install git+https://github.com/Qulacs-Osaka/qulacs-visualizer
-```
-
 ## Documentation
 
 API document of this library is available here: https://qulacs-osaka.github.io/qulacs-visualizer
