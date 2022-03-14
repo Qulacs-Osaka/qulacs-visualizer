@@ -84,9 +84,30 @@ circuit_drawer(circuit, "latex")
 
 ![circuit_latex_drawing.png](doc/source/_static/circuit_latex_drawing.png)
 
+If you want to output LaTeX code, set `output_method="latex_source"`.
+
+```py
+circuit_drawer(circuit, "latex_source")
+```
+
+```latex
+\documentclass[border=2px]{standalone}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+    \scalebox{1.0}{
+    \Qcircuit @C=1.0em @R=0.2em @!R { \\
+        \nghost{ {q}_{0} : } & \lstick{ {q}_{0} :  } & \gate{X} & \multigate{1}{DeM} & \targ & \qw \\
+        \nghost{ {q}_{1} : } & \lstick{ {q}_{1} :  } & \gate{Y} & \ghost{DeM} & \qw & \qw \\
+        \nghost{ {q}_{2} : } & \lstick{ {q}_{2} :  } & \gate{Z} & \qw & \ctrl{-2} & \gate{X} \\
+    }}
+\end{document}
+```
+
 ### Requirement
 
-If you want to use LaTeX for drawing, you need to have a local environment where you can run LaTeX (pdflatex).
+If you want to use LaTeX Drawing, you need to have a local environment where you can run LaTeX (pdflatex).
 You will also need the [qcircuit package](https://github.com/CQuIC/qcircuit).
 [TeX Live](https://www.tug.org/texlive/) and [MiKTeX](https://miktex.org/) have the qcircuit package installed by default.
 
