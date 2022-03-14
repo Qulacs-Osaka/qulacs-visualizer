@@ -95,6 +95,8 @@ You can use the following commands for each.
 If you use LaTeX, you need to set the environment variable `USE_LATEX=yes`. The default is `USE_LATEX=no`.
 
 ```bash
+# Circuit Parser
+make gen-circuit-parser
 # Text-Based Drawing
 make gen-text
 # Matplotlib Drawing
@@ -119,14 +121,6 @@ The build will generate `*.whl` and `*.tar.gz` in the `dist` folder as artifacts
 
 ```bash
 poetry build
-```
-
-## Installation
-
-You can install qulacs-visualizer from the GitHub repository.
-
-```bash
-pip install git+https://github.com/Qulacs-Osaka/qulacs-visualizer
 ```
 
 ## Documentation

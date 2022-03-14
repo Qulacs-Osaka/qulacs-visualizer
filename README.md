@@ -2,9 +2,16 @@
 
 [![CI](https://github.com/Qulacs-Osaka/qulacs-visualizer/actions/workflows/ci.yml/badge.svg)](https://github.com/Qulacs-Osaka/qulacs-visualizer/actions/workflows/ci.yml) [![Build and Deploy Documentation](https://github.com/Qulacs-Osaka/qulacs-visualizer/actions/workflows/doc.yml/badge.svg)](https://github.com/Qulacs-Osaka/qulacs-visualizer/actions/workflows/doc.yml) [![PyPI version](https://badge.fury.io/py/qulacsvis.svg)](https://badge.fury.io/py/qulacsvis) [![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
-qulacs-visualizer is a quantum circuit drawing library for [qulacs](https://github.com/qulacs/qulacs). This library only supports Python and is not available in C/C++.
+qulacs-visualizer is a quantum circuit drawing library for [qulacs](https://github.com/qulacs/qulacs). This library only supports Python. Not available in C/C++.
 
-qulacs-visualizer supports text-based drawing and drawing using [matplotlib](https://github.com/matplotlib/matplotlib). We plan to add support for drawing using LaTeX and outputting LaTeX code using the [qcircuit package](https://github.com/CQuIC/qcircuit).
+qulacs-visualizer supports the following methods.
+
+- Text-Based Drawing
+- Matplotlib Drawing
+  - using [matplotlib](https://github.com/matplotlib/matplotlib)
+- LaTeX Drawing
+  - using LaTeX and the [qcircuit package](https://github.com/CQuIC/qcircuit)
+
 
 ## Quick Install
 
@@ -39,6 +46,7 @@ circuit.add_dense_matrix_gate(
 circuit.add_CNOT_gate(2, 0)
 circuit.add_X_gate(2)
 
+# Draw a quantum circuit
 circuit_drawer(circuit)
 ```
 ```
@@ -58,26 +66,48 @@ circuit_drawer(circuit)
 
 ### Matplotlib Drawing
 
-To use another drawing method, you can specify it by setting a value to the `output_method` argument of the `circuit_drawer()` function.
-
-The `output_method` can be omitted.
+To use another drawing method, you can specify it by setting a value to the `output_method` argument of the `circuit_drawer()` function. For matplotlib drawing, set `output_method="mpl"`.
 
 ```py
-# Matplotlib Drawing
-circuit_drawer(circuit, output_method="mpl")
-# or 
 circuit_drawer(circuit, "mpl")
 ```
 
-![sample_circuit1.png](docs/source/_static/simple_circuit1.png)
+![circuit_matplotlib_drawing.png](doc/source/_static/circuit_matplotlib_drawing.png)
 
 ## LaTeX Drawing
 
-**The LaTeX drawing function is currently under implementation and may not work correctly.**
+For LaTeX drawing, set `output_method="latex"`.
+
+```py
+circuit_drawer(circuit, "latex")
+```
+
+![circuit_latex_drawing.png](doc/source/_static/circuit_latex_drawing.png)
+
+If you want to output LaTeX code, set `output_method="latex_source"`.
+
+```py
+print(circuit_drawer(circuit, "latex_source"))
+```
+
+```latex
+\documentclass[border=2px]{standalone}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+    \scalebox{1.0}{
+    \Qcircuit @C=1.0em @R=0.2em @!R { \\
+        \nghost{ {q}_{0} : } & \lstick{ {q}_{0} :  } & \gate{X} & \multigate{1}{DeM} & \targ & \qw \\
+        \nghost{ {q}_{1} : } & \lstick{ {q}_{1} :  } & \gate{Y} & \ghost{DeM} & \qw & \qw \\
+        \nghost{ {q}_{2} : } & \lstick{ {q}_{2} :  } & \gate{Z} & \qw & \ctrl{-2} & \gate{X} \\
+    }}
+\end{document}
+```
 
 ### Requirement
 
-If you want to use LaTeX for drawing, you need to have a local environment where you can run LaTeX (pdflatex).
+If you want to use LaTeX Drawing, you need to have a local environment where you can run LaTeX (pdflatex).
 You will also need the [qcircuit package](https://github.com/CQuIC/qcircuit).
 [TeX Live](https://www.tug.org/texlive/) and [MiKTeX](https://miktex.org/) have the qcircuit package installed by default.
 
