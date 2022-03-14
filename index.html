@@ -44,6 +44,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#text-based-drawing">Text-Based Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#matplotlib-drawing">Matplotlib Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#latex-drawing">LaTeX Drawing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#requirement">Requirement</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -78,7 +82,7 @@
              
   <section id="welcome-to-qulacsvis-s-documentation">
 <h1>Welcome to qulacsvis’s documentation!<a class="headerlink" href="#welcome-to-qulacsvis-s-documentation" title="Permalink to this headline"></a></h1>
-<p>qulacs-visualizer is a quantum circuit drawing library for <a class="reference external" href="https://github.com/qulacs/qulacs">qulacs</a>. This library only supports Python and is not available in C/C++.</p>
+<p>qulacs-visualizer is a quantum circuit drawing library for <a class="reference external" href="https://github.com/qulacs/qulacs">qulacs</a>. This library only supports Python. Not available in C/C++.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
 <p>Install using pip from PyPI:</p>
@@ -125,17 +129,47 @@ Or See also <a class="reference internal" href="options.html#how-to-use-options"
 </section>
 <section id="matplotlib-drawing">
 <h3>Matplotlib Drawing<a class="headerlink" href="#matplotlib-drawing" title="Permalink to this headline"></a></h3>
-<p>To use another drawing method, you can specify it by setting a value to the <code class="docutils literal notranslate"><span class="pre">output_method</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">circuit_drawer()</span></code> function.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">output_method</span></code> can be omitted.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Matplotlib Drawing</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">output_method</span><span class="o">=</span><span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># or</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
+<p>To use another drawing method, you can specify it by setting a value to the <code class="docutils literal notranslate"><span class="pre">output_method</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">circuit_drawer()</span></code> function. For matplotlib drawing, set <code class="docutils literal notranslate"><span class="pre">output_method=&quot;mpl&quot;</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure class="align-default">
-<img alt="simple_circuit1.png" src="_images/simple_circuit1.png" />
+<img alt="circuit_matplotlib_drawing.png" src="_images/circuit_matplotlib_drawing.png" />
 </figure>
+</section>
+<section id="latex-drawing">
+<h3>LaTeX Drawing<a class="headerlink" href="#latex-drawing" title="Permalink to this headline"></a></h3>
+<p>For LaTeX drawing, set <code class="docutils literal notranslate"><span class="pre">output_method=&quot;latex&quot;</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;latex&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="circuit_latex_drawing.png" src="_images/circuit_latex_drawing.png" />
+</figure>
+<p>If you want to output LaTeX code, set <code class="docutils literal notranslate"><span class="pre">output_method=&quot;latex_source&quot;</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;latex_source&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-latex notranslate"><div class="highlight"><pre><span></span><span class="k">\documentclass</span><span class="na">[border=2px]</span><span class="nb">{</span>standalone<span class="nb">}</span>
+<span class="k">\usepackage</span><span class="na">[braket, qm]</span><span class="nb">{</span>qcircuit<span class="nb">}</span>
+<span class="k">\usepackage</span><span class="nb">{</span>graphicx<span class="nb">}</span>
+
+<span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
+    <span class="k">\scalebox</span><span class="nb">{</span>1.0<span class="nb">}{</span>
+    <span class="k">\Qcircuit</span> @C=1.0em @R=0.2em @!R <span class="nb">{</span> <span class="k">\\</span>
+        <span class="k">\nghost</span><span class="nb">{</span> <span class="nb">{</span>q<span class="nb">}_{</span>0<span class="nb">}</span> : <span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\lstick</span><span class="nb">{</span> <span class="nb">{</span>q<span class="nb">}_{</span>0<span class="nb">}</span> :  <span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\gate</span><span class="nb">{</span>X<span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\multigate</span><span class="nb">{</span>1<span class="nb">}{</span>DeM<span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\targ</span> <span class="nb">&amp;</span> <span class="k">\qw</span> <span class="k">\\</span>
+        <span class="k">\nghost</span><span class="nb">{</span> <span class="nb">{</span>q<span class="nb">}_{</span>1<span class="nb">}</span> : <span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\lstick</span><span class="nb">{</span> <span class="nb">{</span>q<span class="nb">}_{</span>1<span class="nb">}</span> :  <span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\gate</span><span class="nb">{</span>Y<span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\ghost</span><span class="nb">{</span>DeM<span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\qw</span> <span class="nb">&amp;</span> <span class="k">\qw</span> <span class="k">\\</span>
+        <span class="k">\nghost</span><span class="nb">{</span> <span class="nb">{</span>q<span class="nb">}_{</span>2<span class="nb">}</span> : <span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\lstick</span><span class="nb">{</span> <span class="nb">{</span>q<span class="nb">}_{</span>2<span class="nb">}</span> :  <span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\gate</span><span class="nb">{</span>Z<span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\qw</span> <span class="nb">&amp;</span> <span class="k">\ctrl</span><span class="nb">{</span>-2<span class="nb">}</span> <span class="nb">&amp;</span> <span class="k">\gate</span><span class="nb">{</span>X<span class="nb">}</span> <span class="k">\\</span>
+    <span class="nb">}}</span>
+<span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span>
+</pre></div>
+</div>
+<section id="requirement">
+<h4>Requirement<a class="headerlink" href="#requirement" title="Permalink to this headline"></a></h4>
+<p>If you want to use LaTeX for drawing, you need to have a local environment where you can run LaTeX (pdflatex).
+You will also need the <a class="reference external" href="https://github.com/CQuIC/qcircuit">qcircuit package</a>.
+<a class="reference external" href="https://www.tug.org/texlive/">TeX Live</a> and <a class="reference external" href="https://miktex.org/">MiKTeX</a> have the qcircuit package installed by default.</p>
+</section>
 </section>
 </section>
 </section>
