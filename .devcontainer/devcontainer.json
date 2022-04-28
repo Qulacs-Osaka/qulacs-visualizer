@@ -24,6 +24,6 @@
 		"ms-python.vscode-pylance"
 	],
 	"workspaceFolder": "/workspaces/qulacs-visualizer",
-	"postStartCommand": "gosu root chown vscode .venv",
+	"postStartCommand": "/usr/bin/git config --global gpg.program /usr/bin/gpg && gosu root chown vscode .venv",
 	"remoteUser": "vscode"
 }

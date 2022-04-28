@@ -28,6 +28,7 @@ RUN apt-get update \
     libffi-dev \
     liblzma-dev \
     git \
+    gpg \
     poppler-utils \
     gosu \
     && apt-get clean \
