@@ -27,7 +27,9 @@ RUN apt-get update \
     libxmlsec1-dev \
     libffi-dev \
     liblzma-dev \
-    git
+    git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/pyenv/pyenv.git ${PYENV_ROOT} \
     && pyenv install ${PYTHON_VERSION} \
