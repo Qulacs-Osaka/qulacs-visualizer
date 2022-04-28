@@ -42,3 +42,6 @@ RUN git clone https://github.com/pyenv/pyenv.git ${PYENV_ROOT} \
 
 RUN useradd -u $UID -o -m $USERNAME
 RUN groupmod -g $GID -o $USERNAME
+
+# Requires $POETRY_HOME to install the location; poetry is installed under /root by default.
+RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/home/${USERNAME}/.local python3 -
