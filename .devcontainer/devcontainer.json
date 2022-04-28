@@ -1,0 +1,15 @@
+{
+	"name": "LaTeX & Python3",
+	"dockerComposeFile": [
+		"./docker-compose.yml"
+	],
+	"service": "main",
+	"workspaceFolder": "/workspaces/qulacs-visualizer",
+	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/init.sh",
+	"shutdownAction": "stopCompose",
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "bash"
+	},
+	"extensions": [],
+	"remoteUser": "vscode"
+}

@@ -1,0 +1,15 @@
+version: "3"
+services:
+  main:
+    container_name: vcs-qulacs-visualizer
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USERNAME: vscode
+        UID: $UID
+        GID: $GID
+    tty: true
+    volumes:
+      - ..:/workspaces/qulacs-visualizer:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"
