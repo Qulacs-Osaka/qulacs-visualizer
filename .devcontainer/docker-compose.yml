@@ -11,8 +11,14 @@ services:
         GID: $GID
     tty: true
     volumes:
-      - ..:/workspaces/qulacs-visualizer:cached
-      - qulacs-visualizer-venv:/workspaces/qulacs-visualizer/.venv
+      - type: bind
+        source: ..
+        target: /workspaces/qulacs-visualizer
+      - type: volume
+        source: qulacs-visualizer-venv
+        target: /workspaces/qulacs-visualizer/.venv
+        volume:
+          nocopy: true
     command: /bin/sh -c "while sleep 1000; do :; done"
 
 volumes:
