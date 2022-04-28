@@ -28,8 +28,11 @@ RUN apt-get update \
     libffi-dev \
     liblzma-dev \
     git \
+    gosu \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN chmod +s /usr/sbin/gosu
 
 RUN git clone https://github.com/pyenv/pyenv.git ${PYENV_ROOT} \
     && pyenv install ${PYTHON_VERSION} \
