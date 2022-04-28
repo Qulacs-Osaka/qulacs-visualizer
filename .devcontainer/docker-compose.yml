@@ -12,4 +12,8 @@ services:
     tty: true
     volumes:
       - ..:/workspaces/qulacs-visualizer:cached
+      - qulacs-visualizer-venv:/workspaces/qulacs-visualizer/.venv
     command: /bin/sh -c "while sleep 1000; do :; done"
+
+volumes:
+  qulacs-visualizer-venv:
