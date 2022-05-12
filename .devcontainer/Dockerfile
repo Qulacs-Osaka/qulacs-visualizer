@@ -34,6 +34,9 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# gosu is used instead of sudo in postStartCommand of devcontainer.json.
+# This command allows a non-root user to run as the root user using gosu.
+# ref: https://github.com/tianon/gosu/issues/11
 RUN chmod +s /usr/sbin/gosu
 
 RUN git clone https://github.com/pyenv/pyenv.git ${PYENV_ROOT} \
