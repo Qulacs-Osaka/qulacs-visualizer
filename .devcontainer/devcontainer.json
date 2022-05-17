@@ -1,0 +1,29 @@
+{
+	"name": "LaTeX & Python3",
+	"dockerComposeFile": [
+		"./docker-compose.yml"
+	],
+	"service": "main",
+	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/init.sh",
+	"shutdownAction": "stopCompose",
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "bash",
+		"python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": false,
+		"python.linting.flake8Enabled": true,
+		"python.formatting.provider": "black",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": true
+		},
+		"python.linting.mypyEnabled": true,
+	},
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance"
+	],
+	"workspaceFolder": "/workspaces/qulacs-visualizer",
+	"postStartCommand": "/usr/bin/git config --global gpg.program /usr/bin/gpg && gosu root chown vscode .venv",
+	"remoteUser": "vscode"
+}
