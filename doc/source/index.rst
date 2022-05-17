@@ -11,6 +11,7 @@
    :hidden:
 
    options
+   modules
 
 Welcome to qulacsvis's documentation!
 =====================================
