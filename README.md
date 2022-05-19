@@ -24,8 +24,8 @@ pip install qulacsvis
 ## Example
 
 
-For more information, see the [documentation](https://qulacs-osaka.github.io/qulacs-visualizer/qulacsvis.visualization.circuit_drawer.html) of the `circuit_drawer()` function.
-The documentation describes the other options available.
+For more information, see the [documentation](https://qulacs-osaka.github.io/qulacs-visualizer/index.html).
+The documentation describes the [other options available](https://qulacs-osaka.github.io/qulacs-visualizer/options.html).
 
 ### Text-Based Drawing
 
