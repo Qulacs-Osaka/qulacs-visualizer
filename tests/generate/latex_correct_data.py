@@ -1,8 +1,9 @@
 import os
 import sys
 
-from qulacsvis import circuit_drawer
 from PIL import Image
+
+from qulacsvis import circuit_drawer
 
 sys.path.append(os.path.join("tests"))
 
