@@ -1,7 +1,7 @@
 import os
+
 import matplotlib
 from packaging.version import Version
-
 
 if __name__ == "__main__":
     MPL_VERSION = Version(matplotlib.__version__)
