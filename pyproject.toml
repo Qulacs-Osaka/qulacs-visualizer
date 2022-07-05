@@ -26,6 +26,7 @@ flake8 = "^4.0.1"
 mypy = "^0.910"
 isort = "^5.10.1"
 pytest-mpl = "^0.13"
+dataclasses-json = "^0.5.7"
 
 [tool.isort]
 default_section = "THIRDPARTY"
