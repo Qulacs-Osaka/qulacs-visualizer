@@ -1,23 +1,19 @@
 import copy
+import dataclasses
 from typing import List
 
 from qulacs import QuantumCircuit
-from typing_extensions import TypedDict
 
 GATE_DEFAULT_WIDTH = 1.0
 GATE_DEFAULT_HEIGHT = 1.5
 
-GateData = TypedDict(
-    "GateData",
-    {
-        "text": str,
-        "width": float,
-        "height": float,
-        "raw_text": str,
-        "target_bit": List[int],
-        "control_bit": List[int],
-    },
-)
+
+@dataclasses.dataclass
+class GateData:
+    name: str
+    target_bits: List[int] = dataclasses.field(default_factory=list)
+    control_bits: List[int] = dataclasses.field(default_factory=list)
+
 
 CircuitData = List[List[GateData]]
 
@@ -87,14 +83,7 @@ class CircuitParser:
             "ParametricPauliRotation": r"$pPR$",
         }
 
-        default_value: GateData = {
-            "raw_text": "wire",
-            "width": GATE_DEFAULT_WIDTH,
-            "height": GATE_DEFAULT_HEIGHT,
-            "text": "",
-            "target_bit": [],
-            "control_bit": [],
-        }
+        default_value = GateData("wire")
         layer_info: List[GateData] = [
             copy.deepcopy(default_value) for _ in range(self.qubit_count)
         ]
@@ -114,39 +103,27 @@ class CircuitParser:
             control_index_list = gate.get_control_index_list()
             index_list = target_index_list + control_index_list
             gate_name = gate.get_name()
-            name_latex = self.gate_dict[gate_name]
 
             conflict = False
             for index in range(min(index_list), max(index_list) + 1):
-                if layer_info[index]["raw_text"] != "wire":
+                if layer_info[index].name != "wire":
                     conflict = True
             if conflict:
                 self.append_layer(layer_info, default_value)
 
             for index in range(min(index_list), max(index_list) + 1):
-                layer_info[index]["raw_text"] = "used"
+                layer_info[index].name = "used"
             for target_index in target_index_list:
                 if target_index == target_index_list[0]:
-                    layer_info[target_index]["raw_text"] = gate_name
-                    layer_info[target_index]["text"] = name_latex
-                    layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
-                    layer_info[target_index]["height"] = GATE_DEFAULT_HEIGHT
-                    layer_info[target_index]["target_bit"] = target_index_list
-                    layer_info[target_index]["control_bit"] = control_index_list
+                    layer_info[target_index].name = gate_name
+                    layer_info[target_index].target_bits = target_index_list
+                    layer_info[target_index].control_bits = control_index_list
                 else:
-                    layer_info[target_index]["width"] = GATE_DEFAULT_WIDTH
-                    layer_info[target_index]["raw_text"] = "ghost"
+                    layer_info[target_index].name = "ghost"
 
         self.append_layer(layer_info, default_value)
 
         self.layer_width = [GATE_DEFAULT_WIDTH for _ in range(len(self.gate_info[0]))]
-        for i in range(len(self.gate_info[0])):
-            for j in range(self.qubit_count):
-                self.layer_width[i] = max(
-                    self.layer_width[i], self.gate_info[j][i]["width"]
-                )
-            for j in range(self.qubit_count):
-                self.gate_info[j][i]["width"] = self.layer_width[i]
 
     def append_layer(self, layer_info: List[GateData], default_value: GateData) -> None:
         """
@@ -161,12 +138,12 @@ class CircuitParser:
         """
         is_blank = True
         for qubit in range(self.qubit_count):
-            if layer_info[qubit]["raw_text"] != "wire":
+            if layer_info[qubit].name != "wire":
                 is_blank = False
         if not is_blank:
             for qubit in range(self.qubit_count):
-                if layer_info[qubit]["raw_text"] == "used":
-                    layer_info[qubit]["raw_text"] = "wire"
+                if layer_info[qubit].name == "used":
+                    layer_info[qubit].name = "wire"
             for qubit in range(self.qubit_count):
                 self.gate_info[qubit].append(layer_info[qubit])
                 layer_info[qubit] = copy.deepcopy(default_value)
