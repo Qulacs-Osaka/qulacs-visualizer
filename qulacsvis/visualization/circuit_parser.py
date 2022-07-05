@@ -1,5 +1,6 @@
 import copy
 import dataclasses
+import dataclasses_json
 from typing import List
 
 from qulacs import QuantumCircuit
@@ -8,6 +9,7 @@ GATE_DEFAULT_WIDTH = 1.0
 GATE_DEFAULT_HEIGHT = 1.5
 
 
+@dataclasses_json.dataclass_json
 @dataclasses.dataclass
 class GateData:
     name: str
