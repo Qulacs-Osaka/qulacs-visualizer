@@ -1,8 +1,8 @@
 import copy
 import dataclasses
-import dataclasses_json
 from typing import List
 
+import dataclasses_json
 from qulacs import QuantumCircuit
 
 GATE_DEFAULT_WIDTH = 1.0
@@ -37,53 +37,12 @@ class CircuitParser:
         List of gate data.
     layer_width : List[float]
         Width of each layer.
-    gate_dict : Dict[str, str]
-        A dictionary mapping gate names to their latex representation.
     """
 
     def __init__(self, circuit: QuantumCircuit):
         self.qubit_count = circuit.get_qubit_count()
         self.gate_info: CircuitData = [[] for _ in range(self.qubit_count)]
         self.layer_width = []
-
-        self.gate_dict = {
-            "I": r"$I$",
-            "X": r"$X$",
-            "Y": r"$Y$",
-            "Z": r"$Z$",
-            "H": r"$H$",
-            "S": r"$S$",
-            "Sdag": r"$S^\dag$",
-            "T": r"$T$",
-            "Tdag": r"$T^\dag$",
-            "sqrtX": r"$\sqrt{X}$",
-            "sqrtXdag": r"$\sqrt{X^\dag}$",
-            "sqrtY": r"$\sqrt{Y}$",
-            "sqrtYdag": r"$\sqrt{Y^\dag}$",
-            "Projection-0": r"$P0$",
-            "Projection-1": r"$P1$",
-            "U1": r"$U1$",
-            "U2": r"$U2$",
-            "U3": r"$U3$",
-            "X-rotation": r"$RX$",
-            "Y-rotation": r"$RY$",
-            "Z-rotation": r"$RZ$",
-            "Pauli": r"$Pauli$",
-            "Pauli-rotation": r"$PR$",
-            "CZ": r"$CZ$",
-            "CNOT": r"$\targ$",
-            "SWAP": r"$SWAP$",
-            "Reflection": r"$Ref$",
-            "ReversibleBoolean": r"$ReB$",
-            "DenseMatrix": r"$DeM$",
-            "DinagonalMatrix": r"$DiM$",
-            "SparseMatrix": r"$SpM$",
-            "Generic gate": r"$GeG$",
-            "ParametricRX": r"$pRX$",
-            "ParametricRY": r"$pRY$",
-            "ParametricRZ": r"$pRZ$",
-            "ParametricPauliRotation": r"$pPR$",
-        }
 
         default_value = GateData("wire")
         layer_info: List[GateData] = [
