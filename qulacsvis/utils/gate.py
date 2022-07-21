@@ -1,4 +1,4 @@
-__TO_LATEX_STYLE_GATESTR_MAP = {
+__DEFAULT_GATESTR_MAP = {
     "": "",
     "I": "I",
     "X": "X",
@@ -6,13 +6,13 @@ __TO_LATEX_STYLE_GATESTR_MAP = {
     "Z": "Z",
     "H": "H",
     "S": "S",
-    "Sdag": r"S^\dag",
+    "Sdag": "Sdg",
     "T": "T",
-    "Tdag": r"T^\dag",
-    "sqrtX": r"\sqrt{X}",
-    "sqrtXdag": r"\sqrt{X^\dag}",
-    "sqrtY": r"\sqrt{Y}",
-    "sqrtYdag": r"\sqrt{Y^\dag}",
+    "Tdag": "Tdg",
+    "sqrtX": "sqX",
+    "sqrtXdag": "sXd",
+    "sqrtY": "sqY",
+    "sqrtYdag": "sYd",
     "Projection-0": "P0",
     "Projection-1": "P1",
     "U1": "U1",
@@ -21,11 +21,11 @@ __TO_LATEX_STYLE_GATESTR_MAP = {
     "X-rotation": "RX",
     "Y-rotation": "RY",
     "Z-rotation": "RZ",
-    "Pauli": "Pauli",
+    "Pauli": "Pau",
     "Pauli-rotation": "PR",
     "CZ": "CZ",
-    "CNOT": r"\targ",
-    "SWAP": "SWAP",
+    "CNOT": "CX",
+    "SWAP": "SWP",
     "Reflection": "Ref",
     "ReversibleBoolean": "ReB",
     "DenseMatrix": "DeM",
@@ -37,6 +37,25 @@ __TO_LATEX_STYLE_GATESTR_MAP = {
     "ParametricRZ": "pRZ",
     "ParametricPauliRotation": "pPR",
 }
+
+__TO_LATEX_STYLE_GATESTR_MAP = dict(
+    __DEFAULT_GATESTR_MAP,
+    **{
+        "Sdag": r"S^\dag",
+        "Tdag": r"T^\dag",
+        "sqrtX": r"\sqrt{X}",
+        "sqrtXdag": r"\sqrt{X^\dag}",
+        "sqrtY": r"\sqrt{Y}",
+        "sqrtYdag": r"\sqrt{Y^\dag}",
+        "CNOT": r"\targ",
+        "wire": r"\qw",
+        "ghost": "ghost",
+    },
+)
+
+
+def to_text_style(gate_name: str) -> str:
+    return __DEFAULT_GATESTR_MAP[gate_name].center(3)
 
 
 def to_latex_style(gate_name: str) -> str:
