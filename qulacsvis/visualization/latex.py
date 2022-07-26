@@ -59,9 +59,9 @@ def _generate_latex_source(circuit: QuantumCircuit) -> str:
         gate_latex_part = [r"\qw" for _ in range(qubit_count)]
         for j in range(qubit_count):
             gate_data = parser.gate_info[j][i]
-            name_latex_part = gate_dict[gate_data["raw_text"]]
-            target_index_list = gate_data["target_bit"]
-            control_index_list = gate_data["control_bit"]
+            name_latex_part = gate_dict[gate_data.name]
+            target_index_list = gate_data.target_bits
+            control_index_list = gate_data.control_bits
             if name_latex_part == r"\qswap":
                 for target_index in target_index_list:
                     gate_latex_part[target_index] = name_latex_part
