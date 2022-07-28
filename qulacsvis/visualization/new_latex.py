@@ -87,4 +87,7 @@ class LatexSourceGenerator:
         raise NotImplementedError
 
     def gate(self, layer_latex: List[str], gate: GateData) -> None:
-        raise NotImplementedError
+        gate_qcircuit_style = to_latex_style(gate.name)
+        target_bit = gate.target_bits[0]
+        layer_latex[target_bit] = gate_qcircuit_style
+        self.control_bits(layer_latex, gate.control_bits, target_bit)
