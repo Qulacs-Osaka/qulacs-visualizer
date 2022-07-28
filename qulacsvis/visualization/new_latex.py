@@ -5,6 +5,8 @@ from qulacs import QuantumCircuit
 from qulacsvis.utils.gate import to_latex_style
 from qulacsvis.visualization.circuit_parser import CircuitParser, GateData
 
+import numpy as np
+
 
 def to_qcircuit_style(gate_name: str) -> str:
     return "{" + to_latex_style(gate_name) + "}"
@@ -15,25 +17,27 @@ class LatexSourceGenerator:
         self.__quantum_circuit = circuit
         self.__parser = CircuitParser(circuit)
         self.__circuit_data = self.__parser.gate_info
-        self.circuit: List[List[str]] = []
+        self.circuit = np.array([[]])
 
     def generate(self) -> str:
         qubit_count = self.__parser.qubit_count
         circuit_layer_count = len(self.__circuit_data[0])
 
-        input_label = [
+        input_label = np.array(
             [
-                # nghost reserves drawing area for input label,
-                # adjusts the spacing between rows.
-                r"\nghost{ q_{" + str(i) + "} : }",
-                r"\lstick{ q_{" + str(i) + "} : }",
+                [
+                    # nghost reserves drawing area for input label,
+                    # adjusts the spacing between rows.
+                    r"\nghost{ q_{" + str(i) + "} : }",
+                    r"\lstick{ q_{" + str(i) + "} : }",
+                ]
+                for i in range(qubit_count)
             ]
-            for i in range(qubit_count)
-        ]
+        )
 
         # TODO Add wire
         # self.circuit = [[r"\qw"] for _ in range(qubit_count)]
-        self.circuit = [[] for _ in range(qubit_count)]
+        self.circuit = np.array([[] for _ in range(qubit_count)])
         for layer in range(circuit_layer_count):
             for qubit in range(qubit_count):
                 current_layer_latex = [
@@ -54,7 +58,10 @@ class LatexSourceGenerator:
                 else:
                     self.gate(current_layer_latex, gate)
 
-        return "TODO generate latex code"
+            self.circuit = np.column_stack([self.circuit, current_layer_latex])
+        # res = np.column_stack([input_label, self.circuit])
+
+        return self.circuit
 
     def cnot(self, layer_latex: List[str], gate: GateData) -> None:
         raise NotImplementedError
