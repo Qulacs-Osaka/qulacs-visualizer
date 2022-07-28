@@ -1,3 +1,5 @@
+from typing import List
+
 __DEFAULT_GATESTR_MAP = {
     "": "",
     "I": "I",
@@ -77,3 +79,42 @@ def to_latex_style(gate_name: str) -> str:
         If gate name is not found.
     """
     return __TO_LATEX_STYLE_GATESTR_MAP[gate_name]
+
+
+def grouping_adjacent_gates(target_bits: List[int]) -> List[List[int]]:
+    """
+    Grouping adjacent gates.
+
+    Parameters
+    ----------
+    target_bit : List[int]
+        The target bit list.
+
+    Returns
+    -------
+    List[List[int]]
+        The grouped target bit list.
+
+    Examples
+    --------
+    >>> target_bits = [1, 2, 3, 5, 7, 8]
+    >>> print(grouping_adjacent_gates(target_bits))
+    >>> [[1, 2, 3], [5], [7, 8]]
+    """
+
+    target_bits.sort()
+    groups = []
+    adjacent_gates: List[int] = []
+    for target_bit in target_bits:
+        if adjacent_gates == []:
+            adjacent_gates.append(target_bit)
+            continue
+
+        if target_bit - 1 in adjacent_gates:
+            adjacent_gates.append(target_bit)
+        else:
+            groups.append(adjacent_gates)
+            adjacent_gates = [target_bit]
+
+    groups.append(adjacent_gates)
+    return groups

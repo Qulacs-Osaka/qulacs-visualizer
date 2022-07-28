@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from qulacs import QuantumCircuit
 from typing_extensions import Final
 
-from qulacsvis.utils.gate import to_latex_style
+from qulacsvis.utils.gate import to_latex_style, grouping_adjacent_gates
 
 from .circuit_parser import (
     GATE_DEFAULT_HEIGHT,
@@ -338,7 +338,7 @@ class MPLCircuitlDrawer:
 
         multi_gate_data = GateData(gate.name)
 
-        groups_of_adjacent_gates = self._grouping_adjacent_gates(gate.target_bits)
+        groups_of_adjacent_gates = grouping_adjacent_gates(gate.target_bits)
 
         for i, adjacent_gates in enumerate(groups_of_adjacent_gates):
             group_x = xpos
@@ -356,44 +356,6 @@ class MPLCircuitlDrawer:
         self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
 
         self._control_bits(gate.control_bits, (xpos, ypos))
-
-    def _grouping_adjacent_gates(self, target_bits: List[int]) -> List[List[int]]:
-        """
-        Grouping adjacent gates.
-
-        Parameters
-        ----------
-        target_bit : List[int]
-            The target bit list.
-
-        Returns
-        -------
-        List[List[int]]
-            The grouped target bit list.
-
-        Examples
-        --------
-        >>> target_bits = [1, 2, 3, 5, 7, 8]
-        >>> print(_grouping_adjacent_gates(target_bits))
-        >>> [[1, 2, 3], [5], [7, 8]]
-        """
-
-        target_bits.sort()
-        groups = []
-        adjacent_gates: List[int] = []
-        for target_bit in target_bits:
-            if adjacent_gates == []:
-                adjacent_gates.append(target_bit)
-                continue
-
-            if target_bit - 1 in adjacent_gates:
-                adjacent_gates.append(target_bit)
-            else:
-                groups.append(adjacent_gates)
-                adjacent_gates = [target_bit]
-
-        groups.append(adjacent_gates)
-        return groups
 
     def _cnot(self, gate: GateData, xy: Tuple[float, float]) -> None:
         """
