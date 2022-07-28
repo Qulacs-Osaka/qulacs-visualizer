@@ -44,9 +44,9 @@ class LatexSourceGenerator:
                 gate = self.__circuit_data[qubit][layer]
 
                 if gate.name == "ghost":
-                    current_layer_latex[qubit] = "ghost"
+                    continue
                 elif gate.name == "wire":
-                    current_layer_latex[qubit] = to_latex_style(gate.name)
+                    continue
                 elif gate.name == "CNOT":
                     self.cnot(current_layer_latex, gate)
                 elif gate.name == "SWAP":
