@@ -18,6 +18,15 @@ class LatexSourceGenerator:
         self.__parser = CircuitParser(circuit)
         self.__circuit_data = self.__parser.gate_info
         self.circuit = np.array([[]])
+        self.head = r"""
+\documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+    \Qcircuit @C=1.0em @R=0.7em @!R{ \\
+"""
+        self.tail = r"}" + "\n" + r"\end{document}"
 
     def generate(self) -> str:
         qubit_count = self.__parser.qubit_count
@@ -56,8 +65,9 @@ class LatexSourceGenerator:
 
             self.circuit = np.column_stack([self.circuit, current_layer_latex])
         circuit_with_label = np.column_stack([input_label, self.circuit])
+        body = self.array_to_qcircuit_style(circuit_with_label)  # type: ignore
 
-        return self.array_to_qcircuit_style(circuit_with_label)  # type:ignore
+        return self.head + body + self.tail
 
     def array_to_qcircuit_style(self, array: List[List[str]]) -> str:
         liens = [" & ".join(line) for line in array]
