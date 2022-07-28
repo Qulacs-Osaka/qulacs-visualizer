@@ -67,7 +67,12 @@ class LatexSourceGenerator:
         cnot_qcircuit_style = to_latex_style(gate.name)
         target_bit = gate.target_bits[0]
         layer_latex[target_bit] = cnot_qcircuit_style
-        for control_bit in gate.control_bits:
+        self.control_bits(layer_latex, gate.control_bits, target_bit)
+
+    def control_bits(
+        self, layer_latex: List[str], control_bits: List[int], target_bit: int
+    ) -> None:
+        for control_bit in control_bits:
             layer_latex[control_bit] = r"\ctrl{" + str(target_bit - control_bit) + "}"
 
     def swap(self, layer_latex: List[str], gate: GateData) -> None:
