@@ -64,7 +64,11 @@ class LatexSourceGenerator:
         return self.circuit
 
     def cnot(self, layer_latex: List[str], gate: GateData) -> None:
-        raise NotImplementedError
+        cnot_qcircuit_style = to_latex_style(gate.name)
+        target_bit = gate.target_bits[0]
+        layer_latex[target_bit] = cnot_qcircuit_style
+        for control_bit in gate.control_bits:
+            layer_latex[control_bit] = r"\ctrl{" + str(target_bit - control_bit) + "}"
 
     def swap(self, layer_latex: List[str], gate: GateData) -> None:
         swap_qcircuit_style = to_latex_style(gate.name)
