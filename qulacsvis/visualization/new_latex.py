@@ -35,9 +35,7 @@ class LatexSourceGenerator:
             ]
         )
 
-        # TODO Add wire
-        # self.circuit = [[r"\qw"] for _ in range(qubit_count)]
-        self.circuit = np.array([[] for _ in range(qubit_count)])
+        self.circuit = np.array([[r"\qw"] for _ in range(qubit_count)])
         for layer in range(circuit_layer_count):
             current_layer_latex = [to_latex_style("wire") for _ in range(qubit_count)]
             for qubit in range(qubit_count):
@@ -57,9 +55,15 @@ class LatexSourceGenerator:
                     self.gate(current_layer_latex, gate)
 
             self.circuit = np.column_stack([self.circuit, current_layer_latex])
-        # res = np.column_stack([input_label, self.circuit])
+        circuit_with_label = np.column_stack([input_label, self.circuit])
 
-        return self.circuit
+        return self.array_to_qcircuit_style(circuit_with_label)  # type:ignore
+
+    def array_to_qcircuit_style(self, array: List[List[str]]) -> str:
+        liens = [" & ".join(line) for line in array]
+        res = (r"\\" + "\n").join(liens)
+        res += r"\\" + "\n"
+        return res
 
     def cnot(self, layer_latex: List[str], gate: GateData) -> None:
         cnot_qcircuit_style = to_latex_style(gate.name)
