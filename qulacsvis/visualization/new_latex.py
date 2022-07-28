@@ -39,10 +39,8 @@ class LatexSourceGenerator:
         # self.circuit = [[r"\qw"] for _ in range(qubit_count)]
         self.circuit = np.array([[] for _ in range(qubit_count)])
         for layer in range(circuit_layer_count):
+            current_layer_latex = [to_latex_style("wire") for _ in range(qubit_count)]
             for qubit in range(qubit_count):
-                current_layer_latex = [
-                    to_latex_style("wire") for _ in range(qubit_count)
-                ]
                 gate = self.__circuit_data[qubit][layer]
 
                 if gate.name == "ghost":
