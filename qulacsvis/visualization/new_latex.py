@@ -2,7 +2,7 @@ from typing import List
 
 from qulacs import QuantumCircuit
 
-from qulacsvis.utils.gate import to_latex_style
+from qulacsvis.utils.gate import to_latex_style, grouping_adjacent_gates
 from qulacsvis.visualization.circuit_parser import CircuitParser, GateData
 
 import numpy as np
@@ -82,7 +82,20 @@ class LatexSourceGenerator:
         layer_latex[swap[1]] = swap_qcircuit_style
 
     def multi_gate(self, layer_latex: List[str], gate: GateData) -> None:
-        raise NotImplementedError
+        gate_name_qcircuit_style = to_latex_style(gate.name)
+        groups_adjacent_gates = grouping_adjacent_gates(gate.target_bits)
+
+        self.control_bits(layer_latex, gate.control_bits, gate.target_bits[0])
+
+        for adjacent_gates in groups_adjacent_gates:
+            size = len(adjacent_gates) - 1
+            target_bit = adjacent_gates[0]
+            layer_latex[target_bit] = (
+                r"\multigate{" + str(size) + "}{" + gate_name_qcircuit_style + "}"
+            )
+
+            for target_bit in adjacent_gates[1:]:
+                layer_latex[target_bit] = r"\ghost{" + gate_name_qcircuit_style + "}"
 
     def gate(self, layer_latex: List[str], gate: GateData) -> None:
         gate_qcircuit_style = r"\gate{" + to_latex_style(gate.name) + "}"
