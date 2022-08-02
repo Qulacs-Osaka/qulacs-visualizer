@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from qulacs import QuantumCircuit
 from typing_extensions import Final
 
-from qulacsvis.utils.gate import to_latex_style, grouping_adjacent_gates
+from qulacsvis.utils.gate import grouping_adjacent_gates, to_latex_style
 
 from .circuit_parser import (
     GATE_DEFAULT_HEIGHT,
