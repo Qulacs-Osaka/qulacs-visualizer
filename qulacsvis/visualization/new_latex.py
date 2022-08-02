@@ -111,6 +111,13 @@ class LatexSourceGenerator:
             for target_bit in adjacent_gates[1:]:
                 layer_latex[target_bit] = r"\ghost{" + gate_name_qcircuit_style + "}"
 
+        if len(groups_adjacent_gates) > 1:
+            for group1, group2 in zip(groups_adjacent_gates, groups_adjacent_gates[1:]):
+                from_ = group1[-1]
+                to_ = group2[0]
+                size = to_ - from_
+                layer_latex[from_] += r" \qwx[" + str(size) + "]"
+
     def gate(self, layer_latex: List[str], gate: GateData) -> None:
         gate_qcircuit_style = r"\gate{" + to_latex_style(gate.name) + "}"
         target_bit = gate.target_bits[0]
