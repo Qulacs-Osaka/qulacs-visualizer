@@ -50,6 +50,7 @@ __TO_LATEX_STYLE_GATESTR_MAP = dict(
         "sqrtY": r"\sqrt{Y}",
         "sqrtYdag": r"\sqrt{Y^\dag}",
         "CNOT": r"\targ",
+        "SWAP": r"\qswap",
         "wire": r"\qw",
         "ghost": "ghost",
     },
