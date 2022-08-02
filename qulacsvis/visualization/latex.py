@@ -201,6 +201,7 @@ class LatexSourceGenerator:
         for adjacent_gates in groups_adjacent_gates:
             size = len(adjacent_gates) - 1
             target_bit = adjacent_gates[0]
+            # The "\multi_gate" should be placed in one location and "\ghost" in the other.
             layer_latex[target_bit] = (
                 r"\multigate{" + str(size) + "}{" + gate_name_qcircuit_style + "}"
             )
@@ -209,6 +210,7 @@ class LatexSourceGenerator:
                 layer_latex[target_bit] = r"\ghost{" + gate_name_qcircuit_style + "}"
 
         if len(groups_adjacent_gates) > 1:
+            # Generate the line connecting the each group
             for group1, group2 in zip(groups_adjacent_gates, groups_adjacent_gates[1:]):
                 from_ = group1[-1]
                 to_ = group2[0]
