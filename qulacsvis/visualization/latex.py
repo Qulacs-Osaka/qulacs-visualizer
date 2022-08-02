@@ -9,11 +9,11 @@ from qulacsvis.visualization.circuit_parser import CircuitParser, GateData
 
 class LatexSourceGenerator:
     def __init__(self, circuit: QuantumCircuit):
-        self.__quantum_circuit = circuit
-        self.__parser = CircuitParser(circuit)
-        self.__circuit_data = self.__parser.gate_info
-        self.circuit = np.array([[]])
-        self.head = r"""
+        self._quantum_circuit = circuit
+        self._parser = CircuitParser(circuit)
+        self._circuit_data = self._parser.gate_info
+        self._circuit = np.array([[]])
+        self._head = r"""
 \documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
 \usepackage[braket, qm]{qcircuit}
 \usepackage{graphicx}
@@ -21,11 +21,11 @@ class LatexSourceGenerator:
 \begin{document}
     \Qcircuit @C=1.0em @R=0.7em @!R{ \\
 """
-        self.tail = r"    }" + "\n" + r"\end{document}"
+        self._tail = r"    }" + "\n" + r"\end{document}"
 
     def generate(self) -> str:
-        qubit_count = self.__parser.qubit_count
-        circuit_layer_count = len(self.__circuit_data[0])
+        qubit_count = self._parser.qubit_count
+        circuit_layer_count = len(self._circuit_data[0])
 
         input_label = np.array(
             [
@@ -39,33 +39,33 @@ class LatexSourceGenerator:
             ]
         )
 
-        self.circuit = np.array([[] for _ in range(qubit_count)])
+        self._circuit = np.array([[] for _ in range(qubit_count)])
         for layer in range(circuit_layer_count):
             current_layer_latex = [to_latex_style("wire") for _ in range(qubit_count)]
             for qubit in range(qubit_count):
-                gate = self.__circuit_data[qubit][layer]
+                gate = self._circuit_data[qubit][layer]
 
                 if gate.name == "ghost":
                     continue
                 elif gate.name == "wire":
                     continue
                 elif gate.name == "CNOT":
-                    self.cnot(current_layer_latex, gate)
+                    self._cnot(current_layer_latex, gate)
                 elif gate.name == "SWAP":
-                    self.swap(current_layer_latex, gate)
+                    self._swap(current_layer_latex, gate)
                 elif len(gate.target_bits) > 1:
-                    self.multi_gate(current_layer_latex, gate)
+                    self._multi_gate(current_layer_latex, gate)
                 else:
-                    self.gate(current_layer_latex, gate)
+                    self._gate(current_layer_latex, gate)
 
-            self.circuit = np.column_stack([self.circuit, current_layer_latex])
+            self._circuit = np.column_stack([self._circuit, current_layer_latex])
         wires = np.array([[r"\qw"] for _ in range(qubit_count)])
-        circuit_with_label = np.column_stack([input_label, wires, self.circuit, wires])
-        body = self.array_to_qcircuit_style(circuit_with_label)  # type: ignore
+        circuit_with_label = np.column_stack([input_label, wires, self._circuit, wires])
+        body = self._array_to_qcircuit_style(circuit_with_label)  # type: ignore
 
-        return self.head + body + self.tail
+        return self._head + body + self._tail
 
-    def array_to_qcircuit_style(self, array: List[List[str]]) -> str:
+    def _array_to_qcircuit_style(self, array: List[List[str]]) -> str:
         lines = [" & ".join(line) for line in array]
         # add indent for latex source file
         indent = "        "
@@ -74,19 +74,19 @@ class LatexSourceGenerator:
         res += r"\\" + "\n"
         return res
 
-    def cnot(self, layer_latex: List[str], gate: GateData) -> None:
+    def _cnot(self, layer_latex: List[str], gate: GateData) -> None:
         cnot_qcircuit_style = to_latex_style(gate.name)
         target_bit = gate.target_bits[0]
         layer_latex[target_bit] = cnot_qcircuit_style
-        self.control_bits(layer_latex, gate.control_bits, target_bit)
+        self._control_bits(layer_latex, gate.control_bits, target_bit)
 
-    def control_bits(
+    def _control_bits(
         self, layer_latex: List[str], control_bits: List[int], target_bit: int
     ) -> None:
         for control_bit in control_bits:
             layer_latex[control_bit] = r"\ctrl{" + str(target_bit - control_bit) + "}"
 
-    def swap(self, layer_latex: List[str], gate: GateData) -> None:
+    def _swap(self, layer_latex: List[str], gate: GateData) -> None:
         swap_qcircuit_style = to_latex_style(gate.name)
         target_index_list = gate.target_bits
         swap = (target_index_list[0], target_index_list[-1])
@@ -94,11 +94,11 @@ class LatexSourceGenerator:
         layer_latex[swap[0]] += r" \qwx[" + str(swap[1] - swap[0]) + r"]"
         layer_latex[swap[1]] = swap_qcircuit_style
 
-    def multi_gate(self, layer_latex: List[str], gate: GateData) -> None:
+    def _multi_gate(self, layer_latex: List[str], gate: GateData) -> None:
         gate_name_qcircuit_style = to_latex_style(gate.name)
         groups_adjacent_gates = grouping_adjacent_gates(gate.target_bits)
 
-        self.control_bits(layer_latex, gate.control_bits, gate.target_bits[0])
+        self._control_bits(layer_latex, gate.control_bits, gate.target_bits[0])
 
         for adjacent_gates in groups_adjacent_gates:
             size = len(adjacent_gates) - 1
@@ -117,8 +117,8 @@ class LatexSourceGenerator:
                 size = to_ - from_
                 layer_latex[from_] += r" \qwx[" + str(size) + "]"
 
-    def gate(self, layer_latex: List[str], gate: GateData) -> None:
+    def _gate(self, layer_latex: List[str], gate: GateData) -> None:
         gate_qcircuit_style = r"\gate{" + to_latex_style(gate.name) + "}"
         target_bit = gate.target_bits[0]
         layer_latex[target_bit] = gate_qcircuit_style
-        self.control_bits(layer_latex, gate.control_bits, target_bit)
+        self._control_bits(layer_latex, gate.control_bits, target_bit)
