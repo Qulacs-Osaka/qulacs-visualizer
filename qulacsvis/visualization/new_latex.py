@@ -1,15 +1,10 @@
 from typing import List
 
+import numpy as np
 from qulacs import QuantumCircuit
 
-from qulacsvis.utils.gate import to_latex_style, grouping_adjacent_gates
+from qulacsvis.utils.gate import grouping_adjacent_gates, to_latex_style
 from qulacsvis.visualization.circuit_parser import CircuitParser, GateData
-
-import numpy as np
-
-
-def to_qcircuit_style(gate_name: str) -> str:
-    return "{" + to_latex_style(gate_name) + "}"
 
 
 class LatexSourceGenerator:
