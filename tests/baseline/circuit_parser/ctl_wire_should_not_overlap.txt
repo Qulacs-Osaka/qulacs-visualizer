@@ -1,142 +1,97 @@
 [
     [
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         }
     ],
     [
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "X",
-            "target_bit": [
+            "control_bits": [],
+            "name": "X",
+            "target_bits": [
                 1
-            ],
-            "text": "$X$",
-            "width": 1.0
+            ]
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "X",
-            "target_bit": [
+            "control_bits": [],
+            "name": "X",
+            "target_bits": [
                 1
-            ],
-            "text": "$X$",
-            "width": 1.0
+            ]
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "X",
-            "target_bit": [
+            "control_bits": [],
+            "name": "X",
+            "target_bits": [
                 1
-            ],
-            "text": "$X$",
-            "width": 1.0
+            ]
         }
     ],
     [
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [
+            "control_bits": [
                 0
             ],
-            "height": 1.5,
-            "raw_text": "CZ",
-            "target_bit": [
+            "name": "CZ",
+            "target_bits": [
                 2
-            ],
-            "text": "$CZ$",
-            "width": 1.0
+            ]
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [
+            "control_bits": [
                 0
             ],
-            "height": 1.5,
-            "raw_text": "CNOT",
-            "target_bit": [
+            "name": "CNOT",
+            "target_bits": [
                 2
-            ],
-            "text": "$\\targ$",
-            "width": 1.0
+            ]
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         }
     ]
 ]

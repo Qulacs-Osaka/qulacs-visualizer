@@ -6,6 +6,8 @@ from matplotlib import pyplot as plt
 from qulacs import QuantumCircuit
 from typing_extensions import Final
 
+from qulacsvis.utils.gate import grouping_adjacent_gates, to_latex_style
+
 from .circuit_parser import (
     GATE_DEFAULT_HEIGHT,
     GATE_DEFAULT_WIDTH,
@@ -161,15 +163,15 @@ class MPLCircuitlDrawer:
             for qubit in range(self._parser.qubit_count):
                 gate = self._circuit_data[qubit][layer]
                 qubit_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
-                if gate["raw_text"] == "ghost":
+                if gate.name == "ghost":
                     continue
-                elif gate["raw_text"] == "wire":
+                elif gate.name == "wire":
                     continue
-                elif gate["raw_text"] == "CNOT":
+                elif gate.name == "CNOT":
                     self._cnot(gate, (layer_xpos, qubit_ypos))
-                elif gate["raw_text"] == "SWAP":
+                elif gate.name == "SWAP":
                     self._swap(gate, (layer_xpos, qubit_ypos))
-                elif len(gate["target_bit"]) > 1:
+                elif len(gate.target_bits) > 1:
                     self._multi_gate(gate, (layer_xpos, qubit_ypos))
                 else:
                     self._gate_with_size(gate, (layer_xpos, qubit_ypos), 1)
@@ -302,8 +304,8 @@ class MPLCircuitlDrawer:
         )
         box = patches.Rectangle(
             # The gate is centered.
-            xy=(xpos - 0.5 * gate["width"], ypos - 0.5 * multi_gate_height),
-            width=gate["width"],
+            xy=(xpos - 0.5 * GATE_DEFAULT_WIDTH, ypos - 0.5 * multi_gate_height),
+            width=GATE_DEFAULT_WIDTH,
             height=multi_gate_height,
             facecolor="w",
             edgecolor="k",
@@ -311,8 +313,14 @@ class MPLCircuitlDrawer:
             zorder=PORDER_GATE,
         )
         self._ax.add_patch(box)
-        self._text(xpos, ypos, gate["text"])
-        self._control_bits(gate["control_bit"], (xpos, ypos))
+
+        if gate.name == "":
+            latex_style_gate_str = ""
+        else:
+            latex_style_gate_str = f"${to_latex_style(gate.name)}$"
+
+        self._text(xpos, ypos, latex_style_gate_str)
+        self._control_bits(gate.control_bits, (xpos, ypos))
 
     def _multi_gate(self, gate: GateData, xy: Tuple[float, float]) -> None:
         """
@@ -328,16 +336,9 @@ class MPLCircuitlDrawer:
 
         xpos, ypos = xy
 
-        multi_gate_data: GateData = {
-            "text": gate["text"],
-            "width": gate["width"],
-            "height": gate["height"],
-            "target_bit": [],
-            "control_bit": [],
-            "raw_text": gate["raw_text"],
-        }
+        multi_gate_data = GateData(gate.name)
 
-        groups_of_adjacent_gates = self._grouping_adjacent_gates(gate["target_bit"])
+        groups_of_adjacent_gates = grouping_adjacent_gates(gate.target_bits)
 
         for i, adjacent_gates in enumerate(groups_of_adjacent_gates):
             group_x = xpos
@@ -347,52 +348,14 @@ class MPLCircuitlDrawer:
             )
             if i == 0:
                 # Show the name only for the first group (multi_gate) and hide the rest
-                multi_gate_data["text"] = ""
+                multi_gate_data.name = ""
 
         # Gray line connecting the gates
-        ypos = min(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
-        to_ypos = max(gate["target_bit"]) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+        ypos = min(gate.target_bits) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+        to_ypos = max(gate.target_bits) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
         self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
 
-        self._control_bits(gate["control_bit"], (xpos, ypos))
-
-    def _grouping_adjacent_gates(self, target_bits: List[int]) -> List[List[int]]:
-        """
-        Grouping adjacent gates.
-
-        Parameters
-        ----------
-        target_bit : List[int]
-            The target bit list.
-
-        Returns
-        -------
-        List[List[int]]
-            The grouped target bit list.
-
-        Examples
-        --------
-        >>> target_bits = [1, 2, 3, 5, 7, 8]
-        >>> print(_grouping_adjacent_gates(target_bits))
-        >>> [[1, 2, 3], [5], [7, 8]]
-        """
-
-        target_bits.sort()
-        groups = []
-        adjacent_gates: List[int] = []
-        for target_bit in target_bits:
-            if adjacent_gates == []:
-                adjacent_gates.append(target_bit)
-                continue
-
-            if target_bit - 1 in adjacent_gates:
-                adjacent_gates.append(target_bit)
-            else:
-                groups.append(adjacent_gates)
-                adjacent_gates = [target_bit]
-
-        groups.append(adjacent_gates)
-        return groups
+        self._control_bits(gate.control_bits, (xpos, ypos))
 
     def _cnot(self, gate: GateData, xy: Tuple[float, float]) -> None:
         """
@@ -414,9 +377,9 @@ class MPLCircuitlDrawer:
         xpos, ypos = xy
         TARGET_QUBIT_RADIUS: Final[float] = 0.4
 
-        if gate["control_bit"] is None:
+        if gate.control_bits is None:
             raise ValueError("control_bit is None")
-        elif gate["control_bit"] == []:
+        elif gate.control_bits == []:
             raise ValueError("control_bit is empty")
 
         target = patches.Circle(
@@ -441,7 +404,7 @@ class MPLCircuitlDrawer:
             zorder=PORDER_TEXT,
         )
 
-        self._control_bits(gate["control_bit"], (xpos, ypos))
+        self._control_bits(gate.control_bits, (xpos, ypos))
 
     def _control_bits(
         self, control_bits: List[int], xy_from: Tuple[float, float]
@@ -490,7 +453,7 @@ class MPLCircuitlDrawer:
         xpos, ypos = xy
         TARGET_QUBIT_MARK_SIZE: Final[float] = 0.2
 
-        for target_bit in gate["target_bit"]:
+        for target_bit in gate.target_bits:
             to_ypos = target_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
             self._line(
                 (xpos, ypos),

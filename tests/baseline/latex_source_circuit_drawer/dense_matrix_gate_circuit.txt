@@ -1,12 +1,11 @@
 
-\documentclass[border=2px]{standalone}
+\documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
 \usepackage[braket, qm]{qcircuit}
 \usepackage{graphicx}
 
 \begin{document}
-    \scalebox{1.0}{
-    \Qcircuit @C=1.0em @R=0.2em @!R { \\
-        \nghost{ {q}_{0} : } & \lstick{ {q}_{0} :  } & \multigate{1}{DeM} \\
-        \nghost{ {q}_{1} : } & \lstick{ {q}_{1} :  } & \ghost{DeM} \\
-    }}
+    \Qcircuit @C=1.0em @R=0.7em @!R{ \\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qw & \multigate{1}{DeM} & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \ghost{DeM} & \qw\\
+    }
 \end{document}

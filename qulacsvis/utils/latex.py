@@ -51,7 +51,11 @@ class _LatexCompiler:
         except subprocess.CalledProcessError as err:
             with open("latex_error.log", "wb") as error_file:
                 error_file.write(err.stdout)
-            raise Exception("`pdflatex` failed. See `latex_error.log`") from err
+            with open("circuit_drawer.tex", "w") as tex_file:
+                tex_file.write(code)
+            raise Exception(
+                "`pdflatex` failed. See `latex_error.log`, `circuit_drawer.tex`"
+            ) from err
 
     def has_pdflatex(self) -> bool:
         """

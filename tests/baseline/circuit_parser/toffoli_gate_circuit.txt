@@ -1,95 +1,68 @@
 [
     [
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [
+            "control_bits": [
                 1,
                 2
             ],
-            "height": 1.5,
-            "raw_text": "DenseMatrix",
-            "target_bit": [
+            "name": "DenseMatrix",
+            "target_bits": [
                 0
-            ],
-            "text": "$DeM$",
-            "width": 1.0
+            ]
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         }
     ],
     [
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [
+            "control_bits": [
                 0,
                 2
             ],
-            "height": 1.5,
-            "raw_text": "DenseMatrix",
-            "target_bit": [
+            "name": "DenseMatrix",
+            "target_bits": [
                 1
-            ],
-            "text": "$DeM$",
-            "width": 1.0
+            ]
         }
     ],
     [
         {
-            "control_bit": [
+            "control_bits": [
                 0,
                 1
             ],
-            "height": 1.5,
-            "raw_text": "DenseMatrix",
-            "target_bit": [
+            "name": "DenseMatrix",
+            "target_bits": [
                 2
-            ],
-            "text": "$DeM$",
-            "width": 1.0
+            ]
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         },
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "wire",
-            "target_bit": [],
-            "text": "",
-            "width": 1.0
+            "control_bits": [],
+            "name": "wire",
+            "target_bits": []
         }
     ]
 ]

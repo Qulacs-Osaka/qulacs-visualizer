@@ -91,17 +91,16 @@ print(circuit_drawer(circuit, "latex_source"))
 ```
 
 ```latex
-\documentclass[border=2px]{standalone}
+\documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
 \usepackage[braket, qm]{qcircuit}
 \usepackage{graphicx}
 
 \begin{document}
-    \scalebox{1.0}{
-    \Qcircuit @C=1.0em @R=0.2em @!R { \\
-        \nghost{ {q}_{0} : } & \lstick{ {q}_{0} :  } & \gate{X} & \multigate{1}{DeM} & \targ & \qw \\
-        \nghost{ {q}_{1} : } & \lstick{ {q}_{1} :  } & \gate{Y} & \ghost{DeM} & \qw & \qw \\
-        \nghost{ {q}_{2} : } & \lstick{ {q}_{2} :  } & \gate{Z} & \qw & \ctrl{-2} & \gate{X} \\
-    }}
+    \Qcircuit @C=1.0em @R=0.7em @!R{ \\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qw & \gate{X} & \multigate{1}{DeM} & \targ & \qw & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \gate{Y} & \ghost{DeM} & \qw & \qw & \qw\\
+        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \qw & \gate{Z} & \qw & \ctrl{-2} & \gate{X} & \qw\\
+    }
 \end{document}
 ```
 
