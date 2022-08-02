@@ -26,7 +26,7 @@ class LatexSourceGenerator:
 \begin{document}
     \Qcircuit @C=1.0em @R=0.7em @!R{ \\
 """
-        self.tail = r"}" + "\n" + r"\end{document}"
+        self.tail = r"    }" + "\n" + r"\end{document}"
 
     def generate(self) -> str:
         qubit_count = self.__parser.qubit_count
@@ -70,8 +70,11 @@ class LatexSourceGenerator:
         return self.head + body + self.tail
 
     def array_to_qcircuit_style(self, array: List[List[str]]) -> str:
-        liens = [" & ".join(line) for line in array]
-        res = (r"\\" + "\n").join(liens)
+        lines = [" & ".join(line) for line in array]
+        # add indent for latex source file
+        indent = "        "
+        lines = [indent + line for line in lines]
+        res = (r"\\" + "\n").join(lines)
         res += r"\\" + "\n"
         return res
 
