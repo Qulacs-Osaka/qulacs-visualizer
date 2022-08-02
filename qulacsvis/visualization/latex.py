@@ -39,7 +39,7 @@ class LatexSourceGenerator:
             ]
         )
 
-        self.circuit = np.array([[r"\qw"] for _ in range(qubit_count)])
+        self.circuit = np.array([[] for _ in range(qubit_count)])
         for layer in range(circuit_layer_count):
             current_layer_latex = [to_latex_style("wire") for _ in range(qubit_count)]
             for qubit in range(qubit_count):
@@ -59,7 +59,8 @@ class LatexSourceGenerator:
                     self.gate(current_layer_latex, gate)
 
             self.circuit = np.column_stack([self.circuit, current_layer_latex])
-        circuit_with_label = np.column_stack([input_label, self.circuit])
+        wires = np.array([[r"\qw"] for _ in range(qubit_count)])
+        circuit_with_label = np.column_stack([input_label, wires, self.circuit, wires])
         body = self.array_to_qcircuit_style(circuit_with_label)  # type: ignore
 
         return self.head + body + self.tail
