@@ -97,9 +97,9 @@ print(circuit_drawer(circuit, "latex_source"))
 
 \begin{document}
     \Qcircuit @C=1.0em @R=0.7em @!R{ \\
-        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qw & \gate{X} & \multigate{1}{DeM} & \targ & \qw & \qw\\
-        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \gate{Y} & \ghost{DeM} & \qw & \qw & \qw\\
-        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \qw & \gate{Z} & \qw & \ctrl{-2} & \gate{X} & \qw\\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \gate{X} & \multigate{1}{DeM} & \targ & \qw & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \gate{Y} & \ghost{DeM} & \qw & \qw & \qw\\
+        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \gate{Z} & \qw & \ctrl{-2} & \gate{X} & \qw\\
     }
 \end{document}
 ```
