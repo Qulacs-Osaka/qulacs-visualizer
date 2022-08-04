@@ -1,14 +1,11 @@
 [
     [
         {
-            "control_bit": [],
-            "height": 1.5,
-            "raw_text": "X",
-            "target_bit": [
+            "control_bits": [],
+            "name": "X",
+            "target_bits": [
                 0
-            ],
-            "text": "$X$",
-            "width": 1.0
+            ]
         }
     ]
 ]
