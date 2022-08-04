@@ -5,10 +5,10 @@
 
 \begin{document}
     \Qcircuit @C=1.0em @R=0.7em @!R{ \\
-        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qw & \multigate{0}{DeM} \qwx[3] & \qw\\
-        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \ctrl{-1} & \qw\\
-        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \qw & \qw & \qw\\
-        \nghost{ q_{3} : } & \lstick{ q_{3} : } & \qw & \multigate{1}{DeM} & \qw\\
-        \nghost{ q_{4} : } & \lstick{ q_{4} : } & \qw & \ghost{DeM} & \qw\\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \multigate{0}{DeM} \qwx[3] & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \ctrl{-1} & \qw\\
+        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \qw & \qw\\
+        \nghost{ q_{3} : } & \lstick{ q_{3} : } & \multigate{1}{DeM} & \qw\\
+        \nghost{ q_{4} : } & \lstick{ q_{4} : } & \ghost{DeM} & \qw\\
     }
 \end{document}

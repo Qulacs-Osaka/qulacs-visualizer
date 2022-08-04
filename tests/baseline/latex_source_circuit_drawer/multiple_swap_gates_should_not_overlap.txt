@@ -5,9 +5,9 @@
 
 \begin{document}
     \Qcircuit @C=1.0em @R=0.7em @!R{ \\
-        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qw & \qswap \qwx[2] & \qw & \qw\\
-        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \qw & \qswap \qwx[2] & \qw\\
-        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \qw & \qswap & \qw & \qw\\
-        \nghost{ q_{3} : } & \lstick{ q_{3} : } & \qw & \qw & \qswap & \qw\\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qswap \qwx[2] & \qw & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \qswap \qwx[2] & \qw\\
+        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \qswap & \qw & \qw\\
+        \nghost{ q_{3} : } & \lstick{ q_{3} : } & \qw & \qswap & \qw\\
     }
 \end{document}

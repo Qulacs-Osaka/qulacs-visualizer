@@ -5,8 +5,8 @@
 
 \begin{document}
     \Qcircuit @C=1.0em @R=0.7em @!R{ \\
-        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qw & \gate{X} & \qw\\
-        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \gate{Y} & \qw\\
-        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \qw & \gate{Z} & \qw\\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \gate{X} & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \gate{Y} & \qw\\
+        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \gate{Z} & \qw\\
     }
 \end{document}

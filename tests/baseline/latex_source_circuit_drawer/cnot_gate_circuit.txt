@@ -5,7 +5,7 @@
 
 \begin{document}
     \Qcircuit @C=1.0em @R=0.7em @!R{ \\
-        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qw & \ctrl{1} & \targ & \qw\\
-        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \targ & \ctrl{-1} & \qw\\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \ctrl{1} & \targ & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \targ & \ctrl{-1} & \qw\\
     }
 \end{document}

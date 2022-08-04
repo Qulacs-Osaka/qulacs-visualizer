@@ -5,7 +5,7 @@
 
 \begin{document}
     \Qcircuit @C=1.0em @R=0.7em @!R{ \\
-        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qw & \qswap \qwx[1] & \qswap & \qw\\
-        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \qswap & \qswap \qwx[-1] & \qw\\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qswap \qwx[1] & \qswap & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qswap & \qswap \qwx[-1] & \qw\\
     }
 \end{document}

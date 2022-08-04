@@ -5,7 +5,7 @@
 
 \begin{document}
     \Qcircuit @C=1.0em @R=0.7em @!R{ \\
-        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \qw & \multigate{1}{DeM} & \qw\\
-        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \qw & \ghost{DeM} & \qw\\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \multigate{1}{DeM} & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \ghost{DeM} & \qw\\
     }
 \end{document}
