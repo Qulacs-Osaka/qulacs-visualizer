@@ -7,6 +7,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   qulacsvis.utils.gate
    qulacsvis.utils.latex
 
 Module contents

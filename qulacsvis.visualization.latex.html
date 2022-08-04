@@ -82,6 +82,114 @@
              
   <section id="module-qulacsvis.visualization.latex">
 <span id="qulacsvis-visualization-latex-module"></span><h1>qulacsvis.visualization.latex module<a class="headerlink" href="#module-qulacsvis.visualization.latex" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="qulacsvis.visualization.latex.LatexSourceGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qulacsvis.visualization.latex.</span></span><span class="sig-name descname"><span class="pre">LatexSourceGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">qulacs.QuantumCircuit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qulacsvis/visualization/latex.html#LatexSourceGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generate latex source from QuantumCircuit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>circuit</strong> (<em>QuantumCircuit</em>) – A quantum circuit to be drawn.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qulacsvis.visualization.latex.LatexSourceGenerator._quantum_circuit">
+<span class="sig-name descname"><span class="pre">_quantum_circuit</span></span><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator._quantum_circuit" title="Permalink to this definition"></a></dt>
+<dd><p>A quantum circuit to be drawn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>QuantumCircuit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qulacsvis.visualization.latex.LatexSourceGenerator._parser">
+<span class="sig-name descname"><span class="pre">_parser</span></span><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator._parser" title="Permalink to this definition"></a></dt>
+<dd><p>The parser of the quantum circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.CircuitParser" title="qulacsvis.visualization.circuit_parser.CircuitParser">CircuitParser</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qulacsvis.visualization.latex.LatexSourceGenerator._circuit_data">
+<span class="sig-name descname"><span class="pre">_circuit_data</span></span><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator._circuit_data" title="Permalink to this definition"></a></dt>
+<dd><p>The data of the quantum circuit after parsing by CircuitParser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>CircuitData</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qulacsvis.visualization.latex.LatexSourceGenerator._circuit">
+<span class="sig-name descname"><span class="pre">_circuit</span></span><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator._circuit" title="Permalink to this definition"></a></dt>
+<dd><p>A matrix containing strings converted from CircuitData for Qcircuit.
+Each element and its position corresponds to one of GateData.
+Quantum circuit only, input values are not contained.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qulacsvis.visualization.latex.LatexSourceGenerator._head">
+<span class="sig-name descname"><span class="pre">_head</span></span><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator._head" title="Permalink to this definition"></a></dt>
+<dd><p>The head of the latex source containing preamble.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qulacsvis.visualization.latex.LatexSourceGenerator._tail">
+<span class="sig-name descname"><span class="pre">_tail</span></span><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator._tail" title="Permalink to this definition"></a></dt>
+<dd><p>The tail of the latex source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qulacsvis.visualization</span> <span class="kn">import</span> <span class="n">LatexSourceGenerator</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_X_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_Y_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_Z_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">generator</span> <span class="o">=</span> <span class="n">LatexSourceGenerator</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">latex_source</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">latex_source</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="qulacsvis.visualization.latex.LatexSourceGenerator.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/qulacsvis/visualization/latex.html#LatexSourceGenerator.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator.generate" title="Permalink to this definition"></a></dt>
+<dd><p>Generate latex source from QuantumCircuit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>latex_source</strong> – String of latex source generated</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qulacsvis.visualization.latex &mdash; qulacsvis 0.2.2 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> qulacsvis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../options.html">How to use options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">qulacsvis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">qulacsvis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>qulacsvis.visualization.latex</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for qulacsvis.visualization.latex</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+
+<span class="kn">from</span> <span class="nn">qulacsvis.utils.gate</span> <span class="kn">import</span> <span class="n">grouping_adjacent_gates</span><span class="p">,</span> <span class="n">to_latex_style</span>
+<span class="kn">from</span> <span class="nn">qulacsvis.visualization.circuit_parser</span> <span class="kn">import</span> <span class="n">CircuitParser</span><span class="p">,</span> <span class="n">GateData</span>
+
+
+<div class="viewcode-block" id="LatexSourceGenerator"><a class="viewcode-back" href="../../../qulacsvis.visualization.latex.html#qulacsvis.visualization.latex.LatexSourceGenerator">[docs]</a><span class="k">class</span> <span class="nc">LatexSourceGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generate latex source from QuantumCircuit</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    circuit : QuantumCircuit</span>
+<span class="sd">        A quantum circuit to be drawn.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _quantum_circuit : QuantumCircuit</span>
+<span class="sd">        A quantum circuit to be drawn.</span>
+<span class="sd">    _parser : CircuitParser</span>
+<span class="sd">        The parser of the quantum circuit.</span>
+<span class="sd">    _circuit_data : CircuitData</span>
+<span class="sd">        The data of the quantum circuit after parsing by CircuitParser.</span>
+<span class="sd">    _circuit : numpy.ndarray</span>
+<span class="sd">        A matrix containing strings converted from CircuitData for Qcircuit.</span>
+<span class="sd">        Each element and its position corresponds to one of GateData.</span>
+<span class="sd">        Quantum circuit only, input values are not contained.</span>
+<span class="sd">    _head : str</span>
+<span class="sd">        The head of the latex source containing preamble.</span>
+<span class="sd">    _tail : str</span>
+<span class="sd">        The tail of the latex source.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from qulacs import QuantumCircuit</span>
+<span class="sd">    &gt;&gt;&gt; from qulacsvis.visualization import LatexSourceGenerator</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; circuit = QuantumCircuit(3)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_X_gate(0)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_Y_gate(1)</span>
+<span class="sd">    &gt;&gt;&gt; circuit.add_Z_gate(2)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; generator = LatexSourceGenerator(circuit)</span>
+<span class="sd">    &gt;&gt;&gt; latex_source = generator.generate()</span>
+<span class="sd">    &gt;&gt;&gt; print(latex_source)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quantum_circuit</span> <span class="o">=</span> <span class="n">circuit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span> <span class="o">=</span> <span class="n">CircuitParser</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">gate_info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_head</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">\documentclass[border={-2pt 5pt 5pt -7pt}]</span><span class="si">{standalone}</span><span class="s2"></span>
+<span class="s2">\usepackage[braket, qm]</span><span class="si">{qcircuit}</span><span class="s2"></span>
+<span class="s2">\usepackage</span><span class="si">{graphicx}</span><span class="s2"></span>
+
+<span class="s2">\begin</span><span class="si">{document}</span><span class="s2"></span>
+<span class="s2">    \Qcircuit @C=1.0em @R=0.7em @!R{ \\</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tail</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;    }&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{document}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="LatexSourceGenerator.generate"><a class="viewcode-back" href="../../../qulacsvis.visualization.latex.html#qulacsvis.visualization.latex.LatexSourceGenerator.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate latex source from QuantumCircuit</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        latex_source : str</span>
+<span class="sd">            String of latex source generated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qubit_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">qubit_count</span>
+        <span class="n">circuit_layer_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">input_label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span>
+                    <span class="c1"># nghost reserves drawing area for input label,</span>
+                    <span class="c1"># adjusts the spacing between rows.</span>
+                    <span class="sa">r</span><span class="s2">&quot;\nghost{ q_{&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;} : }&quot;</span><span class="p">,</span>
+                    <span class="sa">r</span><span class="s2">&quot;\lstick{ q_{&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;} : }&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">)])</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_layer_count</span><span class="p">):</span>
+            <span class="c1"># This is an array containing strings.</span>
+            <span class="c1"># The string for each element is the string for the Qcircuit of the gate corresponding to each qubit row of the layer currently of interest.</span>
+            <span class="n">current_layer_latex</span> <span class="o">=</span> <span class="p">[</span><span class="n">to_latex_style</span><span class="p">(</span><span class="s2">&quot;wire&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">):</span>
+                <span class="n">gate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;ghost&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;wire&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_cnot</span><span class="p">(</span><span class="n">current_layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SWAP&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_swap</span><span class="p">(</span><span class="n">current_layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_multi_gate</span><span class="p">(</span><span class="n">current_layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_gate</span><span class="p">(</span><span class="n">current_layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="p">,</span> <span class="n">current_layer_latex</span><span class="p">])</span>
+        <span class="n">wires</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="sa">r</span><span class="s2">&quot;\qw&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">)])</span>
+        <span class="n">circuit_with_label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">input_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="p">,</span> <span class="n">wires</span><span class="p">])</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix_to_qcircuit_style</span><span class="p">(</span><span class="n">circuit_with_label</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_head</span> <span class="o">+</span> <span class="n">body</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tail</span></div>
+
+    <span class="k">def</span> <span class="nf">_matrix_to_qcircuit_style</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate from matrix to string for Qcircuit</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        matrix : List[List[str]]</span>
+<span class="sd">            A matrix containing strings converted from CircuitData for Qcircuit.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        res : str</span>
+<span class="sd">            Generated string for Qcircuit from matrix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot; &amp; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">matrix</span><span class="p">]</span>
+        <span class="c1"># add indent for latex source file</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="s2">&quot;        &quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">indent</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">_cnot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate CNOT gate for Qcircuit</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layer_latex : List[str]</span>
+<span class="sd">            Array containing the string of the gate of the layer currently of interest</span>
+<span class="sd">        gate : GateData</span>
+<span class="sd">            The gate data to be drawn.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cnot_qcircuit_style</span> <span class="o">=</span> <span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">target_bit</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">layer_latex</span><span class="p">[</span><span class="n">target_bit</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnot_qcircuit_style</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bits</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_control_bits</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">control_bits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target_bit</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate control bits for Qcircuit</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layer_latex : List[str]</span>
+<span class="sd">            Array containing the string of the gate of the layer currently of interest</span>
+<span class="sd">        control_bits : List[int]</span>
+<span class="sd">            The control bits of the gate to be drawn.</span>
+<span class="sd">        target_bit : int</span>
+<span class="sd">            A target bit of the gate.</span>
+<span class="sd">            This value is used to generate the line connecting the target bit and control bits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">control_bit</span> <span class="ow">in</span> <span class="n">control_bits</span><span class="p">:</span>
+            <span class="n">layer_latex</span><span class="p">[</span><span class="n">control_bit</span><span class="p">]</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\ctrl{&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">target_bit</span> <span class="o">-</span> <span class="n">control_bit</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate SWAP gate for Qcircuit</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layer_latex : List[str]</span>
+<span class="sd">            Array containing the string of the gate of the layer currently of interest</span>
+<span class="sd">        gate : GateData</span>
+<span class="sd">            The gate data to be drawn.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">swap_qcircuit_style</span> <span class="o">=</span> <span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">target_index_list</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span>
+        <span class="n">swap</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_index_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">target_index_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">layer_latex</span><span class="p">[</span><span class="n">swap</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">swap_qcircuit_style</span>
+        <span class="n">layer_latex</span><span class="p">[</span><span class="n">swap</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; \qwx[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">swap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">swap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;]&quot;</span>
+        <span class="n">layer_latex</span><span class="p">[</span><span class="n">swap</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">swap_qcircuit_style</span>
+
+    <span class="k">def</span> <span class="nf">_multi_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate multi gate for Qcircuit (e.g., DensityMatrixGate)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layer_latex : List[str]</span>
+<span class="sd">            Array containing the string of the gate of the layer currently of interest</span>
+<span class="sd">        gate : GateData</span>
+<span class="sd">            The gate data to be drawn.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gate_name_qcircuit_style</span> <span class="o">=</span> <span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">groups_adjacent_gates</span> <span class="o">=</span> <span class="n">grouping_adjacent_gates</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bits</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">adjacent_gates</span> <span class="ow">in</span> <span class="n">groups_adjacent_gates</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">adjacent_gates</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">target_bit</span> <span class="o">=</span> <span class="n">adjacent_gates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># The &quot;\multi_gate&quot; should be placed in one location and &quot;\ghost&quot; in the other.</span>
+            <span class="n">layer_latex</span><span class="p">[</span><span class="n">target_bit</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">r</span><span class="s2">&quot;\multigate{&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}{&quot;</span> <span class="o">+</span> <span class="n">gate_name_qcircuit_style</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">target_bit</span> <span class="ow">in</span> <span class="n">adjacent_gates</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">layer_latex</span><span class="p">[</span><span class="n">target_bit</span><span class="p">]</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\ghost{&quot;</span> <span class="o">+</span> <span class="n">gate_name_qcircuit_style</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups_adjacent_gates</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Generate the line connecting the each group</span>
+            <span class="k">for</span> <span class="n">group1</span><span class="p">,</span> <span class="n">group2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">groups_adjacent_gates</span><span class="p">,</span> <span class="n">groups_adjacent_gates</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                <span class="n">from_</span> <span class="o">=</span> <span class="n">group1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">to_</span> <span class="o">=</span> <span class="n">group2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="n">to_</span> <span class="o">-</span> <span class="n">from_</span>
+                <span class="n">layer_latex</span><span class="p">[</span><span class="n">from_</span><span class="p">]</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; \qwx[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate a gate for Qcircuit</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layer_latex : List[str]</span>
+<span class="sd">            Array containing the string of the gate of the layer currently of interest</span>
+<span class="sd">        gate : GateData</span>
+<span class="sd">            The gate data to be drawn.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gate_qcircuit_style</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\gate{&quot;</span> <span class="o">+</span> <span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+        <span class="n">target_bit</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">layer_latex</span><span class="p">[</span><span class="n">target_bit</span><span class="p">]</span> <span class="o">=</span> <span class="n">gate_qcircuit_style</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bits</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Qulacs-Osaka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

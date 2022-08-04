@@ -75,7 +75,7 @@
 
 <span class="kn">from</span> <span class="nn">qulacsvis.utils.latex</span> <span class="kn">import</span> <span class="n">_LatexCompiler</span><span class="p">,</span> <span class="n">_PDFtoImage</span>
 
-<span class="kn">from</span> <span class="nn">.latex</span> <span class="kn">import</span> <span class="n">_generate_latex_source</span>
+<span class="kn">from</span> <span class="nn">.latex</span> <span class="kn">import</span> <span class="n">LatexSourceGenerator</span>
 <span class="kn">from</span> <span class="nn">.matplotlib</span> <span class="kn">import</span> <span class="n">MPLCircuitlDrawer</span>
 <span class="kn">from</span> <span class="nn">.text</span> <span class="kn">import</span> <span class="n">TextCircuitDrawer</span>
 
@@ -170,7 +170,8 @@
 
     <span class="k">elif</span> <span class="n">output_method</span> <span class="o">==</span> <span class="s2">&quot;latex&quot;</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
-            <span class="n">latex_source</span> <span class="o">=</span> <span class="n">_generate_latex_source</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+            <span class="n">generator</span> <span class="o">=</span> <span class="n">LatexSourceGenerator</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+            <span class="n">latex_source</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
             <span class="n">latex</span> <span class="o">=</span> <span class="n">_LatexCompiler</span><span class="p">()</span>
             <span class="n">pdftoimage</span> <span class="o">=</span> <span class="n">_PDFtoImage</span><span class="p">()</span>
 
@@ -181,7 +182,9 @@
             <span class="k">return</span> <span class="n">image</span>
 
     <span class="k">elif</span> <span class="n">output_method</span> <span class="o">==</span> <span class="s2">&quot;latex_source&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_generate_latex_source</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="n">generator</span> <span class="o">=</span> <span class="n">LatexSourceGenerator</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="n">latex_source</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">latex_source</span>
 
     <span class="k">elif</span> <span class="n">output_method</span> <span class="o">==</span> <span class="s2">&quot;mpl&quot;</span><span class="p">:</span>
         <span class="n">mpl_drawer</span> <span class="o">=</span> <span class="n">MPLCircuitlDrawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
