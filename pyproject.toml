@@ -11,10 +11,11 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
-Qulacs = "^0.3.0"
+Qulacs = ">=0.5.0"
 temp = "^2020.7.2"
 Pillow = "^9.1.0"
 numpy = "^1.22.0"
+scipy = "^1.9.1"
 matplotlib = "^3.4.3"
 
 [tool.poetry.dev-dependencies]
