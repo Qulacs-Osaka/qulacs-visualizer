@@ -88,7 +88,8 @@ class LatexSourceGenerator:
         self._circuit = np.array([[] for _ in range(qubit_count)])
         for layer in range(circuit_layer_count):
             # This is an array containing strings.
-            # The string for each element is the string for the Qcircuit of the gate corresponding to each qubit row of the layer currently of interest.
+            # The string for each element is the string for the Qcircuit of the gate
+            # corresponding to each qubit row of the layer currently of interest.
             current_layer_latex = [to_latex_style("wire") for _ in range(qubit_count)]
             for qubit in range(qubit_count):
                 gate = self._circuit_data[qubit][layer]
