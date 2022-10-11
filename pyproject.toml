@@ -17,6 +17,7 @@ Pillow = "^9.1.0"
 numpy = "^1.22.0"
 scipy = "^1.9.1"
 matplotlib = "^3.4.3"
+dataclasses-json = "^0.5.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -27,7 +28,6 @@ flake8 = "^4.0.1"
 mypy = "^0.910"
 isort = "^5.10.1"
 pytest-mpl = "^0.13"
-dataclasses-json = "^0.5.7"
 
 [tool.isort]
 default_section = "THIRDPARTY"
