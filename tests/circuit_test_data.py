@@ -209,8 +209,7 @@ def skqulacs_farhi_neven_watle_ansatz() -> QuantumCircuit:
 
 def skqulacs_ibm_embedding_circuit() -> QuantumCircuit:
     n_qubit = 4
-    circuit = create_ibm_embedding_circuit(n_qubit)
-    circuit: QuantumCircuit = circuit._circuit
+    circuit: QuantumCircuit = create_ibm_embedding_circuit(n_qubit)._circuit
     return circuit
 
 
