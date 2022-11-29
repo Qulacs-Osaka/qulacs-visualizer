@@ -53,9 +53,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>qulacsvis.visualization.latex</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qulacsvis.visualization.latex</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -174,10 +174,10 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_gate</span><span class="p">(</span><span class="n">current_layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="p">,</span> <span class="n">current_layer_latex</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="p">,</span> <span class="n">current_layer_latex</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
         <span class="n">wires</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="sa">r</span><span class="s2">&quot;\qw&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">)])</span>
-        <span class="n">circuit_with_label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">input_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="p">,</span> <span class="n">wires</span><span class="p">])</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix_to_qcircuit_style</span><span class="p">(</span><span class="n">circuit_with_label</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="n">circuit_with_label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">input_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="p">,</span> <span class="n">wires</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix_to_qcircuit_style</span><span class="p">(</span><span class="n">circuit_with_label</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_head</span> <span class="o">+</span> <span class="n">body</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tail</span></div>
 
