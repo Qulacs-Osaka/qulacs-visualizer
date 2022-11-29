@@ -1,0 +1,13 @@
+
+\documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+    \Qcircuit @C=1.0em @R=0.7em @!R{ \\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \gate{pRY} & \gate{pRZ} & \multigate{3}{DeM} & \gate{pRX} & \gate{pRZ} & \gate{pRX} & \multigate{3}{DeM} & \gate{pRX} & \gate{pRZ} & \gate{pRX} & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \gate{pRY} & \gate{pRZ} & \ghost{DeM} & \gate{pRX} & \gate{pRZ} & \gate{pRX} & \ghost{DeM} & \gate{pRX} & \gate{pRZ} & \gate{pRX} & \qw\\
+        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \gate{pRY} & \gate{pRZ} & \ghost{DeM} & \gate{pRX} & \gate{pRZ} & \gate{pRX} & \ghost{DeM} & \gate{pRX} & \gate{pRZ} & \gate{pRX} & \qw\\
+        \nghost{ q_{3} : } & \lstick{ q_{3} : } & \gate{pRY} & \gate{pRZ} & \ghost{DeM} & \gate{pRX} & \gate{pRZ} & \gate{pRX} & \ghost{DeM} & \gate{pRX} & \gate{pRZ} & \gate{pRX} & \qw\\
+    }
+\end{document}

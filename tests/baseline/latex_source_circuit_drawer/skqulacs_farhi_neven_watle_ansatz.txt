@@ -1,0 +1,13 @@
+
+\documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+    \Qcircuit @C=1.0em @R=0.7em @!R{ \\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \gate{pRY} & \gate{pRZ} & \ctrl{2} & \qw & \qw & \ctrl{2} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \targ & \gate{pRX} & \gate{pRY} & \targ & \gate{pRY} & \gate{pRX} & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \gate{pRY} & \gate{pRZ} & \qw & \qw & \qw & \qw & \qw & \qw & \targ & \gate{pRX} & \gate{pRY} & \targ & \gate{pRY} & \gate{pRX} & \targ & \gate{pRX} & \gate{pRY} & \targ & \gate{pRY} & \gate{pRX} & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \gate{pRY} & \gate{pRZ} & \targ & \gate{pRX} & \gate{pRY} & \targ & \gate{pRY} & \gate{pRX} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{-2} & \qw & \qw & \ctrl{-2} & \qw & \qw & \qw\\
+        \nghost{ q_{3} : } & \lstick{ q_{3} : } & \gate{pRY} & \gate{pRZ} & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{-2} & \qw & \qw & \ctrl{-2} & \qw & \qw & \ctrl{-2} & \qw & \qw & \ctrl{-2} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+    }
+\end{document}

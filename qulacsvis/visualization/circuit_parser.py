@@ -1,6 +1,6 @@
-import copy
 import dataclasses
-from typing import List
+from collections import deque
+from typing import Deque, List
 
 import dataclasses_json
 from qulacs import QuantumCircuit
@@ -18,6 +18,7 @@ class GateData:
 
 
 CircuitData = List[List[GateData]]
+QueueCircuitData = List[Deque[GateData]]
 
 
 class CircuitParser:
@@ -41,70 +42,63 @@ class CircuitParser:
 
     def __init__(self, circuit: QuantumCircuit):
         self.qubit_count = circuit.get_qubit_count()
-        self.gate_info: CircuitData = [[] for _ in range(self.qubit_count)]
-        self.layer_width = []
-
-        default_value = GateData("wire")
-        layer_info: List[GateData] = [
-            copy.deepcopy(default_value) for _ in range(self.qubit_count)
+        self.layer_width: List[float] = []
+        self.__temp_parsed_circuit: QueueCircuitData = [
+            deque() for _ in range(self.qubit_count)
         ]
-        gate_num = circuit.get_gate_count()
+        self.parsed_circuit: CircuitData = [[]]
 
-        for i in range(gate_num):
-            gate = circuit.get_gate(i)
-            if len(gate.get_target_index_list()) == 0:
-                print(
-                    """CAUTION: The {}-th Gate you added is skipped.\
-                    This gate does not have "target_qubit_list".""".format(
-                        i
-                    )
-                )
-                continue
+        for position in range(circuit.get_gate_count()):
+            gate = circuit.get_gate(position)
             target_index_list = gate.get_target_index_list()
             control_index_list = gate.get_control_index_list()
-            index_list = target_index_list + control_index_list
             gate_name = gate.get_name()
 
-            conflict = False
-            for index in range(min(index_list), max(index_list) + 1):
-                if layer_info[index].name != "wire":
-                    conflict = True
-            if conflict:
-                self.append_layer(layer_info, default_value)
+            if len(target_index_list) == 0:
+                print(
+                    f"WARNING: The {position}-th Gate you added is skipped."
+                    'This gate does not have "target_qubit_list".'
+                )
+                continue
 
-            for index in range(min(index_list), max(index_list) + 1):
-                layer_info[index].name = "used"
-            for target_index in target_index_list:
-                if target_index == target_index_list[0]:
-                    layer_info[target_index].name = gate_name
-                    layer_info[target_index].target_bits = target_index_list
-                    layer_info[target_index].control_bits = control_index_list
+            merged_index = target_index_list + control_index_list
+            min_merged_index = min(merged_index)
+            max_merged_index = max(merged_index)
+            self._align_layers(min_merged_index, max_merged_index)
+
+            for index in range(min_merged_index, max_merged_index + 1):
+                if index == target_index_list[0]:
+                    self.__temp_parsed_circuit[index].append(
+                        GateData(gate_name, target_index_list, control_index_list)
+                    )
+                elif index in target_index_list:
+                    self.__temp_parsed_circuit[index].append(GateData("ghost"))
                 else:
-                    layer_info[target_index].name = "ghost"
+                    self.__temp_parsed_circuit[index].append(GateData("wire"))
 
-        self.append_layer(layer_info, default_value)
+        self._align_layers(0, self.qubit_count)
+        self.parsed_circuit = [list(queue) for queue in self.__temp_parsed_circuit]
+        self.layer_width = [
+            GATE_DEFAULT_WIDTH for _ in range(len(self.parsed_circuit[0]))
+        ]
 
-        self.layer_width = [GATE_DEFAULT_WIDTH for _ in range(len(self.gate_info[0]))]
-
-    def append_layer(self, layer_info: List[GateData], default_value: GateData) -> None:
+    def _align_layers(self, min_line_index: int, max_line_index: int) -> None:
         """
-        Append a layer to the layer_info.
+        Align layer sizes for a specified range of rows.
 
         Parameters
         ----------
-        layer_info : List[GateData]
-            A list of gate data.
-        default_value : GateData
-            A default value of gate data.
+        min_line_index : int
+            Minimum row index to be aligned.
+        max_line_index : int
+            Maximum row index to be aligned.
         """
-        is_blank = True
-        for qubit in range(self.qubit_count):
-            if layer_info[qubit].name != "wire":
-                is_blank = False
-        if not is_blank:
-            for qubit in range(self.qubit_count):
-                if layer_info[qubit].name == "used":
-                    layer_info[qubit].name = "wire"
-            for qubit in range(self.qubit_count):
-                self.gate_info[qubit].append(layer_info[qubit])
-                layer_info[qubit] = copy.deepcopy(default_value)
+        if min_line_index > max_line_index:
+            min_line_index, max_line_index = max_line_index, min_line_index
+        lines = self.__temp_parsed_circuit[min_line_index : max_line_index + 1]
+        layer_counts = [len(queue) for queue in lines]
+        max_layer_count = max(layer_counts)
+
+        for queue, layer_count in zip(lines, layer_counts):
+            for _ in range(max_layer_count - layer_count):
+                queue.append(GateData("wire"))

@@ -1,0 +1,13 @@
+
+\documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+    \Qcircuit @C=1.0em @R=0.7em @!R{ \\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \gate{H} & \gate{pRZ} & \ctrl{1} & \qw & \ctrl{1} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \targ & \gate{pRZ} & \targ & \gate{H} & \gate{pRZ} & \ctrl{1} & \qw & \ctrl{1} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \targ & \gate{pRZ} & \targ & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \gate{H} & \qw & \targ & \gate{pRZ} & \targ & \gate{pRZ} & \ctrl{1} & \qw & \ctrl{1} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \gate{H} & \qw & \targ & \gate{pRZ} & \targ & \gate{pRZ} & \ctrl{1} & \qw & \ctrl{1} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw\\
+        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \gate{H} & \qw & \qw & \qw & \qw & \qw & \targ & \gate{pRZ} & \targ & \gate{pRZ} & \ctrl{1} & \qw & \ctrl{1} & \qw & \qw & \qw & \qw & \gate{H} & \qw & \qw & \qw & \qw & \qw & \targ & \gate{pRZ} & \targ & \gate{pRZ} & \ctrl{1} & \qw & \ctrl{1} & \qw & \qw & \qw & \qw & \qw\\
+        \nghost{ q_{3} : } & \lstick{ q_{3} : } & \gate{H} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \targ & \gate{pRZ} & \targ & \gate{pRZ} & \ctrl{-3} & \qw & \ctrl{-3} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \targ & \gate{pRZ} & \targ & \gate{pRZ} & \ctrl{-3} & \qw & \ctrl{-3} & \qw\\
+    }
+\end{document}

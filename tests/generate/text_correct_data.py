@@ -11,6 +11,10 @@ from circuit_test_data import load_circuit_data  # noqa
 
 BASELINE_DIR = os.path.join("tests", "baseline", "text_circuit_drawer")
 
+# Text-based method output is dependent on terminal size
+os.environ["COLUMNS"] = "80"
+os.environ["LINES"] = "24"
+
 
 class Capturing(List[str]):
     def __enter__(self) -> "Capturing":

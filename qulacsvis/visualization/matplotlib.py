@@ -79,7 +79,7 @@ class MPLCircuitlDrawer:
 
         self._circuit = circuit
         self._parser = CircuitParser(circuit)
-        self._circuit_data: CircuitData = self._parser.gate_info
+        self._circuit_data: CircuitData = self._parser.parsed_circuit
         self._fig_scale_factor = scale
 
     def draw(self, *, debug: bool = False) -> matplotlib.figure.Figure:

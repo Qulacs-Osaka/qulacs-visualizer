@@ -1,0 +1,13 @@
+
+\documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+    \Qcircuit @C=1.0em @R=0.7em @!R{ \\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \gate{pRY} & \gate{pRZ} & \gate{RY} & \ctrl{1} & \gate{pRY} & \gate{pRZ} & \gate{RY} & \ctrl{3} & \gate{pRY} & \qw & \qw & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \gate{pRY} & \gate{pRZ} & \qw & \gate{CZ} & \qw & \qw & \qw & \qw & \qw & \gate{CZ} & \qw & \qw\\
+        \nghost{ q_{2} : } & \lstick{ q_{2} : } & \gate{pRY} & \gate{pRZ} & \gate{RY} & \ctrl{1} & \gate{pRY} & \gate{pRZ} & \qw & \qw & \gate{RY} & \ctrl{-1} & \gate{pRY} & \qw\\
+        \nghost{ q_{3} : } & \lstick{ q_{3} : } & \gate{pRY} & \gate{pRZ} & \qw & \gate{CZ} & \qw & \qw & \qw & \gate{CZ} & \qw & \qw & \qw & \qw\\
+    }
+\end{document}
