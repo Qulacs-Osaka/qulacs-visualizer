@@ -30,8 +30,8 @@ for key, circuit in circuit_data.items():
 @pytest.mark.parametrize("circuit,expected_path", test_table)
 def test_circuit_parser(circuit: QuantumCircuit, expected_path: str) -> None:
     parser = CircuitParser(circuit)
-    gate_info = dataclasses_to_dict(parser.gate_info)
+    parsed_circuit = dataclasses_to_dict(parser.parsed_circuit)
 
     with open(expected_path, "r") as f:
         expected = json.load(f)
-    assert gate_info == expected
+    assert parsed_circuit == expected

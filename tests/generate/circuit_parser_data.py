@@ -17,8 +17,8 @@ if __name__ == "__main__":
 
     for name, circuit in test_data.items():
         parser = CircuitParser(circuit)
-        gate_info = dataclasses_to_dict(parser.gate_info)
+        parsed_circuit = dataclasses_to_dict(parser.parsed_circuit)
 
         with open(os.path.join(BASELINE_DIR, name + ".txt"), "w") as f:
-            json.dump(gate_info, f, sort_keys=True, indent=4)
+            json.dump(parsed_circuit, f, sort_keys=True, indent=4)
             print(f'Saved output to {os.path.join(BASELINE_DIR, name + ".txt")}')

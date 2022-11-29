@@ -50,7 +50,7 @@ class LatexSourceGenerator:
     def __init__(self, circuit: QuantumCircuit):
         self._quantum_circuit = circuit
         self._parser = CircuitParser(circuit)
-        self._circuit_data = self._parser.gate_info
+        self._circuit_data = self._parser.parsed_circuit
         self._circuit = np.array([[]])
         self._head = r"""
 \documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}

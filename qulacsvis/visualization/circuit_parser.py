@@ -46,7 +46,7 @@ class CircuitParser:
         self.__temp_parsed_circuit: QueueCircuitData = [
             deque() for _ in range(self.qubit_count)
         ]
-        self.gate_info: CircuitData = [[]]
+        self.parsed_circuit: CircuitData = [[]]
 
         for position in range(circuit.get_gate_count()):
             gate = circuit.get_gate(position)
@@ -77,8 +77,10 @@ class CircuitParser:
                     self.__temp_parsed_circuit[index].append(GateData("wire"))
 
         self._align_layers(0, self.qubit_count)
-        self.gate_info = [list(queue) for queue in self.__temp_parsed_circuit]
-        self.layer_width = [GATE_DEFAULT_WIDTH for _ in range(len(self.gate_info[0]))]
+        self.parsed_circuit = [list(queue) for queue in self.__temp_parsed_circuit]
+        self.layer_width = [
+            GATE_DEFAULT_WIDTH for _ in range(len(self.parsed_circuit[0]))
+        ]
 
     def _align_layers(self, min_line_index: int, max_line_index: int) -> None:
         """
