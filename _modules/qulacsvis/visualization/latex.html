@@ -117,7 +117,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_quantum_circuit</span> <span class="o">=</span> <span class="n">circuit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span> <span class="o">=</span> <span class="n">CircuitParser</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">gate_info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">parsed_circuit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_head</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">\documentclass[border={-2pt 5pt 5pt -7pt}]</span><span class="si">{standalone}</span><span class="s2"></span>
