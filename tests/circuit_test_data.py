@@ -96,7 +96,7 @@ def multiple_swap_gates_should_not_overlap() -> QuantumCircuit:
 
 def dense_matrix_gate_circuit() -> QuantumCircuit:
     circuit = QuantumCircuit(2)
-    circuit.add_dense_matrix_gate(
+    circuit.add_dense_matrix_gate(  # type: ignore
         [0, 1], [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]
     )
     return circuit
