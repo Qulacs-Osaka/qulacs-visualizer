@@ -10,12 +10,12 @@ authors = ["Qulacs-Osaka <you@example.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
+python = ">=3.7,<3.11"
 Qulacs = ">=0.5.0"
 temp = "^2020.7.2"
 Pillow = "^9.1.0"
-numpy = "^1.22.0"
-scipy = "^1.9.1"
+numpy = "~1.21.0"
+scipy = "~1.7.0"
 matplotlib = "^3.4.3"
 dataclasses-json = "^0.5.7"
 
