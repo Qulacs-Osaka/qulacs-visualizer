@@ -1,7 +1,7 @@
 [
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "DenseMatrix",
             "target_bits": [
                 0,
@@ -11,7 +11,7 @@
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ghost",
             "target_bits": []
         }

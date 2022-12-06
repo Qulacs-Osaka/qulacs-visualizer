@@ -1,14 +1,20 @@
 [
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [
-                1,
-                2
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 1
+                },
+                {
+                    "control_value": 1,
+                    "index": 2
+                }
             ],
             "name": "DenseMatrix",
             "target_bits": [
@@ -16,26 +22,32 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         }
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [
-                0,
-                2
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 0
+                },
+                {
+                    "control_value": 1,
+                    "index": 2
+                }
             ],
             "name": "DenseMatrix",
             "target_bits": [
@@ -45,9 +57,15 @@
     ],
     [
         {
-            "control_bits": [
-                0,
-                1
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 0
+                },
+                {
+                    "control_value": 1,
+                    "index": 1
+                }
             ],
             "name": "DenseMatrix",
             "target_bits": [
@@ -55,12 +73,12 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         }

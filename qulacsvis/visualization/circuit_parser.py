@@ -11,10 +11,17 @@ GATE_DEFAULT_HEIGHT = 1.5
 
 @dataclasses_json.dataclass_json
 @dataclasses.dataclass
+class ControlQubitInfo:
+    index: int
+    control_value: int
+
+
+@dataclasses_json.dataclass_json
+@dataclasses.dataclass
 class GateData:
     name: str
     target_bits: List[int] = dataclasses.field(default_factory=list)
-    control_bits: List[int] = dataclasses.field(default_factory=list)
+    control_bit_infos: List[ControlQubitInfo] = dataclasses.field(default_factory=list)
 
 
 CircuitData = List[List[GateData]]
@@ -52,6 +59,10 @@ class CircuitParser:
             gate = circuit.get_gate(position)
             target_index_list = gate.get_target_index_list()
             control_index_list = gate.get_control_index_list()
+            control_index_value_list = [
+                ControlQubitInfo(index, control_value)
+                for index, control_value in gate.get_control_index_value_list()
+            ]
             gate_name = gate.get_name()
 
             if len(target_index_list) == 0:
@@ -69,7 +80,7 @@ class CircuitParser:
             for index in range(min_merged_index, max_merged_index + 1):
                 if index == target_index_list[0]:
                     self.__temp_parsed_circuit[index].append(
-                        GateData(gate_name, target_index_list, control_index_list)
+                        GateData(gate_name, target_index_list, control_index_value_list)
                     )
                 elif index in target_index_list:
                     self.__temp_parsed_circuit[index].append(GateData("ghost"))

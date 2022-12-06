@@ -1,7 +1,7 @@
 [
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "X",
             "target_bits": [
                 0
@@ -10,7 +10,7 @@
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "Y",
             "target_bits": [
                 1
@@ -19,7 +19,7 @@
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "Z",
             "target_bits": [
                 2

@@ -1,58 +1,58 @@
 [
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         }
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "X",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "X",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "X",
             "target_bits": [
                 1
@@ -61,13 +61,16 @@
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [
-                0
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 0
+                }
             ],
             "name": "CZ",
             "target_bits": [
@@ -75,13 +78,16 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [
-                0
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 0
+                }
             ],
             "name": "CNOT",
             "target_bits": [
@@ -89,7 +95,7 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         }

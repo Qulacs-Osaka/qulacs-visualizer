@@ -1,21 +1,21 @@
 [
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "DenseMatrix",
             "target_bits": [
                 0,
@@ -25,28 +25,28 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "DenseMatrix",
             "target_bits": [
                 0,
@@ -56,21 +56,21 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 0
@@ -79,66 +79,66 @@
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ghost",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ghost",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 1
@@ -147,66 +147,66 @@
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ghost",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ghost",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 2
@@ -215,66 +215,66 @@
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 3
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 3
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ghost",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 3
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 3
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 3
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ghost",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 3
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 3
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 3

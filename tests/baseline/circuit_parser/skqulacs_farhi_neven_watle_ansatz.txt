@@ -1,112 +1,115 @@
 [
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [
-                2
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 2
+                }
             ],
             "name": "CNOT",
             "target_bits": [
@@ -114,22 +117,25 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [
-                2
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 2
+                }
             ],
             "name": "CNOT",
             "target_bits": [
@@ -137,14 +143,14 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 0
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 0
@@ -153,52 +159,55 @@
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [
-                3
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 3
+                }
             ],
             "name": "CNOT",
             "target_bits": [
@@ -206,22 +215,25 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [
-                3
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 3
+                }
             ],
             "name": "CNOT",
             "target_bits": [
@@ -229,22 +241,25 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [
-                3
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 3
+                }
             ],
             "name": "CNOT",
             "target_bits": [
@@ -252,22 +267,25 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [
-                3
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 3
+                }
             ],
             "name": "CNOT",
             "target_bits": [
@@ -275,68 +293,71 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 1
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         }
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [
-                0
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 0
+                }
             ],
             "name": "CNOT",
             "target_bits": [
@@ -344,22 +365,25 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [
-                0
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 0
+                }
             ],
             "name": "CNOT",
             "target_bits": [
@@ -367,242 +391,242 @@
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRX",
             "target_bits": [
                 2
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         }
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRY",
             "target_bits": [
                 3
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ParametricRZ",
             "target_bits": [
                 3
             ]
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         },
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         }
