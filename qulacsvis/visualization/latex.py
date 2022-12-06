@@ -4,7 +4,11 @@ import numpy as np
 from qulacs import QuantumCircuit
 
 from qulacsvis.utils.gate import grouping_adjacent_gates, to_latex_style
-from qulacsvis.visualization.circuit_parser import CircuitParser, GateData
+from qulacsvis.visualization.circuit_parser import (
+    CircuitParser,
+    ControlQubitInfo,
+    GateData,
+)
 
 
 class LatexSourceGenerator:
@@ -147,10 +151,13 @@ class LatexSourceGenerator:
         cnot_qcircuit_style = to_latex_style(gate.name)
         target_bit = gate.target_bits[0]
         layer_latex[target_bit] = cnot_qcircuit_style
-        self._control_bits(layer_latex, gate.control_bits, target_bit)
+        self._control_bits(layer_latex, gate.control_bit_infos, target_bit)
 
     def _control_bits(
-        self, layer_latex: List[str], control_bits: List[int], target_bit: int
+        self,
+        layer_latex: List[str],
+        control_bit_infos: List[ControlQubitInfo],
+        target_bit: int,
     ) -> None:
         """Generate control bits for Qcircuit
 
@@ -164,7 +171,8 @@ class LatexSourceGenerator:
             A target bit of the gate.
             This value is used to generate the line connecting the target bit and control bits.
         """
-        for control_bit in control_bits:
+        for info in control_bit_infos:
+            control_bit = info.index
             layer_latex[control_bit] = r"\ctrl{" + str(target_bit - control_bit) + "}"
 
     def _swap(self, layer_latex: List[str], gate: GateData) -> None:
@@ -197,7 +205,7 @@ class LatexSourceGenerator:
         gate_name_qcircuit_style = to_latex_style(gate.name)
         groups_adjacent_gates = grouping_adjacent_gates(gate.target_bits)
 
-        self._control_bits(layer_latex, gate.control_bits, gate.target_bits[0])
+        self._control_bits(layer_latex, gate.control_bit_infos, gate.target_bits[0])
 
         for adjacent_gates in groups_adjacent_gates:
             size = len(adjacent_gates) - 1
@@ -231,4 +239,4 @@ class LatexSourceGenerator:
         gate_qcircuit_style = r"\gate{" + to_latex_style(gate.name) + "}"
         target_bit = gate.target_bits[0]
         layer_latex[target_bit] = gate_qcircuit_style
-        self._control_bits(layer_latex, gate.control_bits, target_bit)
+        self._control_bits(layer_latex, gate.control_bit_infos, target_bit)
