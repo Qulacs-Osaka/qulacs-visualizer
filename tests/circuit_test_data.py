@@ -122,13 +122,16 @@ def dense_matrix_gate_circuit() -> QuantumCircuit:
 
 def dense_matrix_gate_with_target_bits() -> QuantumCircuit:
     circuit = QuantumCircuit(3)
-    # CCX0,1, 2
-    cx_gate = CNOT(1, 2)
-    cx_mat_gate = to_matrix_gate(cx_gate)
-    control_index = 0
-    control_with_value = 1
-    cx_mat_gate.add_control_qubit(control_index, control_with_value)
-    circuit.add_gate(cx_mat_gate)
+
+    cx_gate0 = CNOT(control=2, target=0)
+    cx_mat_gate0 = to_matrix_gate(cx_gate0)
+    cx_mat_gate0.add_control_qubit(index=1, control_value=0)
+    circuit.add_gate(cx_mat_gate0)
+
+    cx_gate2 = CNOT(control=1, target=2)
+    cx_mat_gate2 = to_matrix_gate(cx_gate2)
+    cx_mat_gate2.add_control_qubit(index=0, control_value=0)
+    circuit.add_gate(cx_mat_gate2)
     return circuit
 
 
