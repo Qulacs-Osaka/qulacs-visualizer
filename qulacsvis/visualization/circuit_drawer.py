@@ -98,7 +98,7 @@ def circuit_drawer(
 
     if output_method == "text":
         text_drawer = TextCircuitDrawer(circuit, dot=dot)
-        text_drawer.draw(verbose=verbose)  # type: ignore
+        text_drawer.draw(verbose=verbose)
         return None
 
     elif output_method == "latex":
