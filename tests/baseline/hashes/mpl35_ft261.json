@@ -9,7 +9,7 @@
   "tests.latex_circuit_drawer_test.test_draw_with_mpl[swap_circuit]": "47c7804d7a27d11e60ee55d181fa0a8a9a598773d95d1cc60ca5767aaf3c67a7",
   "tests.latex_circuit_drawer_test.test_draw_with_mpl[multiple_swap_gates_should_not_overlap]": "34c27d3ce849243f11b146992e5e8dd15533c086d3c039708890693eab91657c",
   "tests.latex_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_circuit]": "247f171124734f0ecfac74581692e2991c563fae43ac5d214d41411c8c4eafc0",
-  "tests.latex_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_with_target_bits]": "93b748439d1c70ec9ce46fae7e655c51839fff3212b292b54949b424920bd194",
+  "tests.latex_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_with_target_bits]": "96415af13f2d3f6fee644822883d93cac97d2629666f9df6e52a48ccd004222d",
   "tests.latex_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_with_separated_target_bits]": "6a2d1c67e94881968c31a8b8a3b447e6e30ef93ca965f247611fa5700bab59e3",
   "tests.latex_circuit_drawer_test.test_draw_with_mpl[dense_matrix_gate_should_not_overlap]": "a161f4c36b3138a8c4e4f0520c128a42225133945e1f0d4607161e0375965529",
   "tests.latex_circuit_drawer_test.test_draw_with_mpl[toffoli_gate_circuit]": "4c343b0d3a167819a3ae6f9c8d9d41ea987ad867a7671fae2dd9d56f00027f7e",

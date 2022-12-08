@@ -171,13 +171,26 @@ class LatexSourceGenerator:
             A target bit of the gate.
             This value is used to generate the line connecting the target bit and control bits.
         """
-        for info in control_bit_infos:
+
+        if len(control_bit_infos) == 0:
+            return
+
+        merged_bit_infos = [ControlQubitInfo(target_bit, 1)]
+        merged_bit_infos.extend(control_bit_infos)
+        merged_bit_infos.sort(key=lambda x: x.index)
+
+        for info, next_info in zip(merged_bit_infos, merged_bit_infos[1:]):
+            if info.index >= target_bit:
+                info, next_info = next_info, info
+
             control_bit = info.index
             if info.control_value == 0:
                 ctrl_cmd = r"\ctrlo{"
             else:
                 ctrl_cmd = r"\ctrl{"
-            layer_latex[control_bit] = ctrl_cmd + str(target_bit - control_bit) + "}"
+            layer_latex[control_bit] = (
+                ctrl_cmd + str(next_info.index - info.index) + "}"
+            )
 
     def _swap(self, layer_latex: List[str], gate: GateData) -> None:
         """Generate SWAP gate for Qcircuit
