@@ -58,6 +58,9 @@ __TO_LATEX_STYLE_GATESTR_MAP = dict(
 
 
 def to_text_style(gate_name: str) -> str:
+    gate_str = __DEFAULT_GATESTR_MAP[gate_name]
+    if len(gate_str) == 2:
+        return gate_str.ljust(3)
     return __DEFAULT_GATESTR_MAP[gate_name].center(3)
 
 

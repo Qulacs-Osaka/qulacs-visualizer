@@ -6,6 +6,7 @@ from typing import List
 import numpy as np
 from qulacs import QuantumGateBase
 
+from qulacsvis.utils.gate import to_text_style
 from qulacsvis.visualization.circuit_parser import ControlQubitInfo
 
 
@@ -45,47 +46,6 @@ class _Gate_AA_Generator:
     """qulacsの量子ゲート(QuantumGateBase)を描画するためのクラス"""
 
     def __init__(self, *, dot: str = "large"):
-        # qulacsの対応バージョン:0.2.0
-        # 想定のゲートの出力の文字の幅が３文字分なので3文字用のゲートの名前を定義
-        self.gate_dict = {
-            "I": " I ",
-            "X": " X ",
-            "Y": " Y ",
-            "Z": " Z ",
-            "H": " H ",
-            "S": " S ",
-            "Sdag": "Sdg",
-            "T": " T ",
-            "Tdag": "Tdg",
-            "sqrtX": "sqX",
-            "sqrtXdag": "sXd",
-            "sqrtY": "sqY",
-            "sqrtYdag": "sYd",
-            "Projection-0": "P0 ",
-            "Projection-1": "P1 ",
-            "U1": "U1 ",
-            "U2": "U2 ",
-            "U3": "U3 ",
-            "X-rotation": "RX ",
-            "Y-rotation": "RY ",
-            "Z-rotation": "RZ ",
-            "Pauli": "Pau",
-            "Pauli-rotation": "PR ",
-            "CZ": "CZ ",
-            "CNOT": "CX ",
-            "SWAP": "SWP",
-            "Reflection": "Ref",
-            "ReversibleBoolean": "ReB",
-            "DenseMatrix": "DeM",
-            "DinagonalMatrix": "DiM",
-            "SparseMatrix": "SpM",
-            "Generic gate": "GeG",
-            "ParametricRX": "pRX",
-            "ParametricRY": "pRY",
-            "ParametricRZ": "pRZ",
-            "ParametricPauliRotation": "pPR",
-        }
-
         # このgate_stringにゲートの上の部分から文字列を作成して追加していきゲートの形を作成
         self.gate_string = []
 
@@ -220,8 +180,8 @@ class _Gate_AA_Generator:
             gate_head = "  ___  "
         # ゲートの名前が表示される部分の形
         try:
-            # ゲートの横幅を３文字分で作成しているので,文字をgate_dictから決定
-            gate_name = " |{}| ".format(self.gate_dict[gate.get_name()])
+            # ゲートの横幅を３文字分でゲート名を作成
+            gate_name = " |{}| ".format(to_text_style(gate.get_name()))
         except KeyError:
             # もし新たに追加されたゲートなどで見つからなかったときは"UnDeFined"
             gate_name = " |UDF| "
