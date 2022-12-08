@@ -173,7 +173,11 @@ class LatexSourceGenerator:
         """
         for info in control_bit_infos:
             control_bit = info.index
-            layer_latex[control_bit] = r"\ctrl{" + str(target_bit - control_bit) + "}"
+            if info.control_value == 0:
+                ctrl_cmd = r"\ctrlo{"
+            else:
+                ctrl_cmd = r"\ctrl{"
+            layer_latex[control_bit] = ctrl_cmd + str(target_bit - control_bit) + "}"
 
     def _swap(self, layer_latex: List[str], gate: GateData) -> None:
         """Generate SWAP gate for Qcircuit

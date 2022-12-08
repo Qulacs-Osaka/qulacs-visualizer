@@ -1,15 +1,27 @@
 # mypy: ignore-errors
+import dataclasses
 import shutil
+from typing import List
 
 import numpy as np
+from qulacs import QuantumGateBase
+
+from qulacsvis.visualization.circuit_parser import ControlQubitInfo
+
+
+@dataclasses.dataclass
+class DotStyle:
+    ctrl: str
+    ctrlo: str
+
 
 CON_DOT_STYLE = {
-    "large": "●",
-    "small": "･",
+    "large": DotStyle(ctrl="●", ctrlo="○"),
+    "small": DotStyle(ctrl="･", ctrlo="⚬"),
 }
 
 
-def _set_con_dot(dot: str) -> str:
+def _set_con_dot(dot: str) -> DotStyle:
     """
     Set a character to mean control qubit.
 
@@ -80,7 +92,7 @@ class _Gate_AA_Generator:
         # 制御qubitの記号
         self.CON_DOT = _set_con_dot(dot)
 
-    def generate(self, gate, index="   ", verbose=False):
+    def generate(self, gate: QuantumGateBase, index="   ", verbose=False):
         """引数のゲートを文字列表示で返してくれる関数
         Argeuments:
             gate:    Qulacsのゲート(QuantumGateBase)
@@ -115,17 +127,22 @@ class _Gate_AA_Generator:
         # 実際にゲートが適用されるターゲットqubitのリストと, コントロール用の制御qubitのリストを取得
         t_list = gate.get_target_index_list()
         c_list = gate.get_control_index_list()
+        cv_list = [
+            ControlQubitInfo(index, control_value)
+            for index, control_value in gate.get_control_index_value_list()
+        ]
         # ゲート作成時の引数の順番や, add_control_qubitメソッドなどで
         # 制御qubitを追加したときなどでリストが昇順になっていないことがあるのでソートしておく
         t_list.sort()
         c_list.sort()
+        cv_list.sort(key=lambda x: x.index)
 
         # 制御qubitが実ゲート(ターゲットqubitにかかるゲート)より上に存在するかチェック
         if len(c_list) != 0 and min(t_list) > min(c_list):
             # 制御qubitが実ゲートより上に存在した
             upper = True
             # ターゲットqubitにかかるゲートより上側に存在する制御qubitの部分の文字列表現を作成
-            self.gen_upper_control_part(t_list, c_list)
+            self.gen_upper_control_part(t_list, cv_list)
         else:
             # 制御qubitが実ゲートより上に存在しない
             upper = False
@@ -134,16 +151,16 @@ class _Gate_AA_Generator:
         self.gen_target_part(gate, t_list, index, upper)
 
         # 制御qubitが実ゲートの間に存在するときの制御qubitを描画
-        self.gen_inner_control_part(t_list, c_list)
+        self.gen_inner_control_part(t_list, cv_list)
 
         # 制御qubitが実ゲート(ターゲットqubitにかかるゲート)より下に存在するかチェック
         if len(c_list) != 0 and max(t_list) < max(c_list):
             # ターゲットqubitにかかるゲートより上側に存在する制御qubitの部分の文字列表現を作成
-            self.gen_lower_control_part(t_list, c_list)
+            self.gen_lower_control_part(t_list, cv_list)
 
         return self.gate_string
 
-    def gen_upper_control_part(self, t_list, c_list):
+    def gen_upper_control_part(self, t_list, cv_list: List[ControlQubitInfo]):
         """ターゲットqubitにかかるゲートより上側に存在する制御qubitを描くメソッド"""
         # 以下制御qubit用のパーツ作り
         # 制御qubit用の部分の形(空)
@@ -151,20 +168,26 @@ class _Gate_AA_Generator:
         # 制御qubit用の部分の形(空)
         control_q_name = "       "
         # 制御qubit用の部分の接続の部分の形
-        control_q_body = "   {}   ".format(self.CON_DOT)
+        control_q_body = "   {}   ".format(self.CON_DOT.ctrl)
+        control_o_q_body = "   {}   ".format(self.CON_DOT.ctrlo)
         # 制御信号用のワイヤーの形
         vertical_wire = "   |   "
 
         # ターゲットqubitにかかるゲートよりも上側に存在している制御qubitのリスト
-        upper_c_list = [i for i in c_list if i < min(t_list)]
+        upper_c_list: List[ControlQubitInfo] = [
+            i for i in cv_list if i.index < min(t_list)
+        ]
 
         # 制御qubitの回路図を構成していく
         self.gate_string.append(control_q_head)
         self.gate_string.append(control_q_name)
-        self.gate_string.append(control_q_body)
+        if upper_c_list[0].control_value == 0:
+            self.gate_string.append(control_o_q_body)
+        else:
+            self.gate_string.append(control_q_body)
         # 制御qubitと実ゲートのqubitでもっとも離れているqubit(実ゲートのqubitは一番上のqubit)を選び
         # 距離を計算. このqubitから下へと縦のワイヤーを引く
-        diff = min(t_list) - min(upper_c_list)
+        diff = min(t_list) - min(upper_c_list, key=lambda x: x.index).index
         for _ in range(diff * 4 - 3):
             self.gate_string.append(vertical_wire)
 
@@ -172,11 +195,14 @@ class _Gate_AA_Generator:
         # 最初の制御qubitは描き込み済みなので２つ目以降の制御qubitから
         for i in upper_c_list[1:]:
             # 制御qubitと実ゲートのかかるqubitで最も近いものとがいくつ離れているか計算
-            diff = min(t_list) - i
+            diff = min(t_list) - i.index
             # 仕様に合わせて位置を調整
             p = diff * 4 - 2
             # 配列に"･"を描き込み(上書き)
-            self.gate_string[-p] = control_q_body
+            if i.control_value == 0:
+                self.gate_string[-p] = control_o_q_body
+            else:
+                self.gate_string[-p] = control_q_body
 
     def gen_target_part(self, gate, t_list, index, upper):
         """ターゲットqubitにかかる部分のゲートの文字列表現を描くメソッド"""
@@ -297,34 +323,44 @@ class _Gate_AA_Generator:
         self.gate_string.append(swap_body_with_wire)  # SWAPする2つ目のqubitの"×"部分
         self.gate_string.append(gate_bottom)  # 底部分
 
-    def gen_inner_control_part(self, t_list, c_list):
+    def gen_inner_control_part(self, t_list, cv_list: List[ControlQubitInfo]):
         """実ゲートが離れたqubitにかかる場合で, 制御qubitがその間にあるときに描くメソッド"""
         # 実ゲートの間に存在している制御qubitのリストを作成
-        inner_c_list = [i for i in c_list if i > min(t_list) and i < max(t_list)]
+        inner_c_list = [
+            i for i in cv_list if i.index > min(t_list) and i.index < max(t_list)
+        ]
 
         # 上で作成したリストを基に, 既に作成済みである実ゲートを上書きする(空リストの時はなにもしない)
-        for index in inner_c_list:
+        for i in inner_c_list:
             # (取得した制御qubitのインデックス)-(実ゲートの一番上のqubit)で描き始めのqubitから
             # 何個下のqubitに描き込めばよいか分かる. この値をゲートの高さ分修正(*4-2)して中央をドットに書き換える
-            row = (index + 1 - min(t_list)) * 4 - 2
+            row = (i.index + 1 - min(t_list)) * 4 - 2
+            if i.control_value == 0:
+                control_dot_str = self.CON_DOT.ctrlo
+            else:
+                control_dot_str = self.CON_DOT.ctrl
+
             self.gate_string[row] = (
-                self.gate_string[row][:3] + self.CON_DOT + self.gate_string[row][4:]
+                self.gate_string[row][:3] + control_dot_str + self.gate_string[row][4:]
             )
 
-    def gen_lower_control_part(self, t_list, c_list):
+    def gen_lower_control_part(self, t_list, cv_list: List[ControlQubitInfo]):
         """ターゲットqubitにかかるゲートより下側に存在する制御qubitを描くメソッド"""
         # 以下制御qubit用のパーツ作り
         # 制御qubit用の部分の接続の部分の形
-        control_q_body = "   {}   ".format(self.CON_DOT)
+        control_q_body = "   {}   ".format(self.CON_DOT.ctrl)
+        control_o_q_body = "   {}   ".format(self.CON_DOT.ctrlo)
         # 制御信号用のワイヤーの形
         vertical_wire = "   |   "
 
         # ターゲットqubitにかかるゲートよりの下側に存在している制御qubitのリスト
-        below_c_list = [i for i in c_list if i > max(t_list)]
+        below_c_list: List[ControlQubitInfo] = [
+            i for i in cv_list if i.index > max(t_list)
+        ]
 
         # 制御qubitと実ゲートのqubitでもっとも離れているqubit(実ゲートのqubitは一番下のqubit)を選び
         # 距離を計算. このqubitから下へと縦向きのワイヤーを引く
-        diff = max(below_c_list) - max(t_list)
+        diff = max(below_c_list, key=lambda x: x.index).index - max(t_list)
         loop = diff * 4 - 1
         for _ in range(loop):
             self.gate_string.append(vertical_wire)
@@ -332,11 +368,14 @@ class _Gate_AA_Generator:
         # 制御信号をどのワイヤーからとっているか表す"･"を描き込む
         for i in below_c_list:
             # 制御qubitとゲートとの距離を計算
-            diff = i - max(t_list)
+            diff = i.index - max(t_list)
             # 仕様に合わせて位置を調整
             p = diff * 4 - loop - 2
             # 配列に"･"を描き込み(上書き)
-            self.gate_string[p] = control_q_body
+            if i.control_value == 0:
+                self.gate_string[p] = control_o_q_body
+            else:
+                self.gate_string[p] = control_q_body
 
 
 class TextCircuitDrawer:
@@ -548,7 +587,7 @@ class TextCircuitDrawer:
             while True:
                 # 先頭の文字を読む
                 char_now = self.circuit_picture[row][p]
-                if char_now == "{}".format(self.CON_DOT):
+                if char_now in f"{self.CON_DOT.ctrl}{self.CON_DOT.ctrlo}":
                     # 読んだのが"･"のときは次の文字が必ず空白になっているはずなので"-"に書き換える
                     self.circuit_picture[row][p + 1] = "-"
                 elif char_now == "-":

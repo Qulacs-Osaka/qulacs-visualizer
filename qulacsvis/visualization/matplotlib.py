@@ -430,14 +430,24 @@ class MPLCircuitlDrawer:
                 xy_from,
                 (to_xpos, to_ypos),
             )
-            ctl = patches.Circle(
-                xy=(to_xpos, to_ypos),
-                radius=0.15,
-                fc="k",
-                ec="w",
-                linewidth=0,
-                zorder=PORDER_GATE,
-            )
+            if info.control_value == 0:
+                ctl = patches.Circle(
+                    xy=(to_xpos, to_ypos),
+                    radius=0.15,
+                    fc="w",
+                    ec="k",
+                    linewidth=2.0,
+                    zorder=PORDER_GATE,
+                )
+            else:
+                ctl = patches.Circle(
+                    xy=(to_xpos, to_ypos),
+                    radius=0.15,
+                    fc="k",
+                    ec="w",
+                    linewidth=0,
+                    zorder=PORDER_GATE,
+                )
             self._ax.add_patch(ctl)
 
     def _swap(self, gate: GateData, xy: Tuple[float, float]) -> None:
