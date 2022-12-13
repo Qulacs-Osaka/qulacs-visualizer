@@ -1,15 +1,28 @@
 # mypy: ignore-errors
+import dataclasses
 import shutil
+from typing import Dict, List, Tuple
 
 import numpy as np
+from qulacs import QuantumCircuit, QuantumGateBase
 
-CON_DOT_STYLE = {
-    "large": "●",
-    "small": "･",
+from qulacsvis.utils.gate import to_text_style
+from qulacsvis.visualization.circuit_parser import ControlQubitInfo
+
+
+@dataclasses.dataclass
+class DotStyle:
+    ctrl: str
+    ctrlo: str
+
+
+CON_DOT_STYLE: Dict[str, DotStyle] = {
+    "large": DotStyle(ctrl="●", ctrlo="○"),
+    "small": DotStyle(ctrl="･", ctrlo="⚬"),
 }
 
 
-def _set_con_dot(dot: str) -> str:
+def _set_con_dot(dot: str) -> DotStyle:
     """
     Set a character to mean control qubit.
 
@@ -32,55 +45,16 @@ def _set_con_dot(dot: str) -> str:
 class _Gate_AA_Generator:
     """qulacsの量子ゲート(QuantumGateBase)を描画するためのクラス"""
 
-    def __init__(self, *, dot: str = "large"):
-        # qulacsの対応バージョン:0.2.0
-        # 想定のゲートの出力の文字の幅が３文字分なので3文字用のゲートの名前を定義
-        self.gate_dict = {
-            "I": " I ",
-            "X": " X ",
-            "Y": " Y ",
-            "Z": " Z ",
-            "H": " H ",
-            "S": " S ",
-            "Sdag": "Sdg",
-            "T": " T ",
-            "Tdag": "Tdg",
-            "sqrtX": "sqX",
-            "sqrtXdag": "sXd",
-            "sqrtY": "sqY",
-            "sqrtYdag": "sYd",
-            "Projection-0": "P0 ",
-            "Projection-1": "P1 ",
-            "U1": "U1 ",
-            "U2": "U2 ",
-            "U3": "U3 ",
-            "X-rotation": "RX ",
-            "Y-rotation": "RY ",
-            "Z-rotation": "RZ ",
-            "Pauli": "Pau",
-            "Pauli-rotation": "PR ",
-            "CZ": "CZ ",
-            "CNOT": "CX ",
-            "SWAP": "SWP",
-            "Reflection": "Ref",
-            "ReversibleBoolean": "ReB",
-            "DenseMatrix": "DeM",
-            "DinagonalMatrix": "DiM",
-            "SparseMatrix": "SpM",
-            "Generic gate": "GeG",
-            "ParametricRX": "pRX",
-            "ParametricRY": "pRY",
-            "ParametricRZ": "pRZ",
-            "ParametricPauliRotation": "pPR",
-        }
-
+    def __init__(self, *, dot: str = "large") -> None:
         # このgate_stringにゲートの上の部分から文字列を作成して追加していきゲートの形を作成
-        self.gate_string = []
+        self.gate_string: List[str] = []
 
         # 制御qubitの記号
         self.CON_DOT = _set_con_dot(dot)
 
-    def generate(self, gate, index="   ", verbose=False):
+    def generate(
+        self, gate: QuantumGateBase, index: str = "   ", verbose: bool = False
+    ) -> List[str]:
         """引数のゲートを文字列表示で返してくれる関数
         Argeuments:
             gate:    Qulacsのゲート(QuantumGateBase)
@@ -95,7 +69,7 @@ class _Gate_AA_Generator:
           0123456       パーツ名                 説明
         0            <= control_q_head       : 制御qubitのときの空白文字
         1            <= control_q_name       : 上に同じ
-        2 ---･---    <= control_q_body       : このqubitが制御qubitであることを示す"･"
+        2 ---･---    <= control(_o)_q_body   : このqubitが制御qubitであることを示す"･,⚬"
         3    |       <= vertical_wire        : 制御qubitと接続する縦向きのワイヤー
         4   _|_      <= gate_head            : ゲートの天井
         5  |CX |     <= gate_name            : どのゲートかを表示するゲートの名前と左右の壁
@@ -115,17 +89,22 @@ class _Gate_AA_Generator:
         # 実際にゲートが適用されるターゲットqubitのリストと, コントロール用の制御qubitのリストを取得
         t_list = gate.get_target_index_list()
         c_list = gate.get_control_index_list()
+        cv_list = [
+            ControlQubitInfo(index, control_value)
+            for index, control_value in gate.get_control_index_value_list()
+        ]
         # ゲート作成時の引数の順番や, add_control_qubitメソッドなどで
         # 制御qubitを追加したときなどでリストが昇順になっていないことがあるのでソートしておく
         t_list.sort()
         c_list.sort()
+        cv_list.sort(key=lambda x: x.index)
 
         # 制御qubitが実ゲート(ターゲットqubitにかかるゲート)より上に存在するかチェック
         if len(c_list) != 0 and min(t_list) > min(c_list):
             # 制御qubitが実ゲートより上に存在した
             upper = True
             # ターゲットqubitにかかるゲートより上側に存在する制御qubitの部分の文字列表現を作成
-            self.gen_upper_control_part(t_list, c_list)
+            self.gen_upper_control_part(t_list, cv_list)
         else:
             # 制御qubitが実ゲートより上に存在しない
             upper = False
@@ -134,16 +113,18 @@ class _Gate_AA_Generator:
         self.gen_target_part(gate, t_list, index, upper)
 
         # 制御qubitが実ゲートの間に存在するときの制御qubitを描画
-        self.gen_inner_control_part(t_list, c_list)
+        self.gen_inner_control_part(t_list, cv_list)
 
         # 制御qubitが実ゲート(ターゲットqubitにかかるゲート)より下に存在するかチェック
         if len(c_list) != 0 and max(t_list) < max(c_list):
             # ターゲットqubitにかかるゲートより上側に存在する制御qubitの部分の文字列表現を作成
-            self.gen_lower_control_part(t_list, c_list)
+            self.gen_lower_control_part(t_list, cv_list)
 
         return self.gate_string
 
-    def gen_upper_control_part(self, t_list, c_list):
+    def gen_upper_control_part(
+        self, t_list: List[int], cv_list: List[ControlQubitInfo]
+    ) -> None:
         """ターゲットqubitにかかるゲートより上側に存在する制御qubitを描くメソッド"""
         # 以下制御qubit用のパーツ作り
         # 制御qubit用の部分の形(空)
@@ -151,20 +132,26 @@ class _Gate_AA_Generator:
         # 制御qubit用の部分の形(空)
         control_q_name = "       "
         # 制御qubit用の部分の接続の部分の形
-        control_q_body = "   {}   ".format(self.CON_DOT)
+        control_q_body = "   {}   ".format(self.CON_DOT.ctrl)
+        control_o_q_body = "   {}   ".format(self.CON_DOT.ctrlo)
         # 制御信号用のワイヤーの形
         vertical_wire = "   |   "
 
         # ターゲットqubitにかかるゲートよりも上側に存在している制御qubitのリスト
-        upper_c_list = [i for i in c_list if i < min(t_list)]
+        upper_c_list: List[ControlQubitInfo] = [
+            i for i in cv_list if i.index < min(t_list)
+        ]
 
         # 制御qubitの回路図を構成していく
         self.gate_string.append(control_q_head)
         self.gate_string.append(control_q_name)
-        self.gate_string.append(control_q_body)
+        if upper_c_list[0].control_value == 0:
+            self.gate_string.append(control_o_q_body)
+        else:
+            self.gate_string.append(control_q_body)
         # 制御qubitと実ゲートのqubitでもっとも離れているqubit(実ゲートのqubitは一番上のqubit)を選び
         # 距離を計算. このqubitから下へと縦のワイヤーを引く
-        diff = min(t_list) - min(upper_c_list)
+        diff = min(t_list) - min(upper_c_list, key=lambda x: x.index).index
         for _ in range(diff * 4 - 3):
             self.gate_string.append(vertical_wire)
 
@@ -172,13 +159,18 @@ class _Gate_AA_Generator:
         # 最初の制御qubitは描き込み済みなので２つ目以降の制御qubitから
         for i in upper_c_list[1:]:
             # 制御qubitと実ゲートのかかるqubitで最も近いものとがいくつ離れているか計算
-            diff = min(t_list) - i
+            diff = min(t_list) - i.index
             # 仕様に合わせて位置を調整
             p = diff * 4 - 2
             # 配列に"･"を描き込み(上書き)
-            self.gate_string[-p] = control_q_body
+            if i.control_value == 0:
+                self.gate_string[-p] = control_o_q_body
+            else:
+                self.gate_string[-p] = control_q_body
 
-    def gen_target_part(self, gate, t_list, index, upper):
+    def gen_target_part(
+        self, gate: QuantumGateBase, t_list: List[int], index: str, upper: bool
+    ) -> None:
         """ターゲットqubitにかかる部分のゲートの文字列表現を描くメソッド"""
         # ターゲットqubitにかかる部分のゲートの大きさを取得
         # ゲートのかかるqubit同士が離れている場合はその間のqubitも使用すると考えて回路図を描くので,
@@ -194,8 +186,8 @@ class _Gate_AA_Generator:
             gate_head = "  ___  "
         # ゲートの名前が表示される部分の形
         try:
-            # ゲートの横幅を３文字分で作成しているので,文字をgate_dictから決定
-            gate_name = " |{}| ".format(self.gate_dict[gate.get_name()])
+            # ゲートの横幅を３文字分でゲート名を作成
+            gate_name = " |{}| ".format(to_text_style(gate.get_name()))
         except KeyError:
             # もし新たに追加されたゲートなどで見つからなかったときは"UnDeFined"
             gate_name = " |UDF| "
@@ -270,7 +262,9 @@ class _Gate_AA_Generator:
                         self.gate_string.append("  | |  ")
             self.gate_string.append(gate_bottom)  # ゲートの最も底部分
 
-    def create_SWAP_gate_string(self, gate_size, t_list, index):
+    def create_SWAP_gate_string(
+        self, gate_size: int, t_list: List[int], index: str
+    ) -> None:
         """SWAPゲートをきれいに描くためのメソッド"""
         # ゲートの上部分の形, SWAPは空
         gate_head = "       "
@@ -297,34 +291,48 @@ class _Gate_AA_Generator:
         self.gate_string.append(swap_body_with_wire)  # SWAPする2つ目のqubitの"×"部分
         self.gate_string.append(gate_bottom)  # 底部分
 
-    def gen_inner_control_part(self, t_list, c_list):
+    def gen_inner_control_part(
+        self, t_list: List[int], cv_list: List[ControlQubitInfo]
+    ) -> None:
         """実ゲートが離れたqubitにかかる場合で, 制御qubitがその間にあるときに描くメソッド"""
         # 実ゲートの間に存在している制御qubitのリストを作成
-        inner_c_list = [i for i in c_list if i > min(t_list) and i < max(t_list)]
+        inner_c_list = [
+            i for i in cv_list if i.index > min(t_list) and i.index < max(t_list)
+        ]
 
         # 上で作成したリストを基に, 既に作成済みである実ゲートを上書きする(空リストの時はなにもしない)
-        for index in inner_c_list:
+        for i in inner_c_list:
             # (取得した制御qubitのインデックス)-(実ゲートの一番上のqubit)で描き始めのqubitから
             # 何個下のqubitに描き込めばよいか分かる. この値をゲートの高さ分修正(*4-2)して中央をドットに書き換える
-            row = (index + 1 - min(t_list)) * 4 - 2
+            row = (i.index + 1 - min(t_list)) * 4 - 2
+            if i.control_value == 0:
+                control_dot_str = self.CON_DOT.ctrlo
+            else:
+                control_dot_str = self.CON_DOT.ctrl
+
             self.gate_string[row] = (
-                self.gate_string[row][:3] + self.CON_DOT + self.gate_string[row][4:]
+                self.gate_string[row][:3] + control_dot_str + self.gate_string[row][4:]
             )
 
-    def gen_lower_control_part(self, t_list, c_list):
+    def gen_lower_control_part(
+        self, t_list: List[int], cv_list: List[ControlQubitInfo]
+    ) -> None:
         """ターゲットqubitにかかるゲートより下側に存在する制御qubitを描くメソッド"""
         # 以下制御qubit用のパーツ作り
         # 制御qubit用の部分の接続の部分の形
-        control_q_body = "   {}   ".format(self.CON_DOT)
+        control_q_body = "   {}   ".format(self.CON_DOT.ctrl)
+        control_o_q_body = "   {}   ".format(self.CON_DOT.ctrlo)
         # 制御信号用のワイヤーの形
         vertical_wire = "   |   "
 
         # ターゲットqubitにかかるゲートよりの下側に存在している制御qubitのリスト
-        below_c_list = [i for i in c_list if i > max(t_list)]
+        below_c_list: List[ControlQubitInfo] = [
+            i for i in cv_list if i.index > max(t_list)
+        ]
 
         # 制御qubitと実ゲートのqubitでもっとも離れているqubit(実ゲートのqubitは一番下のqubit)を選び
         # 距離を計算. このqubitから下へと縦向きのワイヤーを引く
-        diff = max(below_c_list) - max(t_list)
+        diff = max(below_c_list, key=lambda x: x.index).index - max(t_list)
         loop = diff * 4 - 1
         for _ in range(loop):
             self.gate_string.append(vertical_wire)
@@ -332,17 +340,20 @@ class _Gate_AA_Generator:
         # 制御信号をどのワイヤーからとっているか表す"･"を描き込む
         for i in below_c_list:
             # 制御qubitとゲートとの距離を計算
-            diff = i - max(t_list)
+            diff = i.index - max(t_list)
             # 仕様に合わせて位置を調整
             p = diff * 4 - loop - 2
             # 配列に"･"を描き込み(上書き)
-            self.gate_string[p] = control_q_body
+            if i.control_value == 0:
+                self.gate_string[p] = control_o_q_body
+            else:
+                self.gate_string[p] = control_q_body
 
 
 class TextCircuitDrawer:
     """qulacsの量子回路(QuantumCircuit)を描画するためのクラス"""
 
-    def __init__(self, circuit, *, dot: str = "large"):
+    def __init__(self, circuit: QuantumCircuit, *, dot: str = "large") -> None:
         # 制御qubitの記号
         self.CON_DOT = _set_con_dot(dot)
         # 出力したい量子回路
@@ -403,7 +414,7 @@ class TextCircuitDrawer:
         # 単体のゲートの文字列表現を作成するクラスを呼び出す
         self.AA_Generator = _Gate_AA_Generator(dot=dot)
 
-    def draw(self, verbose):
+    def draw(self, verbose: bool) -> None:
         """実際に回路を描き始め出力までするメソッド"""
         # 出力したい量子回路の持つゲート数を取得
         gate_num = self.circ.get_gate_count()
@@ -455,7 +466,7 @@ class TextCircuitDrawer:
                 print("".join(line[plot_range:]))
             print(delimiter)
 
-    def _draw_gate(self, gate, index, verbose):
+    def _draw_gate(self, gate: QuantumGateBase, index: str, verbose: bool) -> None:
         """引数にgateをとり, 「ゲートの文字化」, 「適切な位置に描き込み」 の順で実際に描き込むメソッド"""
         # 単一のゲートの文字列表示を作成
         gate_string = self.AA_Generator.generate(gate, index, verbose)
@@ -476,7 +487,7 @@ class TextCircuitDrawer:
         # 作成した文字列表示をircuit_pictureに描き込む
         self._write_gate_on_picture(gate_string, upper_left_corner)
 
-    def _place_check(self, min_v, max_v):
+    def _place_check(self, min_v: int, max_v: int) -> Tuple[int, int]:
         """適切なゲートの描き込み位置を計算するメソッド"""
         # 回路の浅い所から探索
         for i in range(self.depth):
@@ -506,7 +517,7 @@ class TextCircuitDrawer:
 
         return row, col
 
-    def _expand_map_and_picture(self):
+    def _expand_map_and_picture(self) -> None:
         """回路図が重なって表示されないように深さを増やすメソッド"""
         # self.gate_mapの拡張
         additional_gate_map = np.full(self.qubit_num, True).reshape(self.qubit_num, 1)
@@ -528,7 +539,9 @@ class TextCircuitDrawer:
         # 深さが+1になったのでcircuit_pictureの横サイズも増やす
         self.horizontal_size += 8
 
-    def _write_gate_on_picture(self, gate_string, ulc):
+    def _write_gate_on_picture(
+        self, gate_string: List[str], ulc: Tuple[int, int]
+    ) -> None:
         """作成したゲート文字列を実際に描き込むメソッド"""
         row, col = ulc
         width = 7
@@ -536,7 +549,7 @@ class TextCircuitDrawer:
             self.circuit_picture[row][col : col + width] = list(line)
             row += 1
 
-    def _connect_wire(self):
+    def _connect_wire(self) -> None:
         """量子回路の横向きのワイヤーの接続を補うメソッド"""
         # 回路のqubit数回ループ
         for i in range(self.qubit_num):
@@ -548,7 +561,7 @@ class TextCircuitDrawer:
             while True:
                 # 先頭の文字を読む
                 char_now = self.circuit_picture[row][p]
-                if char_now == "{}".format(self.CON_DOT):
+                if char_now in f"{self.CON_DOT.ctrl}{self.CON_DOT.ctrlo}":
                     # 読んだのが"･"のときは次の文字が必ず空白になっているはずなので"-"に書き換える
                     self.circuit_picture[row][p + 1] = "-"
                 elif char_now == "-":
@@ -584,7 +597,9 @@ class TextCircuitDrawer:
                     break
 
 
-def draw_circuit(circuit, verbose: bool = False, dot: str = "large") -> None:  # type: ignore
+def draw_circuit(
+    circuit: QuantumCircuit, verbose: bool = False, dot: str = "large"
+) -> None:
     """
     量子回路図をテキストで出力するための関数
 

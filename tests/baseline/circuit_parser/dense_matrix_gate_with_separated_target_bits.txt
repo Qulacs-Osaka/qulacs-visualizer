@@ -1,8 +1,11 @@
 [
     [
         {
-            "control_bits": [
-                1
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 1
+                }
             ],
             "name": "DenseMatrix",
             "target_bits": [
@@ -14,28 +17,28 @@
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         }
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "wire",
             "target_bits": []
         }
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ghost",
             "target_bits": []
         }
     ],
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "ghost",
             "target_bits": []
         }

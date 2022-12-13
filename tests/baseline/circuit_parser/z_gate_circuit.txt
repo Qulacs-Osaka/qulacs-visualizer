@@ -1,7 +1,7 @@
 [
     [
         {
-            "control_bits": [],
+            "control_bit_infos": [],
             "name": "Z",
             "target_bits": [
                 0

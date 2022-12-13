@@ -1,23 +1,55 @@
 [
     [
         {
-            "control_bits": [],
-            "name": "wire",
-            "target_bits": []
-        }
-    ],
-    [
-        {
-            "control_bits": [],
-            "name": "wire",
-            "target_bits": []
-        }
-    ],
-    [
-        {
-            "control_bits": [
-                1,
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 2
+                },
+                {
+                    "control_value": 0,
+                    "index": 1
+                }
+            ],
+            "name": "DenseMatrix",
+            "target_bits": [
                 0
+            ]
+        },
+        {
+            "control_bit_infos": [],
+            "name": "wire",
+            "target_bits": []
+        }
+    ],
+    [
+        {
+            "control_bit_infos": [],
+            "name": "wire",
+            "target_bits": []
+        },
+        {
+            "control_bit_infos": [],
+            "name": "wire",
+            "target_bits": []
+        }
+    ],
+    [
+        {
+            "control_bit_infos": [],
+            "name": "wire",
+            "target_bits": []
+        },
+        {
+            "control_bit_infos": [
+                {
+                    "control_value": 1,
+                    "index": 1
+                },
+                {
+                    "control_value": 0,
+                    "index": 0
+                }
             ],
             "name": "DenseMatrix",
             "target_bits": [

@@ -13,6 +13,7 @@ from .circuit_parser import (
     GATE_DEFAULT_WIDTH,
     CircuitData,
     CircuitParser,
+    ControlQubitInfo,
     GateData,
 )
 
@@ -320,7 +321,7 @@ class MPLCircuitlDrawer:
             latex_style_gate_str = f"${to_latex_style(gate.name)}$"
 
         self._text(xpos, ypos, latex_style_gate_str)
-        self._control_bits(gate.control_bits, (xpos, ypos))
+        self._control_bits(gate.control_bit_infos, (xpos, ypos))
 
     def _multi_gate(self, gate: GateData, xy: Tuple[float, float]) -> None:
         """
@@ -355,7 +356,7 @@ class MPLCircuitlDrawer:
         to_ypos = max(gate.target_bits) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
         self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
 
-        self._control_bits(gate.control_bits, (xpos, ypos))
+        self._control_bits(gate.control_bit_infos, (xpos, ypos))
 
     def _cnot(self, gate: GateData, xy: Tuple[float, float]) -> None:
         """
@@ -377,10 +378,10 @@ class MPLCircuitlDrawer:
         xpos, ypos = xy
         TARGET_QUBIT_RADIUS: Final[float] = 0.4
 
-        if gate.control_bits is None:
-            raise ValueError("control_bit is None")
-        elif gate.control_bits == []:
-            raise ValueError("control_bit is empty")
+        if gate.control_bit_infos is None:
+            raise ValueError("control_bit_infos is None")
+        elif gate.control_bit_infos == []:
+            raise ValueError("control_bit_infos is empty")
 
         target = patches.Circle(
             xy=(xpos, ypos),
@@ -404,23 +405,24 @@ class MPLCircuitlDrawer:
             zorder=PORDER_TEXT,
         )
 
-        self._control_bits(gate.control_bits, (xpos, ypos))
+        self._control_bits(gate.control_bit_infos, (xpos, ypos))
 
     def _control_bits(
-        self, control_bits: List[int], xy_from: Tuple[float, float]
+        self, control_bit_infos: List[ControlQubitInfo], xy_from: Tuple[float, float]
     ) -> None:
         """
         Draw control bits.
 
         Parameters
         ----------
-        control_bits : List[int]
+        control_bit_infos : List[ControlQubitInfo]
             The control bits to be drawn.
         xy_from : Tuple[float, float]
             The position of the gate from which the control bits are connected.
         """
 
-        for control_bit in control_bits:
+        for info in control_bit_infos:
+            control_bit = info.index
             to_ypos = control_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
             to_xpos = xy_from[0]
 
@@ -428,14 +430,24 @@ class MPLCircuitlDrawer:
                 xy_from,
                 (to_xpos, to_ypos),
             )
-            ctl = patches.Circle(
-                xy=(to_xpos, to_ypos),
-                radius=0.15,
-                fc="k",
-                ec="w",
-                linewidth=0,
-                zorder=PORDER_GATE,
-            )
+            if info.control_value == 0:
+                ctl = patches.Circle(
+                    xy=(to_xpos, to_ypos),
+                    radius=0.15,
+                    fc="w",
+                    ec="k",
+                    linewidth=2.0,
+                    zorder=PORDER_GATE,
+                )
+            else:
+                ctl = patches.Circle(
+                    xy=(to_xpos, to_ypos),
+                    radius=0.15,
+                    fc="k",
+                    ec="w",
+                    linewidth=0,
+                    zorder=PORDER_GATE,
+                )
             self._ax.add_patch(ctl)
 
     def _swap(self, gate: GateData, xy: Tuple[float, float]) -> None:
