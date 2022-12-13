@@ -72,6 +72,7 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -123,11 +124,19 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="qulacsvis.visualization.circuit_drawer.html#qulacsvis.visualization.circuit_drawer.circuit_drawer">circuit_drawer() (in module qulacsvis.visualization.circuit_drawer)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.CircuitParser">CircuitParser (class in qulacsvis.visualization.circuit_parser)</a>
 </li>
-      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.control_bits">control_bits (qulacsvis.visualization.circuit_parser.GateData attribute)</a>
+      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.control_bit_infos">control_bit_infos (qulacsvis.visualization.circuit_parser.GateData attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.ControlQubitInfo.control_value">control_value (qulacsvis.visualization.circuit_parser.ControlQubitInfo attribute)</a>
+</li>
+      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.ControlQubitInfo">ControlQubitInfo (class in qulacsvis.visualization.circuit_parser)</a>
+</li>
+      <li><a href="qulacsvis.visualization.text.html#qulacsvis.visualization.text.DotStyle.ctrl">ctrl (qulacsvis.visualization.text.DotStyle attribute)</a>
+</li>
+      <li><a href="qulacsvis.visualization.text.html#qulacsvis.visualization.text.DotStyle.ctrlo">ctrlo (qulacsvis.visualization.text.DotStyle attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -135,6 +144,8 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="qulacsvis.visualization.text.html#qulacsvis.visualization.text.DotStyle">DotStyle (class in qulacsvis.visualization.text)</a>
+</li>
       <li><a href="qulacsvis.visualization.matplotlib.html#qulacsvis.visualization.matplotlib.MPLCircuitlDrawer.draw">draw() (qulacsvis.visualization.matplotlib.MPLCircuitlDrawer method)</a>
 
       <ul>
@@ -151,12 +162,20 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.from_dict">from_dict() (qulacsvis.visualization.circuit_parser.GateData class method)</a>
+      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.ControlQubitInfo.from_dict">from_dict() (qulacsvis.visualization.circuit_parser.ControlQubitInfo class method)</a>
+
+      <ul>
+        <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.from_dict">(qulacsvis.visualization.circuit_parser.GateData class method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.from_json">from_json() (qulacsvis.visualization.circuit_parser.GateData class method)</a>
+      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.ControlQubitInfo.from_json">from_json() (qulacsvis.visualization.circuit_parser.ControlQubitInfo class method)</a>
+
+      <ul>
+        <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.from_json">(qulacsvis.visualization.circuit_parser.GateData class method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -172,6 +191,14 @@
       <li><a href="qulacsvis.visualization.latex.html#qulacsvis.visualization.latex.LatexSourceGenerator.generate">generate() (qulacsvis.visualization.latex.LatexSourceGenerator method)</a>
 </li>
       <li><a href="qulacsvis.utils.gate.html#qulacsvis.utils.gate.grouping_adjacent_gates">grouping_adjacent_gates() (in module qulacsvis.utils.gate)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.ControlQubitInfo.index">index (qulacsvis.visualization.circuit_parser.ControlQubitInfo attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -314,8 +341,12 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.schema">schema() (qulacsvis.visualization.circuit_parser.GateData class method)</a>
+      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.ControlQubitInfo.schema">schema() (qulacsvis.visualization.circuit_parser.ControlQubitInfo class method)</a>
+
+      <ul>
+        <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.schema">(qulacsvis.visualization.circuit_parser.GateData class method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -326,12 +357,20 @@
 </li>
       <li><a href="qulacsvis.visualization.text.html#qulacsvis.visualization.text.TextCircuitDrawer">TextCircuitDrawer (class in qulacsvis.visualization.text)</a>
 </li>
-      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.to_dict">to_dict() (qulacsvis.visualization.circuit_parser.GateData method)</a>
+      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.ControlQubitInfo.to_dict">to_dict() (qulacsvis.visualization.circuit_parser.ControlQubitInfo method)</a>
+
+      <ul>
+        <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.to_dict">(qulacsvis.visualization.circuit_parser.GateData method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.to_json">to_json() (qulacsvis.visualization.circuit_parser.GateData method)</a>
+      <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.ControlQubitInfo.to_json">to_json() (qulacsvis.visualization.circuit_parser.ControlQubitInfo method)</a>
+
+      <ul>
+        <li><a href="qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData.to_json">(qulacsvis.visualization.circuit_parser.GateData method)</a>
 </li>
+      </ul></li>
       <li><a href="qulacsvis.utils.gate.html#qulacsvis.utils.gate.to_latex_style">to_latex_style() (in module qulacsvis.utils.gate)</a>
 </li>
       <li><a href="qulacsvis.utils.gate.html#qulacsvis.utils.gate.to_text_style">to_text_style() (in module qulacsvis.utils.gate)</a>

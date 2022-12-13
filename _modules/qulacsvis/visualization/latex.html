@@ -71,7 +71,11 @@
 <span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
 
 <span class="kn">from</span> <span class="nn">qulacsvis.utils.gate</span> <span class="kn">import</span> <span class="n">grouping_adjacent_gates</span><span class="p">,</span> <span class="n">to_latex_style</span>
-<span class="kn">from</span> <span class="nn">qulacsvis.visualization.circuit_parser</span> <span class="kn">import</span> <span class="n">CircuitParser</span><span class="p">,</span> <span class="n">GateData</span>
+<span class="kn">from</span> <span class="nn">qulacsvis.visualization.circuit_parser</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CircuitParser</span><span class="p">,</span>
+    <span class="n">ControlQubitInfo</span><span class="p">,</span>
+    <span class="n">GateData</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="LatexSourceGenerator"><a class="viewcode-back" href="../../../qulacsvis.visualization.latex.html#qulacsvis.visualization.latex.LatexSourceGenerator">[docs]</a><span class="k">class</span> <span class="nc">LatexSourceGenerator</span><span class="p">:</span>
@@ -214,10 +218,13 @@
         <span class="n">cnot_qcircuit_style</span> <span class="o">=</span> <span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">target_bit</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">layer_latex</span><span class="p">[</span><span class="n">target_bit</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnot_qcircuit_style</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bits</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bit_infos</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_control_bits</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">control_bits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target_bit</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">control_bit_infos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ControlQubitInfo</span><span class="p">],</span>
+        <span class="n">target_bit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generate control bits for Qcircuit</span>
 
@@ -231,8 +238,26 @@
 <span class="sd">            A target bit of the gate.</span>
 <span class="sd">            This value is used to generate the line connecting the target bit and control bits.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">control_bit</span> <span class="ow">in</span> <span class="n">control_bits</span><span class="p">:</span>
-            <span class="n">layer_latex</span><span class="p">[</span><span class="n">control_bit</span><span class="p">]</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\ctrl{&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">target_bit</span> <span class="o">-</span> <span class="n">control_bit</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">control_bit_infos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">merged_bit_infos</span> <span class="o">=</span> <span class="p">[</span><span class="n">ControlQubitInfo</span><span class="p">(</span><span class="n">target_bit</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">merged_bit_infos</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">control_bit_infos</span><span class="p">)</span>
+        <span class="n">merged_bit_infos</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">info</span><span class="p">,</span> <span class="n">next_info</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">merged_bit_infos</span><span class="p">,</span> <span class="n">merged_bit_infos</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">target_bit</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">,</span> <span class="n">next_info</span> <span class="o">=</span> <span class="n">next_info</span><span class="p">,</span> <span class="n">info</span>
+
+            <span class="n">control_bit</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">index</span>
+            <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">control_value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ctrl_cmd</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\ctrlo{&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ctrl_cmd</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\ctrl{&quot;</span>
+            <span class="n">layer_latex</span><span class="p">[</span><span class="n">control_bit</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">ctrl_cmd</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">next_info</span><span class="o">.</span><span class="n">index</span> <span class="o">-</span> <span class="n">info</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+            <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generate SWAP gate for Qcircuit</span>
@@ -264,7 +289,7 @@
         <span class="n">gate_name_qcircuit_style</span> <span class="o">=</span> <span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">groups_adjacent_gates</span> <span class="o">=</span> <span class="n">grouping_adjacent_gates</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bits</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bit_infos</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="k">for</span> <span class="n">adjacent_gates</span> <span class="ow">in</span> <span class="n">groups_adjacent_gates</span><span class="p">:</span>
             <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">adjacent_gates</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
@@ -298,7 +323,7 @@
         <span class="n">gate_qcircuit_style</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\gate{&quot;</span> <span class="o">+</span> <span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
         <span class="n">target_bit</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">layer_latex</span><span class="p">[</span><span class="n">target_bit</span><span class="p">]</span> <span class="o">=</span> <span class="n">gate_qcircuit_style</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bits</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">layer_latex</span><span class="p">,</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bit_infos</span><span class="p">,</span> <span class="n">target_bit</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

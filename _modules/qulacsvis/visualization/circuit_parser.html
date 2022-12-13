@@ -76,12 +76,19 @@
 <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">=</span> <span class="mf">1.5</span>
 
 
+<div class="viewcode-block" id="ControlQubitInfo"><a class="viewcode-back" href="../../../qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.ControlQubitInfo">[docs]</a><span class="nd">@dataclasses_json</span><span class="o">.</span><span class="n">dataclass_json</span>
+<span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">ControlQubitInfo</span><span class="p">:</span>
+    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">control_value</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
 <div class="viewcode-block" id="GateData"><a class="viewcode-back" href="../../../qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.GateData">[docs]</a><span class="nd">@dataclasses_json</span><span class="o">.</span><span class="n">dataclass_json</span>
 <span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
 <span class="k">class</span> <span class="nc">GateData</span><span class="p">:</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">target_bits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">control_bits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+    <span class="n">control_bit_infos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ControlQubitInfo</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
 
 
 <span class="n">CircuitData</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">GateData</span><span class="p">]]</span>
@@ -119,6 +126,10 @@
             <span class="n">gate</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">get_gate</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
             <span class="n">target_index_list</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">get_target_index_list</span><span class="p">()</span>
             <span class="n">control_index_list</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">get_control_index_list</span><span class="p">()</span>
+            <span class="n">control_index_value_list</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">ControlQubitInfo</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">control_value</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">control_value</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">get_control_index_value_list</span><span class="p">()</span>
+            <span class="p">]</span>
             <span class="n">gate_name</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_index_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -136,7 +147,7 @@
             <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_merged_index</span><span class="p">,</span> <span class="n">max_merged_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="n">target_index_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__temp_parsed_circuit</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="n">GateData</span><span class="p">(</span><span class="n">gate_name</span><span class="p">,</span> <span class="n">target_index_list</span><span class="p">,</span> <span class="n">control_index_list</span><span class="p">)</span>
+                        <span class="n">GateData</span><span class="p">(</span><span class="n">gate_name</span><span class="p">,</span> <span class="n">target_index_list</span><span class="p">,</span> <span class="n">control_index_value_list</span><span class="p">)</span>
                     <span class="p">)</span>
                 <span class="k">elif</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">target_index_list</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__temp_parsed_circuit</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GateData</span><span class="p">(</span><span class="s2">&quot;ghost&quot;</span><span class="p">))</span>

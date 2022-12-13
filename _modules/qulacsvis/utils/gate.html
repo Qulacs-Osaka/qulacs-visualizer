@@ -125,6 +125,9 @@
 
 
 <div class="viewcode-block" id="to_text_style"><a class="viewcode-back" href="../../../qulacsvis.utils.gate.html#qulacsvis.utils.gate.to_text_style">[docs]</a><span class="k">def</span> <span class="nf">to_text_style</span><span class="p">(</span><span class="n">gate_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">gate_str</span> <span class="o">=</span> <span class="n">__DEFAULT_GATESTR_MAP</span><span class="p">[</span><span class="n">gate_name</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gate_str</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">__DEFAULT_GATESTR_MAP</span><span class="p">[</span><span class="n">gate_name</span><span class="p">]</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></div>
 
 
