@@ -17,6 +17,12 @@ from .circuit_parser import (
     GateData,
 )
 
+MATPLOTLIB_INLINE_BACKENDS = {
+    "module://ipykernel.pylab.backend_inline",
+    "module://matplotlib_inline.backend_inline",
+    "nbAgg",
+}
+
 GATE_MARGIN_RIGHT: Final[float] = 0.5
 GATE_MARGIN_LEFT: Final[float] = 0.5
 GATE_MARGIN_BOTTOM: Final[float] = 0.5
@@ -180,6 +186,8 @@ class MPLCircuitlDrawer:
             # Determine the x-coordinate of the next layer
             layer_xpos += self._parser.layer_width[layer] + GATE_MARGIN_RIGHT
 
+        if matplotlib.get_backend() in MATPLOTLIB_INLINE_BACKENDS:
+            matplotlib.pyplot.close(self._figure)
         return self._figure
 
     def _line(
