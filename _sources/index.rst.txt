@@ -76,7 +76,10 @@ Matplotlib Drawing
 
 To use another drawing method, you can specify it by setting a value to the ``output_method`` argument of the ``circuit_drawer()`` function. For matplotlib drawing, set ``output_method="mpl"``.
 
+>>> import matplotlib.pyplot as plt
+>>>
 >>> circuit_drawer(circuit, "mpl")
+>>> plt.show()
 
 .. figure:: _static/circuit_matplotlib_drawing.png
     :alt: circuit_matplotlib_drawing.png

@@ -84,6 +84,12 @@
     <span class="n">GateData</span><span class="p">,</span>
 <span class="p">)</span>
 
+<span class="n">MATPLOTLIB_INLINE_BACKENDS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;module://ipykernel.pylab.backend_inline&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;module://matplotlib_inline.backend_inline&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nbAgg&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
 <span class="n">GATE_MARGIN_RIGHT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
 <span class="n">GATE_MARGIN_LEFT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
 <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
@@ -247,6 +253,8 @@
             <span class="c1"># Determine the x-coordinate of the next layer</span>
             <span class="n">layer_xpos</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span>
 
+        <span class="k">if</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">get_backend</span><span class="p">()</span> <span class="ow">in</span> <span class="n">MATPLOTLIB_INLINE_BACKENDS</span><span class="p">:</span>
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span></div>
 
     <span class="k">def</span> <span class="nf">_line</span><span class="p">(</span>

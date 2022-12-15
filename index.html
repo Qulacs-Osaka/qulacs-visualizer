@@ -118,7 +118,10 @@ Or See also <a class="reference internal" href="options.html#how-to-use-options"
 <section id="matplotlib-drawing">
 <h3>Matplotlib Drawing<a class="headerlink" href="#matplotlib-drawing" title="Permalink to this headline"></a></h3>
 <p>To use another drawing method, you can specify it by setting a value to the <code class="docutils literal notranslate"><span class="pre">output_method</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">circuit_drawer()</span></code> function. For matplotlib drawing, set <code class="docutils literal notranslate"><span class="pre">output_method=&quot;mpl&quot;</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <figure class="align-default">
