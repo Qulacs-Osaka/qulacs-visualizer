@@ -2,7 +2,7 @@ import os
 import tempfile
 from typing import Optional, Union
 
-import matplotlib.pyplot as plt
+import matplotlib  # NOQA
 from PIL import Image
 from qulacs import QuantumCircuit
 
@@ -22,7 +22,8 @@ def circuit_drawer(
     ppi: int = 150,
     dpi: int = 72,
     scale: float = 0.6,
-) -> Union[str, Image.Image, None]:
+) -> Union[str, Image.Image, matplotlib.figure.Figure]:
+
     """
     Draws a circuit diagram of a circuit.
 
@@ -121,9 +122,7 @@ def circuit_drawer(
 
     elif output_method == "mpl":
         mpl_drawer = MPLCircuitlDrawer(circuit, dpi=dpi, scale=scale)
-        mpl_drawer.draw()
-        plt.show()
-        return None
+        return mpl_drawer.draw()
 
     else:
         raise ValueError(
