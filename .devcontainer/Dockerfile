@@ -7,6 +7,7 @@ ARG GID
 ENV PYTHON_VERSION="3.9.13"
 ENV PYENV_ROOT="/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
+ENV USE_LATEX=yes
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
