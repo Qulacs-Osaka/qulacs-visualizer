@@ -24,11 +24,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> qulacsvis
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            qulacsvis
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -53,7 +57,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
       <li class="breadcrumb-item active">qulacsvis.visualization.text</li>
       <li class="wy-breadcrumbs-aside">
@@ -90,7 +94,7 @@
 
 
 <span class="k">def</span> <span class="nf">_set_con_dot</span><span class="p">(</span><span class="n">dot</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DotStyle</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set a character to mean control qubit.</span>
 
 <span class="sd">    Parameters</span>
@@ -110,7 +114,7 @@
 
 
 <span class="k">class</span> <span class="nc">_Gate_AA_Generator</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;qulacsの量子ゲート(QuantumGateBase)を描画するためのクラス&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;qulacsの量子ゲート(QuantumGateBase)を描画するためのクラス&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;large&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># このgate_stringにゲートの上の部分から文字列を作成して追加していきゲートの形を作成</span>
@@ -122,7 +126,7 @@
     <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">QuantumGateBase</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;   &quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;引数のゲートを文字列表示で返してくれる関数</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;引数のゲートを文字列表示で返してくれる関数</span>
 <span class="sd">        Argeuments:</span>
 <span class="sd">            gate:    Qulacsのゲート(QuantumGateBase)</span>
 <span class="sd">            index:   circuitに追加された順番を示す値, 1000以上の場合は表示が崩れる</span>
@@ -192,7 +196,7 @@
     <span class="k">def</span> <span class="nf">gen_upper_control_part</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">cv_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ControlQubitInfo</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;ターゲットqubitにかかるゲートより上側に存在する制御qubitを描くメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;ターゲットqubitにかかるゲートより上側に存在する制御qubitを描くメソッド&quot;&quot;&quot;</span>
         <span class="c1"># 以下制御qubit用のパーツ作り</span>
         <span class="c1"># 制御qubit用の部分の形(空)</span>
         <span class="n">control_q_head</span> <span class="o">=</span> <span class="s2">&quot;       &quot;</span>
@@ -238,7 +242,7 @@
     <span class="k">def</span> <span class="nf">gen_target_part</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">QuantumGateBase</span><span class="p">,</span> <span class="n">t_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;ターゲットqubitにかかる部分のゲートの文字列表現を描くメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;ターゲットqubitにかかる部分のゲートの文字列表現を描くメソッド&quot;&quot;&quot;</span>
         <span class="c1"># ターゲットqubitにかかる部分のゲートの大きさを取得</span>
         <span class="c1"># ゲートのかかるqubit同士が離れている場合はその間のqubitも使用すると考えて回路図を描くので,</span>
         <span class="c1"># 正確にはゲートのかかるqubitのうち一番上のqubitから一番下のqubitまでの大きさ</span>
@@ -332,7 +336,7 @@
     <span class="k">def</span> <span class="nf">create_SWAP_gate_string</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">gate_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">t_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;SWAPゲートをきれいに描くためのメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;SWAPゲートをきれいに描くためのメソッド&quot;&quot;&quot;</span>
         <span class="c1"># ゲートの上部分の形, SWAPは空</span>
         <span class="n">gate_head</span> <span class="o">=</span> <span class="s2">&quot;       &quot;</span>
         <span class="c1"># ゲートの名前が表示される部分の形, verbose=Trueのときは追加された順番でそれ以外は空</span>
@@ -361,7 +365,7 @@
     <span class="k">def</span> <span class="nf">gen_inner_control_part</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">cv_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ControlQubitInfo</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;実ゲートが離れたqubitにかかる場合で, 制御qubitがその間にあるときに描くメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;実ゲートが離れたqubitにかかる場合で, 制御qubitがその間にあるときに描くメソッド&quot;&quot;&quot;</span>
         <span class="c1"># 実ゲートの間に存在している制御qubitのリストを作成</span>
         <span class="n">inner_c_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cv_list</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">t_list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">t_list</span><span class="p">)</span>
@@ -384,7 +388,7 @@
     <span class="k">def</span> <span class="nf">gen_lower_control_part</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">cv_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ControlQubitInfo</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;ターゲットqubitにかかるゲートより下側に存在する制御qubitを描くメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;ターゲットqubitにかかるゲートより下側に存在する制御qubitを描くメソッド&quot;&quot;&quot;</span>
         <span class="c1"># 以下制御qubit用のパーツ作り</span>
         <span class="c1"># 制御qubit用の部分の接続の部分の形</span>
         <span class="n">control_q_body</span> <span class="o">=</span> <span class="s2">&quot;   </span><span class="si">{}</span><span class="s2">   &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CON_DOT</span><span class="o">.</span><span class="n">ctrl</span><span class="p">)</span>
@@ -418,7 +422,7 @@
 
 
 <div class="viewcode-block" id="TextCircuitDrawer"><a class="viewcode-back" href="../../../qulacsvis.visualization.text.html#qulacsvis.visualization.text.TextCircuitDrawer">[docs]</a><span class="k">class</span> <span class="nc">TextCircuitDrawer</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;qulacsの量子回路(QuantumCircuit)を描画するためのクラス&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;qulacsの量子回路(QuantumCircuit)を描画するためのクラス&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;large&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># 制御qubitの記号</span>
@@ -482,7 +486,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">AA_Generator</span> <span class="o">=</span> <span class="n">_Gate_AA_Generator</span><span class="p">(</span><span class="n">dot</span><span class="o">=</span><span class="n">dot</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TextCircuitDrawer.draw"><a class="viewcode-back" href="../../../qulacsvis.visualization.text.html#qulacsvis.visualization.text.TextCircuitDrawer.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;実際に回路を描き始め出力までするメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;実際に回路を描き始め出力までするメソッド&quot;&quot;&quot;</span>
         <span class="c1"># 出力したい量子回路の持つゲート数を取得</span>
         <span class="n">gate_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circ</span><span class="o">.</span><span class="n">get_gate_count</span><span class="p">()</span>
         <span class="c1"># ゲートを１つずつ取り出し回路図に描き込んでいく</span>
@@ -534,7 +538,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_draw_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">QuantumGateBase</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;引数にgateをとり, 「ゲートの文字化」, 「適切な位置に描き込み」 の順で実際に描き込むメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;引数にgateをとり, 「ゲートの文字化」, 「適切な位置に描き込み」 の順で実際に描き込むメソッド&quot;&quot;&quot;</span>
         <span class="c1"># 単一のゲートの文字列表示を作成</span>
         <span class="n">gate_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AA_Generator</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
 
@@ -555,7 +559,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_write_gate_on_picture</span><span class="p">(</span><span class="n">gate_string</span><span class="p">,</span> <span class="n">upper_left_corner</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_place_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_v</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_v</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;適切なゲートの描き込み位置を計算するメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;適切なゲートの描き込み位置を計算するメソッド&quot;&quot;&quot;</span>
         <span class="c1"># 回路の浅い所から探索</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">):</span>
             <span class="c1"># 使用したいqubitすべてが利用できるかチェック</span>
@@ -585,7 +589,7 @@
         <span class="k">return</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span>
 
     <span class="k">def</span> <span class="nf">_expand_map_and_picture</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;回路図が重なって表示されないように深さを増やすメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;回路図が重なって表示されないように深さを増やすメソッド&quot;&quot;&quot;</span>
         <span class="c1"># self.gate_mapの拡張</span>
         <span class="n">additional_gate_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit_num</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit_num</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">gate_map</span><span class="p">,</span> <span class="n">additional_gate_map</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -609,7 +613,7 @@
     <span class="k">def</span> <span class="nf">_write_gate_on_picture</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">gate_string</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">ulc</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;作成したゲート文字列を実際に描き込むメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;作成したゲート文字列を実際に描き込むメソッド&quot;&quot;&quot;</span>
         <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">ulc</span>
         <span class="n">width</span> <span class="o">=</span> <span class="mi">7</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">gate_string</span><span class="p">:</span>
@@ -617,7 +621,7 @@
             <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="k">def</span> <span class="nf">_connect_wire</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;量子回路の横向きのワイヤーの接続を補うメソッド&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;量子回路の横向きのワイヤーの接続を補うメソッド&quot;&quot;&quot;</span>
         <span class="c1"># 回路のqubit数回ループ</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit_num</span><span class="p">):</span>
             <span class="c1"># 横向きのワイヤーがある場所は配列番号で2,6,10,14,...番目</span>
@@ -667,7 +671,7 @@
 <div class="viewcode-block" id="draw_circuit"><a class="viewcode-back" href="../../../qulacsvis.visualization.text.html#qulacsvis.visualization.text.draw_circuit">[docs]</a><span class="k">def</span> <span class="nf">draw_circuit</span><span class="p">(</span>
     <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;large&quot;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    量子回路図をテキストで出力するための関数</span>
 
 <span class="sd">    Parameters</span>

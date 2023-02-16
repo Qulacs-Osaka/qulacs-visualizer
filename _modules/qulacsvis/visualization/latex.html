@@ -24,11 +24,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> qulacsvis
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            qulacsvis
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -53,7 +57,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
       <li class="breadcrumb-item active">qulacsvis.visualization.latex</li>
       <li class="wy-breadcrumbs-aside">
@@ -79,7 +83,7 @@
 
 
 <div class="viewcode-block" id="LatexSourceGenerator"><a class="viewcode-back" href="../../../qulacsvis.visualization.latex.html#qulacsvis.visualization.latex.LatexSourceGenerator">[docs]</a><span class="k">class</span> <span class="nc">LatexSourceGenerator</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Generate latex source from QuantumCircuit</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate latex source from QuantumCircuit</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -124,17 +128,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">parsed_circuit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_head</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">\documentclass[border={-2pt 5pt 5pt -7pt}]</span><span class="si">{standalone}</span><span class="s2"></span>
-<span class="s2">\usepackage[braket, qm]</span><span class="si">{qcircuit}</span><span class="s2"></span>
-<span class="s2">\usepackage</span><span class="si">{graphicx}</span><span class="s2"></span>
+<span class="s2">\documentclass[border={-2pt 5pt 5pt -7pt}]</span><span class="si">{standalone}</span>
+<span class="s2">\usepackage[braket, qm]</span><span class="si">{qcircuit}</span>
+<span class="s2">\usepackage</span><span class="si">{graphicx}</span>
 
-<span class="s2">\begin</span><span class="si">{document}</span><span class="s2"></span>
+<span class="s2">\begin</span><span class="si">{document}</span>
 <span class="s2">    \Qcircuit @C=1.0em @R=0.7em @!R{ \\</span>
 <span class="s2">&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tail</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;    }&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{document}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="LatexSourceGenerator.generate"><a class="viewcode-back" href="../../../qulacsvis.visualization.latex.html#qulacsvis.visualization.latex.LatexSourceGenerator.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Generate latex source from QuantumCircuit</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate latex source from QuantumCircuit</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -186,7 +190,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_head</span> <span class="o">+</span> <span class="n">body</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tail</span></div>
 
     <span class="k">def</span> <span class="nf">_matrix_to_qcircuit_style</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Generate from matrix to string for Qcircuit</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate from matrix to string for Qcircuit</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -206,7 +210,7 @@
         <span class="k">return</span> <span class="n">res</span>
 
     <span class="k">def</span> <span class="nf">_cnot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Generate CNOT gate for Qcircuit</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate CNOT gate for Qcircuit</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -226,7 +230,7 @@
         <span class="n">control_bit_infos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ControlQubitInfo</span><span class="p">],</span>
         <span class="n">target_bit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Generate control bits for Qcircuit</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate control bits for Qcircuit</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -260,7 +264,7 @@
             <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_swap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Generate SWAP gate for Qcircuit</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate SWAP gate for Qcircuit</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -277,7 +281,7 @@
         <span class="n">layer_latex</span><span class="p">[</span><span class="n">swap</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">swap_qcircuit_style</span>
 
     <span class="k">def</span> <span class="nf">_multi_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Generate multi gate for Qcircuit (e.g., DensityMatrixGate)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate multi gate for Qcircuit (e.g., DensityMatrixGate)</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -311,7 +315,7 @@
                 <span class="n">layer_latex</span><span class="p">[</span><span class="n">from_</span><span class="p">]</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; \qwx[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
 
     <span class="k">def</span> <span class="nf">_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_latex</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Generate a gate for Qcircuit</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a gate for Qcircuit</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
