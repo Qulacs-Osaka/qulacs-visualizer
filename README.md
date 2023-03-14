@@ -77,7 +77,7 @@ plt.show()
 
 ![circuit_matplotlib_drawing.png](doc/source/_static/circuit_matplotlib_drawing.png)
 
-## LaTeX Drawing
+### LaTeX Drawing
 
 For LaTeX drawing, set `output_method="latex"`.
 
@@ -107,11 +107,23 @@ print(circuit_drawer(circuit, "latex_source"))
 \end{document}
 ```
 
-### Requirement
+#### Requirement
 
 If you want to use LaTeX Drawing, you need to have a local environment where you can run LaTeX (pdflatex).
 You will also need the [qcircuit package](https://github.com/CQuIC/qcircuit).
 [TeX Live](https://www.tug.org/texlive/) and [MiKTeX](https://miktex.org/) have the qcircuit package installed by default.
+
+### Save image to file
+
+You can save the images you draw with matplotlib and LaTeX to a file.
+
+```py
+# matplotlib
+circuit_drawer(circuit, "mpl", filename="output.png")
+
+# latex
+circuit_drawer(circuit, "latex", filename="output.png")
+```
 
 ## License
 
