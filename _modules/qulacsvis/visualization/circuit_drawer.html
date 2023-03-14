@@ -70,6 +70,7 @@
              
   <h1>Source code for qulacsvis.visualization.circuit_drawer</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -89,6 +90,7 @@
     <span class="n">output_method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;large&quot;</span><span class="p">,</span>
     <span class="n">ppi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">,</span>
     <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">72</span><span class="p">,</span>
@@ -109,6 +111,9 @@
 <span class="sd">        (output_method=&#39;text&#39;)</span>
 <span class="sd">        If True, a number will be added to the gate.</span>
 <span class="sd">        Gates are numbered in the order in which they are added to the circuit.</span>
+<span class="sd">    filename : Optional[str] optional default=None</span>
+<span class="sd">        (output_method=&#39;mpl&#39; or &#39;latex&#39;)</span>
+<span class="sd">        File name to save the drawing image</span>
 <span class="sd">    dot: str optional default=&#39;large&#39;</span>
 <span class="sd">        (output_method=&#39;text&#39;)</span>
 <span class="sd">        Dot style to mean control qubit(default=&quot;large&quot;)</span>
@@ -183,6 +188,9 @@
             <span class="n">latex</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">latex_source</span><span class="p">,</span> <span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;circuit_drawer&quot;</span><span class="p">)</span>
             <span class="n">pdftoimage</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;circuit_drawer&quot;</span><span class="p">),</span> <span class="n">ppi</span><span class="o">=</span><span class="n">ppi</span><span class="p">)</span>
 
+            <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;circuit_drawer.png&quot;</span><span class="p">),</span> <span class="n">filename</span><span class="p">)</span>
+
             <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s2">&quot;circuit_drawer.png&quot;</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">image</span>
 
@@ -193,7 +201,7 @@
 
     <span class="k">elif</span> <span class="n">output_method</span> <span class="o">==</span> <span class="s2">&quot;mpl&quot;</span><span class="p">:</span>
         <span class="n">mpl_drawer</span> <span class="o">=</span> <span class="n">MPLCircuitlDrawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">mpl_drawer</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">mpl_drawer</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
