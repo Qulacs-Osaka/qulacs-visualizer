@@ -17,10 +17,12 @@ MATPLOTLIB_INLINE_BACKENDS = {
 GATE_DEFAULT_WIDTH = 1.0
 GATE_DEFAULT_HEIGHT = 1.5
 
-GATE_MARGIN_RIGHT: Final[float] = 0.5
-GATE_MARGIN_LEFT: Final[float] = 0.5
-GATE_MARGIN_BOTTOM: Final[float] = 0.5
-GATE_MARGIN_TOP: Final[float] = 0.5
+GATE_MARGIN_RIGHT: Final[float] = 0.25
+GATE_MARGIN_LEFT: Final[float] = 0.25
+GATE_MARGIN_BOTTOM: Final[float] = 0.25
+GATE_MARGIN_TOP: Final[float] = 0.25
+
+CIRCUIT_MARGIN = 0.5
 
 PORDER_LINE: Final[int] = 2
 PORDER_GATE: Final[int] = 3
@@ -118,12 +120,12 @@ class MPLCircuitlDrawer:
         # as the right end (max_x) and left end (min_x) coordinates of the circuit wire.
         circuit_max_x = (
             sum(layer_width)
-            + circuit_layer_count * GATE_MARGIN_RIGHT
+            + circuit_layer_count * (GATE_MARGIN_RIGHT + GATE_MARGIN_LEFT)
             - layer_width[0] / 2
         )
-        circuit_min_x = -layer_width[0] / 2 - GATE_MARGIN_LEFT
+        circuit_min_x = -layer_width[0] / 2 - GATE_MARGIN_LEFT - GATE_MARGIN_RIGHT
         circuit_max_y = (
-            circuit_qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+            circuit_qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_TOP + GATE_MARGIN_BOTTOM) - GATE_MARGIN_TOP
             - GATE_MARGIN_BOTTOM
             - GATE_DEFAULT_HEIGHT / 2
         )
@@ -131,11 +133,11 @@ class MPLCircuitlDrawer:
         # Determine the size of the figure (drawing size of the circuit + margins)
         QUBIT_LABEL_WIDTH = 2
         self._ax.set_xlim(
-            circuit_min_x - QUBIT_LABEL_WIDTH, circuit_max_x + GATE_MARGIN_RIGHT
+            circuit_min_x - QUBIT_LABEL_WIDTH, circuit_max_x + CIRCUIT_MARGIN
         )
         self._ax.set_ylim(
-            circuit_max_y + GATE_MARGIN_BOTTOM,
-            -GATE_DEFAULT_HEIGHT / 2 - GATE_MARGIN_TOP,
+            circuit_max_y + CIRCUIT_MARGIN,
+            -GATE_DEFAULT_HEIGHT / 2 - CIRCUIT_MARGIN,
         )
 
         # Enlarge/reduce the shape while keeping the aspect ratio
@@ -147,7 +149,7 @@ class MPLCircuitlDrawer:
 
         # Draw a Qubit label for the number of Qubits in the quantum circuit and a wire
         for qubit in range(circuit_qubit_count):
-            line_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+            line_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_TOP + GATE_MARGIN_BOTTOM)
             self._text(
                 circuit_min_x - 1,
                 line_ypos,
@@ -170,7 +172,7 @@ class MPLCircuitlDrawer:
         for layer in range(circuit_layer_count):
             for qubit in range(circuit_qubit_count):
                 gate = self._circuit.gates[qubit][layer]
-                qubit_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+                qubit_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_TOP + GATE_MARGIN_BOTTOM)
                 if gate.name == "ghost":
                     continue
                 elif gate.name == "wire":
@@ -187,7 +189,7 @@ class MPLCircuitlDrawer:
                     self._gate_with_size(gate, (layer_xpos, qubit_ypos), 1)
 
             # Determine the x-coordinate of the next layer
-            layer_xpos += layer_width[layer] + GATE_MARGIN_RIGHT
+            layer_xpos += layer_width[layer] + GATE_MARGIN_RIGHT + GATE_MARGIN_LEFT
 
         if filename:
             self._figure.savefig(
@@ -313,13 +315,13 @@ class MPLCircuitlDrawer:
             ypos
             + (
                 ypos
-                + (multi_gate_size - 1) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+                + (multi_gate_size - 1)
+                * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM + GATE_MARGIN_TOP)
             )
         ) * 0.5
-        multi_gate_height = (
-            GATE_DEFAULT_HEIGHT * multi_gate_size
-            + GATE_MARGIN_BOTTOM * (multi_gate_size - 1)
-        )
+        multi_gate_height = GATE_DEFAULT_HEIGHT * multi_gate_size + (
+            GATE_MARGIN_BOTTOM + GATE_MARGIN_TOP
+        ) * (multi_gate_size - 1)
         box = patches.Rectangle(
             # The gate is centered.
             xy=(xpos - 0.5 * GATE_DEFAULT_WIDTH, ypos - 0.5 * multi_gate_height),
@@ -363,7 +365,9 @@ class MPLCircuitlDrawer:
 
         for i, adjacent_gates in enumerate(groups_of_adjacent_gates):
             group_x = xpos
-            group_y = adjacent_gates[0] * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+            group_y = adjacent_gates[0] * (
+                GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM + GATE_MARGIN_TOP
+            )
             self._gate_with_size(
                 multi_gate_data, (group_x, group_y), len(adjacent_gates)
             )
@@ -372,8 +376,12 @@ class MPLCircuitlDrawer:
                 multi_gate_data.name = ""
 
         # Gray line connecting the gates
-        ypos = min(gate.target_bits) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
-        to_ypos = max(gate.target_bits) * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+        ypos = min(gate.target_bits) * (
+            GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM + GATE_MARGIN_TOP
+        )
+        to_ypos = max(gate.target_bits) * (
+            GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM + GATE_MARGIN_TOP
+        )
         self._line((xpos, ypos), (xpos, to_ypos), lw=10, lc="gray")
 
         self._control_bits(gate.control_bit_infos, (xpos, ypos))
@@ -453,7 +461,9 @@ class MPLCircuitlDrawer:
 
         for info in control_bit_infos:
             control_bit = info.index
-            to_ypos = control_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+            to_ypos = control_bit * (
+                GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM + GATE_MARGIN_TOP
+            )
             to_xpos = xy_from[0]
 
             self._line(
@@ -496,7 +506,9 @@ class MPLCircuitlDrawer:
         TARGET_QUBIT_MARK_SIZE: Final[float] = 0.2
 
         for target_bit in gate.target_bits:
-            to_ypos = target_bit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_RIGHT)
+            to_ypos = target_bit * (
+                GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM + GATE_MARGIN_TOP
+            )
             self._line(
                 (xpos, ypos),
                 (xpos, to_ypos),
