@@ -122,3 +122,15 @@ Requirement
 If you want to use LaTeX for drawing, you need to have a local environment where you can run LaTeX (pdflatex).
 You will also need the `qcircuit package <https://github.com/CQuIC/qcircuit>`_.
 `TeX Live <https://www.tug.org/texlive/>`_ and `MiKTeX <https://miktex.org/>`_ have the qcircuit package installed by default.
+
+******************
+Save image to file
+******************
+
+You can save the images you draw with matplotlib and LaTeX to a file.
+
+>>> # matplotlib
+>>> circuit_drawer(circuit, "mpl", filename="output.png")
+>>>
+>>> # latex
+>>> circuit_drawer(circuit, "latex", filename="output.png")

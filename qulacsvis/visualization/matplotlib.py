@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 import matplotlib
 from matplotlib import patches
@@ -77,7 +77,13 @@ class MPLCircuitlDrawer:
     >>> plt.show()
     """
 
-    def __init__(self, circuit: QuantumCircuit, *, dpi: int = 72, scale: float = 0.6):
+    def __init__(
+        self,
+        circuit: QuantumCircuit,
+        *,
+        dpi: int = 72,
+        scale: float = 0.6,
+    ):
         self._figure = plt.figure(dpi=dpi)
         self._figure.subplots_adjust(left=0, right=1, bottom=0, top=1)
         self._ax = self._figure.add_subplot(111)
@@ -89,7 +95,9 @@ class MPLCircuitlDrawer:
         self._circuit_data: CircuitData = self._parser.parsed_circuit
         self._fig_scale_factor = scale
 
-    def draw(self, *, debug: bool = False) -> matplotlib.figure.Figure:
+    def draw(
+        self, *, debug: bool = False, filename: Optional[str] = None
+    ) -> matplotlib.figure.Figure:
         """
         Draw the circuit.
 
@@ -97,6 +105,8 @@ class MPLCircuitlDrawer:
         ----------
         debug : bool optional default=False
             If True, draw the circuit with the axes of the figure.
+        filename : Optional[str] optional default=None
+            File name to save the drawing mpl image
 
         Returns
         -------
@@ -185,6 +195,12 @@ class MPLCircuitlDrawer:
 
             # Determine the x-coordinate of the next layer
             layer_xpos += self._parser.layer_width[layer] + GATE_MARGIN_RIGHT
+
+        if filename:
+            self._figure.savefig(
+                filename,
+                # need some options?
+            )
 
         if matplotlib.get_backend() in MATPLOTLIB_INLINE_BACKENDS:
             matplotlib.pyplot.close(self._figure)
