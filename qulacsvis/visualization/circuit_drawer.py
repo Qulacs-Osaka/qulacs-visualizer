@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 from typing import Optional, Union
 
@@ -18,6 +19,7 @@ def circuit_drawer(
     output_method: Optional[str] = None,
     *,
     verbose: bool = False,
+    filename: Optional[str] = None,
     dot: str = "large",
     ppi: int = 150,
     dpi: int = 72,
@@ -38,6 +40,9 @@ def circuit_drawer(
         (output_method='text')
         If True, a number will be added to the gate.
         Gates are numbered in the order in which they are added to the circuit.
+    filename : Optional[str] optional default=None
+        (output_method='mpl' or 'latex')
+        File name to save the drawing image
     dot: str optional default='large'
         (output_method='text')
         Dot style to mean control qubit(default="large")
@@ -112,6 +117,9 @@ def circuit_drawer(
             latex.compile(latex_source, tmpdir, "circuit_drawer")
             pdftoimage.convert(os.path.join(tmpdir, "circuit_drawer"), ppi=ppi)
 
+            if filename:
+                shutil.copyfile(os.path.join(tmpdir, "circuit_drawer.png"), filename)
+
             image = Image.open(os.path.join(tmpdir, "circuit_drawer.png"))
             return image
 
@@ -122,7 +130,7 @@ def circuit_drawer(
 
     elif output_method == "mpl":
         mpl_drawer = MPLCircuitlDrawer(circuit, dpi=dpi, scale=scale)
-        return mpl_drawer.draw()
+        return mpl_drawer.draw(filename=filename)
 
     else:
         raise ValueError(
