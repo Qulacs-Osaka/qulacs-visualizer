@@ -1,11 +1,9 @@
 from typing import List
 
 import numpy as np
-from qulacs import QuantumCircuit
 
-from qulacsvis.models.circuit import ControlQubitInfo, GateData
+from qulacsvis.models.circuit import CircuitData, ControlQubitInfo, GateData
 from qulacsvis.utils.gate import grouping_adjacent_gates, to_latex_style
-from qulacsvis.visualization.circuit_parser import CircuitParser
 
 
 class LatexSourceGenerator:
@@ -48,10 +46,8 @@ class LatexSourceGenerator:
     >>> print(latex_source)
     """
 
-    def __init__(self, circuit: QuantumCircuit):
-        self._quantum_circuit = circuit
-        self._parser = CircuitParser(circuit)
-        self._circuit_data = self._parser.parsed_circuit
+    def __init__(self, circuit: CircuitData):
+        self._circuit_data = circuit
         self._circuit = np.array([[]])
         self._head = r"""
 \documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
@@ -71,8 +67,8 @@ class LatexSourceGenerator:
         latex_source : str
             String of latex source generated
         """
-        qubit_count = self._parser.qubit_count
-        circuit_layer_count = len(self._circuit_data[0])
+        qubit_count = self._circuit_data.qubit_count
+        circuit_layer_count = self._circuit_data.layer_count
 
         input_label = np.array(
             [
@@ -93,7 +89,7 @@ class LatexSourceGenerator:
             # corresponding to each qubit row of the layer currently of interest.
             current_layer_latex = [to_latex_style("wire") for _ in range(qubit_count)]
             for qubit in range(qubit_count):
-                gate = self._circuit_data[qubit][layer]
+                gate = self._circuit_data.gates[qubit][layer]
 
                 if gate.name == "ghost":
                     continue

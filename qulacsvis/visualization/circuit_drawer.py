@@ -110,7 +110,7 @@ def circuit_drawer(
 
     elif output_method == "latex":
         with tempfile.TemporaryDirectory() as tmpdir:
-            generator = LatexSourceGenerator(circuit)
+            generator = LatexSourceGenerator(to_model(circuit))
             latex_source = generator.generate()
             latex = _LatexCompiler()
             pdftoimage = _PDFtoImage()
@@ -125,7 +125,7 @@ def circuit_drawer(
             return image
 
     elif output_method == "latex_source":
-        generator = LatexSourceGenerator(circuit)
+        generator = LatexSourceGenerator(to_model(circuit))
         latex_source = generator.generate()
         return latex_source
 
