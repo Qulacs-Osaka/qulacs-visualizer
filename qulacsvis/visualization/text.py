@@ -7,7 +7,7 @@ import numpy as np
 from qulacs import QuantumCircuit, QuantumGateBase
 
 from qulacsvis.utils.gate import to_text_style
-from qulacsvis.visualization.circuit_parser import ControlQubitInfo
+from qulacsvis.models.circuit import ControlQubitInfo
 
 
 @dataclasses.dataclass

@@ -3,12 +3,9 @@ from typing import List
 import numpy as np
 from qulacs import QuantumCircuit
 
+from qulacsvis.models.circuit import ControlQubitInfo, GateData
 from qulacsvis.utils.gate import grouping_adjacent_gates, to_latex_style
-from qulacsvis.visualization.circuit_parser import (
-    CircuitParser,
-    ControlQubitInfo,
-    GateData,
-)
+from qulacsvis.visualization.circuit_parser import CircuitParser
 
 
 class LatexSourceGenerator:
@@ -25,10 +22,10 @@ class LatexSourceGenerator:
         A quantum circuit to be drawn.
     _parser : CircuitParser
         The parser of the quantum circuit.
-    _circuit_data : CircuitData
+    _circuit_data : GateDataSeq
         The data of the quantum circuit after parsing by CircuitParser.
     _circuit : numpy.ndarray
-        A matrix containing strings converted from CircuitData for Qcircuit.
+        A matrix containing strings converted from GateDataSeq for Qcircuit.
         Each element and its position corresponds to one of GateData.
         Quantum circuit only, input values are not contained.
     _head : str
@@ -124,7 +121,7 @@ class LatexSourceGenerator:
         Parameters
         ----------
         matrix : List[List[str]]
-            A matrix containing strings converted from CircuitData for Qcircuit.
+            A matrix containing strings converted from GateDataSeq for Qcircuit.
         Returns
         -------
         res : str
