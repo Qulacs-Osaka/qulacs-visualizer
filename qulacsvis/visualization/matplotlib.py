@@ -342,7 +342,10 @@ class MPLCircuitlDrawer:
         if gate.name == "":
             latex_style_gate_str = ""
         else:
-            latex_style_gate_str = f"${to_latex_style(gate.name)}$"
+            try:
+                latex_style_gate_str = f"${to_latex_style(gate.name)}$"
+            except KeyError:
+                latex_style_gate_str = gate.name
 
         self._text(xpos, ypos, latex_style_gate_str)
         self._control_bits(gate.control_bit_infos, (xpos, ypos))
