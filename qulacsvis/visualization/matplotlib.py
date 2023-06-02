@@ -186,6 +186,8 @@ class MPLCircuitlDrawer:
                     continue
                 elif gate.name == "CNOT":
                     self._cnot(gate, (layer_xpos, qubit_ypos))
+                elif gate.name == "Toffoli":
+                    self._cnot(gate, (layer_xpos, qubit_ypos))
                 elif gate.name == "SWAP":
                     self._swap(gate, (layer_xpos, qubit_ypos))
                 elif len(gate.target_bits) > 1:
