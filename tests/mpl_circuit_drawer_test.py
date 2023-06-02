@@ -6,6 +6,7 @@ import pytest
 from packaging.version import Version
 from qulacs import QuantumCircuit
 
+from qulacsvis.qulacs.circuit import to_model
 from qulacsvis.visualization import MPLCircuitlDrawer
 
 from .circuit_test_data import load_circuit_data
@@ -42,6 +43,6 @@ testdatas = load_circuit_data()
 )
 @pytest.mark.mpl_image_compare(hash_library=hash_library)
 def test_draw_with_mpl(circuit: QuantumCircuit) -> matplotlib.figure.Figure:
-    drawer = MPLCircuitlDrawer(circuit)
+    drawer = MPLCircuitlDrawer(to_model(circuit))
     fig = drawer.draw()
     return fig

@@ -3,13 +3,10 @@ from typing import List, Optional, Tuple
 import matplotlib
 from matplotlib import patches
 from matplotlib import pyplot as plt
-from qulacs import QuantumCircuit
 from typing_extensions import Final
 
-from qulacsvis.utils.gate import grouping_adjacent_gates, to_latex_style
-
-from ..models.circuit import ControlQubitInfo, GateData
-from .circuit_parser import CircuitParser
+from ..models.circuit import CircuitData, ControlQubitInfo, GateData
+from ..utils.gate import grouping_adjacent_gates, to_latex_style
 
 MATPLOTLIB_INLINE_BACKENDS = {
     "module://ipykernel.pylab.backend_inline",
@@ -61,6 +58,7 @@ class MPLCircuitlDrawer:
     Examples
     --------
     >>> from qulacs import QuantumCircuit
+    >>> from qulacsvis.qulacs.circuit import to_model
     >>> from qulacsvis.visualization import MPLCircuitlDrawer
     >>> import matplotlib.pyplot as plt
     >>>
@@ -69,14 +67,14 @@ class MPLCircuitlDrawer:
     >>> circuit.add_Y_gate(1)
     >>> circuit.add_Z_gate(2)
     >>>
-    >>> drawer = MPLCircuitlDrawer(circuit)
+    >>> drawer = MPLCircuitlDrawer(to_model(circuit))
     >>> drawer.draw()
     >>> plt.show()
     """
 
     def __init__(
         self,
-        circuit: QuantumCircuit,
+        circuit: CircuitData,
         *,
         dpi: int = 72,
         scale: float = 0.6,
@@ -88,8 +86,6 @@ class MPLCircuitlDrawer:
         self._ax.axis("off")
 
         self._circuit = circuit
-        self._parser = CircuitParser(circuit)
-        self._circuit_data = self._parser.parsed_circuit
         self._fig_scale_factor = scale
 
     def draw(
@@ -114,7 +110,8 @@ class MPLCircuitlDrawer:
             self._ax.axis("on")
             self._ax.grid()
 
-        circuit_layer_count = len(self._circuit_data[0])
+        circuit_qubit_count = self._circuit.qubit_count
+        circuit_layer_count = self._circuit.layer_count
         layer_width = [GATE_DEFAULT_WIDTH for _ in range(circuit_layer_count)]
         # When the input is an empty quantum circuit
         if layer_width == []:
@@ -130,7 +127,7 @@ class MPLCircuitlDrawer:
         )
         circuit_min_x = -layer_width[0] / 2 - GATE_MARGIN_LEFT
         circuit_max_y = (
-            self._parser.qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
+            circuit_qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
             - GATE_MARGIN_BOTTOM
             - GATE_DEFAULT_HEIGHT / 2
         )
@@ -153,7 +150,7 @@ class MPLCircuitlDrawer:
         )
 
         # Draw a Qubit label for the number of Qubits in the quantum circuit and a wire
-        for qubit in range(self._parser.qubit_count):
+        for qubit in range(circuit_qubit_count):
             line_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
             self._text(
                 circuit_min_x - 1,
@@ -175,8 +172,8 @@ class MPLCircuitlDrawer:
 
         # Draw a gate for each layer
         for layer in range(circuit_layer_count):
-            for qubit in range(self._parser.qubit_count):
-                gate = self._circuit_data[qubit][layer]
+            for qubit in range(circuit_qubit_count):
+                gate = self._circuit.gates[qubit][layer]
                 qubit_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_BOTTOM)
                 if gate.name == "ghost":
                     continue

@@ -41,6 +41,7 @@ GateDataSeq = Sequence[Sequence[GateData]]
 @dataclasses.dataclass
 class CircuitData:
     qubit_count: int
+    layer_count: int
     gates: GateDataSeq
 
     @staticmethod
@@ -62,8 +63,11 @@ class CircuitData:
                     line.append(GateData("wire"))
 
         _align_layers(temp_lines, 0, qubit_count)
+        layer_count = len(temp_lines[0])
         return CircuitData(
-            qubit_count=qubit_count, gates=[list(queue) for queue in temp_lines]
+            qubit_count=qubit_count,
+            layer_count=layer_count,
+            gates=[list(queue) for queue in temp_lines],
         )
 
 

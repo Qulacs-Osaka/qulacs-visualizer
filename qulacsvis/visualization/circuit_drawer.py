@@ -9,6 +9,7 @@ from qulacs import QuantumCircuit
 
 from qulacsvis.utils.latex import _LatexCompiler, _PDFtoImage
 
+from ..qulacs.circuit import to_model
 from .latex import LatexSourceGenerator
 from .matplotlib import MPLCircuitlDrawer
 from .text import TextCircuitDrawer
@@ -129,7 +130,7 @@ def circuit_drawer(
         return latex_source
 
     elif output_method == "mpl":
-        mpl_drawer = MPLCircuitlDrawer(circuit, dpi=dpi, scale=scale)
+        mpl_drawer = MPLCircuitlDrawer(to_model(circuit), dpi=dpi, scale=scale)
         return mpl_drawer.draw(filename=filename)
 
     else:

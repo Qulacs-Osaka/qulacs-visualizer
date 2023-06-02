@@ -6,8 +6,8 @@ from typing import Dict, List, Tuple
 import numpy as np
 from qulacs import QuantumCircuit, QuantumGateBase
 
-from qulacsvis.utils.gate import to_text_style
 from qulacsvis.models.circuit import ControlQubitInfo
+from qulacsvis.utils.gate import to_text_style
 
 
 @dataclasses.dataclass
