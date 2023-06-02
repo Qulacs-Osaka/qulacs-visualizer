@@ -399,13 +399,25 @@ class MPLCircuitlDrawer:
             If the gate does not have a control bit.
         """
 
-        xpos, ypos = xy
-        TARGET_QUBIT_RADIUS: Final[float] = 0.4
-
         if gate.control_bit_infos is None:
             raise ValueError("control_bit_infos is None")
         elif gate.control_bit_infos == []:
             raise ValueError("control_bit_infos is empty")
+
+        self._not_mark(xy)
+        self._control_bits(gate.control_bit_infos, xy)
+
+    def _not_mark(self, xy: Tuple[float, float]) -> None:
+        """
+        Draw a "NOT" mark used in CNOT etc.
+
+        Parameters
+        ----------
+        xy : Tuple[float, float]
+            The position of the gate indicating the target bit of NOT.
+        """
+        xpos, ypos = xy
+        TARGET_QUBIT_RADIUS: Final[float] = 0.4
 
         target = patches.Circle(
             xy=(xpos, ypos),
@@ -428,8 +440,6 @@ class MPLCircuitlDrawer:
             (xpos + TARGET_QUBIT_RADIUS, ypos),
             zorder=PORDER_TEXT,
         )
-
-        self._control_bits(gate.control_bit_infos, (xpos, ypos))
 
     def _control_bits(
         self, control_bit_infos: List[ControlQubitInfo], xy_from: Tuple[float, float]
