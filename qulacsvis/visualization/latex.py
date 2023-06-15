@@ -104,6 +104,8 @@ class LatexSourceGenerator:
                     continue
                 elif gate.name == "CNOT":
                     self._cnot(current_layer_latex, gate)
+                elif gate.name == "Toffoli":
+                    self._cnot(current_layer_latex, gate)
                 elif gate.name == "SWAP":
                     self._swap(current_layer_latex, gate)
                 elif len(gate.target_bits) > 1:
