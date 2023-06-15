@@ -257,6 +257,8 @@
                     <span class="k">continue</span>
                 <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_cnot</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="p">(</span><span class="n">layer_xpos</span><span class="p">,</span> <span class="n">qubit_ypos</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Toffoli&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_cnot</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="p">(</span><span class="n">layer_xpos</span><span class="p">,</span> <span class="n">qubit_ypos</span><span class="p">))</span>
                 <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SWAP&quot;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_swap</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="p">(</span><span class="n">layer_xpos</span><span class="p">,</span> <span class="n">qubit_ypos</span><span class="p">))</span>
                 <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -470,13 +472,25 @@
 <span class="sd">            If the gate does not have a control bit.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">=</span> <span class="n">xy</span>
-        <span class="n">TARGET_QUBIT_RADIUS</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.4</span>
-
         <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bit_infos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;control_bit_infos is None&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">control_bit_infos</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;control_bit_infos is empty&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_not_mark</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control_bit_infos</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_not_mark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xy</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw a &quot;NOT&quot; mark used in CNOT etc.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xy : Tuple[float, float]</span>
+<span class="sd">            The position of the gate indicating the target bit of NOT.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">=</span> <span class="n">xy</span>
+        <span class="n">TARGET_QUBIT_RADIUS</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.4</span>
 
         <span class="n">target</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span>
             <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span>
@@ -499,8 +513,6 @@
             <span class="p">(</span><span class="n">xpos</span> <span class="o">+</span> <span class="n">TARGET_QUBIT_RADIUS</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span>
             <span class="n">zorder</span><span class="o">=</span><span class="n">PORDER_TEXT</span><span class="p">,</span>
         <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control_bit_infos</span><span class="p">,</span> <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_control_bits</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">control_bit_infos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ControlQubitInfo</span><span class="p">],</span> <span class="n">xy_from</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
