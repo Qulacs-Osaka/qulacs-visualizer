@@ -415,7 +415,10 @@
         <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="n">latex_style_gate_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">latex_style_gate_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">$&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">latex_style_gate_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">$&quot;</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">latex_style_gate_str</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">,</span> <span class="n">latex_style_gate_str</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control_bit_infos</span><span class="p">,</span> <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">))</span>
