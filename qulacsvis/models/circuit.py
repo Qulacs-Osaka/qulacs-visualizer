@@ -1,8 +1,7 @@
 import dataclasses
 from collections import deque
-from collections.abc import Sequence
 from itertools import chain
-from typing import Deque, List, Optional, Tuple
+from typing import Deque, List, Optional, Sequence, Tuple
 
 import dataclasses_json
 
