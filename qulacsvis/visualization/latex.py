@@ -7,23 +7,19 @@ from qulacsvis.utils.gate import grouping_adjacent_gates, to_latex_style
 
 
 class LatexSourceGenerator:
-    """Generate latex source from QuantumCircuit
+    """Generate latex source from CircuitData
 
     Parameters
     ----------
-    circuit : QuantumCircuit
+    circuit : CircuitData
         A quantum circuit to be drawn.
 
     Attributes
     ----------
-    _quantum_circuit : QuantumCircuit
-        A quantum circuit to be drawn.
-    _parser : CircuitParser
-        The parser of the quantum circuit.
-    _circuit_data : GateDataSeq
-        The data of the quantum circuit after parsing by CircuitParser.
+    _circuit_data : CircuitData
+        The data of the quantum circuit.
     _circuit : numpy.ndarray
-        A matrix containing strings converted from GateDataSeq for Qcircuit.
+        A matrix containing strings converted from CircuitData for Qcircuit.
         Each element and its position corresponds to one of GateData.
         Quantum circuit only, input values are not contained.
     _head : str
@@ -34,6 +30,7 @@ class LatexSourceGenerator:
     Examples
     --------
     >>> from qulacs import QuantumCircuit
+    >>> from qulacsvis.qulacs.circuit import to_model
     >>> from qulacsvis.visualization import LatexSourceGenerator
     >>>
     >>> circuit = QuantumCircuit(3)
@@ -41,7 +38,7 @@ class LatexSourceGenerator:
     >>> circuit.add_Y_gate(1)
     >>> circuit.add_Z_gate(2)
     >>>
-    >>> generator = LatexSourceGenerator(circuit)
+    >>> generator = LatexSourceGenerator(to_model(circuit))
     >>> latex_source = generator.generate()
     >>> print(latex_source)
     """

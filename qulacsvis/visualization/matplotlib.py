@@ -33,7 +33,7 @@ class MPLCircuitlDrawer:
 
     Parameters
     ----------
-    circuit : QuantumCircuit
+    circuit : CircuitData
         A quantum circuit to be drawn.
     dpi : int optional default=72
         The resolution of the figure.
@@ -46,12 +46,8 @@ class MPLCircuitlDrawer:
         The figure of the circuit.
     _ax : matplotlib.axes.Axes
         The axes of the figure.
-    _circuit : QuantumCircuit
+    _circuit : CircuitData
         The quantum circuit to be drawn.
-    _parser : CircuitParser
-        The parser of the quantum circuit.
-    _circuit_data : GateDataSeq
-        The data of the quantum circuit after parsing by CircuitParser.
     _fig_scale_factor : float
         The scale factor of the figure.
 
