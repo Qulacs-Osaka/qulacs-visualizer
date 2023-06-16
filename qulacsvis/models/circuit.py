@@ -48,6 +48,21 @@ class CircuitData:
     def from_gate_sequence(
         gates: Sequence[GateData], qubit_count: Optional[int] = None
     ) -> "CircuitData":
+    """
+    Construct a CircuitData model from a list of gates.
+    
+    Parameters
+    ----------
+    gates : Sequence[GateData]
+        List of gates
+    qubit_count : int optional
+        Number of qubits this quantum circuit has
+        
+    Returns
+    -------
+    CircuitData : CircuitData
+        Constructed CircuitData model
+    """
         if qubit_count is None:
             qubit_count = max(g.max_index for g in gates)
         temp_lines: List[Deque[GateData]] = [deque() for _ in range(qubit_count)]
@@ -79,6 +94,8 @@ def _align_layers(
 
     Parameters
     ----------
+    lines: Sequence[Deque[GateData]]
+        Circuit data during parsing without layer length alignment
     min_line_index : int
         Minimum row index to be aligned.
     max_line_index : int
