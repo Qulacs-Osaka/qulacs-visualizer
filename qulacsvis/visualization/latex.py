@@ -1,32 +1,23 @@
 from typing import List
 
 import numpy as np
-from qulacs import QuantumCircuit
 
+from qulacsvis.models.circuit import CircuitData, ControlQubitInfo, GateData
 from qulacsvis.utils.gate import grouping_adjacent_gates, to_latex_style
-from qulacsvis.visualization.circuit_parser import (
-    CircuitParser,
-    ControlQubitInfo,
-    GateData,
-)
 
 
 class LatexSourceGenerator:
-    """Generate latex source from QuantumCircuit
+    """Generate latex source from CircuitData
 
     Parameters
     ----------
-    circuit : QuantumCircuit
+    circuit : CircuitData
         A quantum circuit to be drawn.
 
     Attributes
     ----------
-    _quantum_circuit : QuantumCircuit
-        A quantum circuit to be drawn.
-    _parser : CircuitParser
-        The parser of the quantum circuit.
     _circuit_data : CircuitData
-        The data of the quantum circuit after parsing by CircuitParser.
+        The data of the quantum circuit.
     _circuit : numpy.ndarray
         A matrix containing strings converted from CircuitData for Qcircuit.
         Each element and its position corresponds to one of GateData.
@@ -39,6 +30,7 @@ class LatexSourceGenerator:
     Examples
     --------
     >>> from qulacs import QuantumCircuit
+    >>> from qulacsvis.qulacs.circuit import to_model
     >>> from qulacsvis.visualization import LatexSourceGenerator
     >>>
     >>> circuit = QuantumCircuit(3)
@@ -46,15 +38,13 @@ class LatexSourceGenerator:
     >>> circuit.add_Y_gate(1)
     >>> circuit.add_Z_gate(2)
     >>>
-    >>> generator = LatexSourceGenerator(circuit)
+    >>> generator = LatexSourceGenerator(to_model(circuit))
     >>> latex_source = generator.generate()
     >>> print(latex_source)
     """
 
-    def __init__(self, circuit: QuantumCircuit):
-        self._quantum_circuit = circuit
-        self._parser = CircuitParser(circuit)
-        self._circuit_data = self._parser.parsed_circuit
+    def __init__(self, circuit: CircuitData):
+        self._circuit_data = circuit
         self._circuit = np.array([[]])
         self._head = r"""
 \documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
@@ -74,8 +64,8 @@ class LatexSourceGenerator:
         latex_source : str
             String of latex source generated
         """
-        qubit_count = self._parser.qubit_count
-        circuit_layer_count = len(self._circuit_data[0])
+        qubit_count = self._circuit_data.qubit_count
+        circuit_layer_count = self._circuit_data.layer_count
 
         input_label = np.array(
             [
@@ -96,7 +86,7 @@ class LatexSourceGenerator:
             # corresponding to each qubit row of the layer currently of interest.
             current_layer_latex = [to_latex_style("wire") for _ in range(qubit_count)]
             for qubit in range(qubit_count):
-                gate = self._circuit_data[qubit][layer]
+                gate = self._circuit_data.gates[qubit][layer]
 
                 if gate.name == "ghost":
                     continue
@@ -126,7 +116,7 @@ class LatexSourceGenerator:
         Parameters
         ----------
         matrix : List[List[str]]
-            A matrix containing strings converted from CircuitData for Qcircuit.
+            A matrix containing strings converted from GateDataSeq for Qcircuit.
         Returns
         -------
         res : str
