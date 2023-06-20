@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>qulacsvis.visualization.circuit_parser &mdash; qulacsvis 0.7.1 documentation</title>
+  <title>qulacsvis.qulacs.circuit &mdash; qulacsvis 0.7.1 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -59,7 +59,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">qulacsvis.visualization.circuit_parser</li>
+      <li class="breadcrumb-item active">qulacsvis.qulacs.circuit</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -68,33 +68,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for qulacsvis.visualization.circuit_parser</h1><div class="highlight"><pre>
+  <h1>Source code for qulacsvis.qulacs.circuit</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
 
-<span class="kn">from</span> <span class="nn">..qulacs.circuit</span> <span class="kn">import</span> <span class="n">to_model</span>
+<span class="kn">from</span> <span class="nn">..models.circuit</span> <span class="kn">import</span> <span class="n">CircuitData</span><span class="p">,</span> <span class="n">ControlQubitInfo</span><span class="p">,</span> <span class="n">GateData</span>
 
 
-<div class="viewcode-block" id="CircuitParser"><a class="viewcode-back" href="../../../qulacsvis.visualization.circuit_parser.html#qulacsvis.visualization.circuit_parser.CircuitParser">[docs]</a><span class="k">class</span> <span class="nc">CircuitParser</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parse quantum circuit into a list of gate data.</span>
+<div class="viewcode-block" id="to_model"><a class="viewcode-back" href="../../../qulacsvis.qulacs.circuit.html#qulacsvis.qulacs.circuit.to_model">[docs]</a><span class="k">def</span> <span class="nf">to_model</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CircuitData</span><span class="p">:</span>
+    <span class="n">qubit_count</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">get_qubit_count</span><span class="p">()</span>
+    <span class="n">gates</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    circuit : QuantumCircuit</span>
-<span class="sd">        Quantum circuit to be parsed.</span>
+    <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">get_gate_count</span><span class="p">()):</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">get_gate</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="n">target_index_list</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">get_target_index_list</span><span class="p">()</span>
+        <span class="n">control_index_value_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ControlQubitInfo</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">control_value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">control_value</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">get_control_index_value_list</span><span class="p">()</span>
+        <span class="p">]</span>
+        <span class="n">gate_name</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
+        <span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GateData</span><span class="p">(</span><span class="n">gate_name</span><span class="p">,</span> <span class="n">target_index_list</span><span class="p">,</span> <span class="n">control_index_value_list</span><span class="p">))</span>
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    qubit_count : int</span>
-<span class="sd">        Number of qubits in the circuit.</span>
-<span class="sd">    gate_info : GateDataSeq</span>
-<span class="sd">        List of gate data.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">):</span>
-        <span class="n">circuit_data</span> <span class="o">=</span> <span class="n">to_model</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qubit_count</span> <span class="o">=</span> <span class="n">circuit_data</span><span class="o">.</span><span class="n">qubit_count</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parsed_circuit</span> <span class="o">=</span> <span class="n">circuit_data</span><span class="o">.</span><span class="n">gates</span></div>
+    <span class="k">return</span> <span class="n">CircuitData</span><span class="o">.</span><span class="n">from_gate_sequence</span><span class="p">(</span><span class="n">gates</span><span class="p">,</span> <span class="n">qubit_count</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

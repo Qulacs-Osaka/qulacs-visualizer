@@ -74,25 +74,19 @@
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">patches</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Final</span>
 
-<span class="kn">from</span> <span class="nn">qulacsvis.utils.gate</span> <span class="kn">import</span> <span class="n">grouping_adjacent_gates</span><span class="p">,</span> <span class="n">to_latex_style</span>
-
-<span class="kn">from</span> <span class="nn">.circuit_parser</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">GATE_DEFAULT_HEIGHT</span><span class="p">,</span>
-    <span class="n">GATE_DEFAULT_WIDTH</span><span class="p">,</span>
-    <span class="n">CircuitData</span><span class="p">,</span>
-    <span class="n">CircuitParser</span><span class="p">,</span>
-    <span class="n">ControlQubitInfo</span><span class="p">,</span>
-    <span class="n">GateData</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..models.circuit</span> <span class="kn">import</span> <span class="n">CircuitData</span><span class="p">,</span> <span class="n">ControlQubitInfo</span><span class="p">,</span> <span class="n">GateData</span>
+<span class="kn">from</span> <span class="nn">..utils.gate</span> <span class="kn">import</span> <span class="n">grouping_adjacent_gates</span><span class="p">,</span> <span class="n">to_latex_style</span>
 
 <span class="n">MATPLOTLIB_INLINE_BACKENDS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;module://ipykernel.pylab.backend_inline&quot;</span><span class="p">,</span>
     <span class="s2">&quot;module://matplotlib_inline.backend_inline&quot;</span><span class="p">,</span>
     <span class="s2">&quot;nbAgg&quot;</span><span class="p">,</span>
 <span class="p">}</span>
+
+<span class="n">GATE_DEFAULT_WIDTH</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">=</span> <span class="mf">1.5</span>
 
 <span class="n">GATE_MARGIN_RIGHT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
 <span class="n">GATE_MARGIN_LEFT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
@@ -110,7 +104,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    circuit : QuantumCircuit</span>
+<span class="sd">    circuit : CircuitData</span>
 <span class="sd">        A quantum circuit to be drawn.</span>
 <span class="sd">    dpi : int optional default=72</span>
 <span class="sd">        The resolution of the figure.</span>
@@ -123,18 +117,15 @@
 <span class="sd">        The figure of the circuit.</span>
 <span class="sd">    _ax : matplotlib.axes.Axes</span>
 <span class="sd">        The axes of the figure.</span>
-<span class="sd">    _circuit : QuantumCircuit</span>
+<span class="sd">    _circuit : CircuitData</span>
 <span class="sd">        The quantum circuit to be drawn.</span>
-<span class="sd">    _parser : CircuitParser</span>
-<span class="sd">        The parser of the quantum circuit.</span>
-<span class="sd">    _circuit_data : CircuitData</span>
-<span class="sd">        The data of the quantum circuit after parsing by CircuitParser.</span>
 <span class="sd">    _fig_scale_factor : float</span>
 <span class="sd">        The scale factor of the figure.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from qulacs import QuantumCircuit</span>
+<span class="sd">    &gt;&gt;&gt; from qulacsvis.qulacs.circuit import to_model</span>
 <span class="sd">    &gt;&gt;&gt; from qulacsvis.visualization import MPLCircuitlDrawer</span>
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">    &gt;&gt;&gt;</span>
@@ -143,14 +134,14 @@
 <span class="sd">    &gt;&gt;&gt; circuit.add_Y_gate(1)</span>
 <span class="sd">    &gt;&gt;&gt; circuit.add_Z_gate(2)</span>
 <span class="sd">    &gt;&gt;&gt;</span>
-<span class="sd">    &gt;&gt;&gt; drawer = MPLCircuitlDrawer(circuit)</span>
+<span class="sd">    &gt;&gt;&gt; drawer = MPLCircuitlDrawer(to_model(circuit))</span>
 <span class="sd">    &gt;&gt;&gt; drawer.draw()</span>
 <span class="sd">    &gt;&gt;&gt; plt.show()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">,</span>
+        <span class="n">circuit</span><span class="p">:</span> <span class="n">CircuitData</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">72</span><span class="p">,</span>
         <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span>
@@ -162,8 +153,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">circuit</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span> <span class="o">=</span> <span class="n">CircuitParser</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">:</span> <span class="n">CircuitData</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">parsed_circuit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fig_scale_factor</span> <span class="o">=</span> <span class="n">scale</span>
 
 <div class="viewcode-block" id="MPLCircuitlDrawer.draw"><a class="viewcode-back" href="../../../qulacsvis.visualization.matplotlib.html#qulacsvis.visualization.matplotlib.MPLCircuitlDrawer.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span>
@@ -188,22 +177,24 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;on&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 
-        <span class="n">circuit_layer_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">circuit_qubit_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">qubit_count</span>
+        <span class="n">circuit_layer_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">layer_count</span>
+        <span class="n">layer_width</span> <span class="o">=</span> <span class="p">[</span><span class="n">GATE_DEFAULT_WIDTH</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_layer_count</span><span class="p">)]</span>
         <span class="c1"># When the input is an empty quantum circuit</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span> <span class="o">==</span> <span class="p">[]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span> <span class="o">=</span> <span class="p">[</span><span class="n">GATE_DEFAULT_WIDTH</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">layer_width</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">layer_width</span> <span class="o">=</span> <span class="p">[</span><span class="n">GATE_DEFAULT_WIDTH</span><span class="p">]</span>
         <span class="c1"># X/Y coordinates of the area where the circuit will be drawn.</span>
         <span class="c1"># Used to resize the figure.</span>
         <span class="c1"># In particular, the X coordinate is also used</span>
         <span class="c1"># as the right end (max_x) and left end (min_x) coordinates of the circuit wire.</span>
         <span class="n">circuit_max_x</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span><span class="p">)</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="n">layer_width</span><span class="p">)</span>
             <span class="o">+</span> <span class="n">circuit_layer_count</span> <span class="o">*</span> <span class="n">GATE_MARGIN_RIGHT</span>
-            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="o">-</span> <span class="n">layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="p">)</span>
-        <span class="n">circuit_min_x</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">GATE_MARGIN_LEFT</span>
+        <span class="n">circuit_min_x</span> <span class="o">=</span> <span class="o">-</span><span class="n">layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">GATE_MARGIN_LEFT</span>
         <span class="n">circuit_max_y</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">qubit_count</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+            <span class="n">circuit_qubit_count</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
             <span class="o">-</span> <span class="n">GATE_MARGIN_BOTTOM</span>
             <span class="o">-</span> <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="p">)</span>
@@ -226,7 +217,7 @@
         <span class="p">)</span>
 
         <span class="c1"># Draw a Qubit label for the number of Qubits in the quantum circuit and a wire</span>
-        <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">qubit_count</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_qubit_count</span><span class="p">):</span>
             <span class="n">line_ypos</span> <span class="o">=</span> <span class="n">qubit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">(</span>
                 <span class="n">circuit_min_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
@@ -248,8 +239,8 @@
 
         <span class="c1"># Draw a gate for each layer</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_layer_count</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">qubit_count</span><span class="p">):</span>
-                <span class="n">gate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_qubit_count</span><span class="p">):</span>
+                <span class="n">gate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">gates</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span>
                 <span class="n">qubit_ypos</span> <span class="o">=</span> <span class="n">qubit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;ghost&quot;</span><span class="p">:</span>
                     <span class="k">continue</span>
@@ -267,7 +258,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_gate_with_size</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="p">(</span><span class="n">layer_xpos</span><span class="p">,</span> <span class="n">qubit_ypos</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
             <span class="c1"># Determine the x-coordinate of the next layer</span>
-            <span class="n">layer_xpos</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">layer_width</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span>
+            <span class="n">layer_xpos</span> <span class="o">+=</span> <span class="n">layer_width</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span>
 
         <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>

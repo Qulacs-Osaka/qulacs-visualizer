@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>qulacsvis.visualization package &mdash; qulacsvis 0.7.1 documentation</title>
+  <title>qulacsvis.qulacs.circuit module &mdash; qulacsvis 0.7.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,8 +18,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="qulacsvis.visualization.circuit_drawer module" href="qulacsvis.visualization.circuit_drawer.html" />
-    <link rel="prev" title="qulacsvis.qulacs.circuit module" href="qulacsvis.qulacs.circuit.html" /> 
+    <link rel="next" title="qulacsvis.visualization package" href="qulacsvis.visualization.html" />
+    <link rel="prev" title="qulacsvis.qulacs package" href="qulacsvis.qulacs.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,8 +48,8 @@
 <li class="toctree-l2 current"><a class="reference internal" href="qulacsvis.html">qulacsvis package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="qulacsvis.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="qulacsvis.models.html">qulacsvis.models package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="qulacsvis.qulacs.html">qulacsvis.qulacs package</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">qulacsvis.visualization package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="qulacsvis.qulacs.html">qulacsvis.qulacs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qulacsvis.visualization.html">qulacsvis.visualization package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="qulacsvis.html#module-qulacsvis">Module contents</a></li>
@@ -75,9 +75,10 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="modules.html">qulacsvis</a></li>
           <li class="breadcrumb-item"><a href="qulacsvis.html">qulacsvis package</a></li>
-      <li class="breadcrumb-item active">qulacsvis.visualization package</li>
+          <li class="breadcrumb-item"><a href="qulacsvis.qulacs.html">qulacsvis.qulacs package</a></li>
+      <li class="breadcrumb-item active">qulacsvis.qulacs.circuit module</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/qulacsvis.visualization.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/qulacsvis.qulacs.circuit.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -85,31 +86,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="qulacsvis-visualization-package">
-<h1>qulacsvis.visualization package<a class="headerlink" href="#qulacsvis-visualization-package" title="Permalink to this headline"></a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="qulacsvis.visualization.circuit_drawer.html">qulacsvis.visualization.circuit_drawer module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qulacsvis.visualization.circuit_parser.html">qulacsvis.visualization.circuit_parser module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qulacsvis.visualization.latex.html">qulacsvis.visualization.latex module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qulacsvis.visualization.matplotlib.html">qulacsvis.visualization.matplotlib module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qulacsvis.visualization.text.html">qulacsvis.visualization.text module</a></li>
-</ul>
-</div>
-</section>
-<section id="module-qulacsvis.visualization">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-qulacsvis.visualization" title="Permalink to this headline"></a></h2>
-</section>
+  <section id="module-qulacsvis.qulacs.circuit">
+<span id="qulacsvis-qulacs-circuit-module"></span><h1>qulacsvis.qulacs.circuit module<a class="headerlink" href="#module-qulacsvis.qulacs.circuit" title="Permalink to this headline"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="qulacsvis.qulacs.circuit.to_model">
+<span class="sig-prename descclassname"><span class="pre">qulacsvis.qulacs.circuit.</span></span><span class="sig-name descname"><span class="pre">to_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">qulacs_core.QuantumCircuit</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="qulacsvis.models.circuit.html#qulacsvis.models.circuit.CircuitData" title="qulacsvis.models.circuit.CircuitData"><span class="pre">qulacsvis.models.circuit.CircuitData</span></a></span></span><a class="reference internal" href="_modules/qulacsvis/qulacs/circuit.html#to_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qulacsvis.qulacs.circuit.to_model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="qulacsvis.qulacs.circuit.html" class="btn btn-neutral float-left" title="qulacsvis.qulacs.circuit module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="qulacsvis.visualization.circuit_drawer.html" class="btn btn-neutral float-right" title="qulacsvis.visualization.circuit_drawer module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="qulacsvis.qulacs.html" class="btn btn-neutral float-left" title="qulacsvis.qulacs package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="qulacsvis.visualization.html" class="btn btn-neutral float-right" title="qulacsvis.visualization package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

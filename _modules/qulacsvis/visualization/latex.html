@@ -72,32 +72,23 @@
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
 
+<span class="kn">from</span> <span class="nn">qulacsvis.models.circuit</span> <span class="kn">import</span> <span class="n">CircuitData</span><span class="p">,</span> <span class="n">ControlQubitInfo</span><span class="p">,</span> <span class="n">GateData</span>
 <span class="kn">from</span> <span class="nn">qulacsvis.utils.gate</span> <span class="kn">import</span> <span class="n">grouping_adjacent_gates</span><span class="p">,</span> <span class="n">to_latex_style</span>
-<span class="kn">from</span> <span class="nn">qulacsvis.visualization.circuit_parser</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CircuitParser</span><span class="p">,</span>
-    <span class="n">ControlQubitInfo</span><span class="p">,</span>
-    <span class="n">GateData</span><span class="p">,</span>
-<span class="p">)</span>
 
 
 <div class="viewcode-block" id="LatexSourceGenerator"><a class="viewcode-back" href="../../../qulacsvis.visualization.latex.html#qulacsvis.visualization.latex.LatexSourceGenerator">[docs]</a><span class="k">class</span> <span class="nc">LatexSourceGenerator</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate latex source from QuantumCircuit</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate latex source from CircuitData</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    circuit : QuantumCircuit</span>
+<span class="sd">    circuit : CircuitData</span>
 <span class="sd">        A quantum circuit to be drawn.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    _quantum_circuit : QuantumCircuit</span>
-<span class="sd">        A quantum circuit to be drawn.</span>
-<span class="sd">    _parser : CircuitParser</span>
-<span class="sd">        The parser of the quantum circuit.</span>
 <span class="sd">    _circuit_data : CircuitData</span>
-<span class="sd">        The data of the quantum circuit after parsing by CircuitParser.</span>
+<span class="sd">        The data of the quantum circuit.</span>
 <span class="sd">    _circuit : numpy.ndarray</span>
 <span class="sd">        A matrix containing strings converted from CircuitData for Qcircuit.</span>
 <span class="sd">        Each element and its position corresponds to one of GateData.</span>
@@ -110,6 +101,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from qulacs import QuantumCircuit</span>
+<span class="sd">    &gt;&gt;&gt; from qulacsvis.qulacs.circuit import to_model</span>
 <span class="sd">    &gt;&gt;&gt; from qulacsvis.visualization import LatexSourceGenerator</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; circuit = QuantumCircuit(3)</span>
@@ -117,15 +109,13 @@
 <span class="sd">    &gt;&gt;&gt; circuit.add_Y_gate(1)</span>
 <span class="sd">    &gt;&gt;&gt; circuit.add_Z_gate(2)</span>
 <span class="sd">    &gt;&gt;&gt;</span>
-<span class="sd">    &gt;&gt;&gt; generator = LatexSourceGenerator(circuit)</span>
+<span class="sd">    &gt;&gt;&gt; generator = LatexSourceGenerator(to_model(circuit))</span>
 <span class="sd">    &gt;&gt;&gt; latex_source = generator.generate()</span>
 <span class="sd">    &gt;&gt;&gt; print(latex_source)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_quantum_circuit</span> <span class="o">=</span> <span class="n">circuit</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span> <span class="o">=</span> <span class="n">CircuitParser</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">parsed_circuit</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">:</span> <span class="n">CircuitData</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span> <span class="o">=</span> <span class="n">circuit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_head</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">\documentclass[border={-2pt 5pt 5pt -7pt}]</span><span class="si">{standalone}</span>
@@ -145,8 +135,8 @@
 <span class="sd">        latex_source : str</span>
 <span class="sd">            String of latex source generated</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">qubit_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">qubit_count</span>
-        <span class="n">circuit_layer_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">qubit_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="o">.</span><span class="n">qubit_count</span>
+        <span class="n">circuit_layer_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="o">.</span><span class="n">layer_count</span>
 
         <span class="n">input_label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[</span>
@@ -167,7 +157,7 @@
             <span class="c1"># corresponding to each qubit row of the layer currently of interest.</span>
             <span class="n">current_layer_latex</span> <span class="o">=</span> <span class="p">[</span><span class="n">to_latex_style</span><span class="p">(</span><span class="s2">&quot;wire&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">)]</span>
             <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">):</span>
-                <span class="n">gate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span>
+                <span class="n">gate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_data</span><span class="o">.</span><span class="n">gates</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span>
 
                 <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;ghost&quot;</span><span class="p">:</span>
                     <span class="k">continue</span>
@@ -197,7 +187,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        matrix : List[List[str]]</span>
-<span class="sd">            A matrix containing strings converted from CircuitData for Qcircuit.</span>
+<span class="sd">            A matrix containing strings converted from GateDataSeq for Qcircuit.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        res : str</span>

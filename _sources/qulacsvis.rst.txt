@@ -7,6 +7,8 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   qulacsvis.models
+   qulacsvis.qulacs
    qulacsvis.visualization
 
 Module contents
