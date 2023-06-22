@@ -3,6 +3,7 @@ from typing import Dict
 import numpy as np
 from qulacs import QuantumCircuit
 from qulacs.gate import CNOT, TOFFOLI, DenseMatrix, to_matrix_gate
+from qulacs.gate import BitFlipNoise
 from skqulacs.circuit.pre_defined import (
     create_farhi_neven_ansatz,
     create_farhi_neven_watle_ansatz,
@@ -41,6 +42,7 @@ def load_circuit_data() -> Dict[str, QuantumCircuit]:
     circuits["toffoli_gate_circuit"] = toffoli_gate_circuit()
     circuits["xyz_horizontal_circuit"] = xyz_horizontal_circuit()
     circuits["xyz_vertical_circuit"] = xyz_vertical_circuit()
+    circuits["unsupported_gates"] = unsupported_gates()
     circuits["skqulacs_qcl_ansatz"] = skqulacs_qcl_ansatz()
     circuits["skqulacs_farhi_neven_ansatz"] = skqulacs_farhi_neven_ansatz()
     circuits["skqulacs_farhi_neven_watle_ansatz"] = skqulacs_farhi_neven_watle_ansatz()
@@ -182,6 +184,16 @@ def xyz_vertical_circuit() -> QuantumCircuit:
     circuit.add_X_gate(0)
     circuit.add_Y_gate(1)
     circuit.add_Z_gate(2)
+    return circuit
+
+
+def unsupported_gates() -> QuantumCircuit:
+    circuit = QuantumCircuit(2)
+    circuit.add_X_gate(0)
+    circuit.add_gate(BitFlipNoise(1, 0.5))
+    circuit.add_X_gate(0)
+    circuit.add_X_gate(1)
+    circuit.add_gate(BitFlipNoise(0, 0.5))
     return circuit
 
 

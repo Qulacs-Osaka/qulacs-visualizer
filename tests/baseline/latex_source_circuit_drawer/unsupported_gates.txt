@@ -1,0 +1,11 @@
+
+\documentclass[border={-2pt 5pt 5pt -7pt}]{standalone}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{graphicx}
+
+\begin{document}
+    \Qcircuit @C=1.0em @R=0.7em @!R{ \\
+        \nghost{ q_{0} : } & \lstick{ q_{0} : } & \gate{X} & \gate{X} & \gate{UDF} & \qw\\
+        \nghost{ q_{1} : } & \lstick{ q_{1} : } & \gate{UDF} & \gate{X} & \qw & \qw\\
+    }
+\end{document}
