@@ -245,7 +245,11 @@ class LatexSourceGenerator:
         gate : GateData
             The gate data to be drawn.
         """
-        gate_qcircuit_style = r"\gate{" + to_latex_style(gate.name) + "}"
+        try:
+            gate_qcircuit_style = r"\gate{" + to_latex_style(gate.name) + "}"
+        except KeyError:
+            gate_qcircuit_style = r"\gate{UDF}"
+
         target_bit = gate.target_bits[0]
         layer_latex[target_bit] = gate_qcircuit_style
         self._control_bits(layer_latex, gate.control_bit_infos, target_bit)
