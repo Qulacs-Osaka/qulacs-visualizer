@@ -88,14 +88,27 @@
 <span class="n">GATE_DEFAULT_WIDTH</span> <span class="o">=</span> <span class="mf">1.0</span>
 <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">=</span> <span class="mf">1.5</span>
 
-<span class="n">GATE_MARGIN_RIGHT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="n">GATE_MARGIN_LEFT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="n">GATE_MARGIN_BOTTOM</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="n">GATE_MARGIN_TOP</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">GATE_MARGIN_RIGHT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">GATE_MARGIN_LEFT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">GATE_MARGIN_BOTTOM</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">GATE_MARGIN_TOP</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.25</span>
+
+<span class="n">CIRCUIT_MARGIN</span> <span class="o">=</span> <span class="mf">0.5</span>
 
 <span class="n">PORDER_LINE</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">PORDER_GATE</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">PORDER_TEXT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+
+
+<span class="k">def</span> <span class="nf">_calc_gate_width</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">GateData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">GATE_DEFAULT_WIDTH</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">to_latex_style</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">char_width</span> <span class="o">=</span> <span class="mf">0.2</span>
+        <span class="n">width</span> <span class="o">+=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">char_width</span>
+
+    <span class="k">return</span> <span class="n">width</span>
 
 
 <div class="viewcode-block" id="MPLCircuitlDrawer"><a class="viewcode-back" href="../../../qulacsvis.visualization.matplotlib.html#qulacsvis.visualization.matplotlib.MPLCircuitlDrawer">[docs]</a><span class="k">class</span> <span class="nc">MPLCircuitlDrawer</span><span class="p">:</span>
@@ -154,6 +167,24 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span> <span class="o">=</span> <span class="n">circuit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fig_scale_factor</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layer_width</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">_calc_layer_width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">circuit_qubit_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">qubit_count</span>
+        <span class="n">circuit_layer_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">layer_count</span>
+
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_layer_count</span><span class="p">):</span>
+            <span class="n">max_width</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_qubit_count</span><span class="p">):</span>
+                <span class="n">gate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">gates</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span>
+                <span class="n">max_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_width</span><span class="p">,</span> <span class="n">_calc_gate_width</span><span class="p">(</span><span class="n">gate</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_layer_width</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">max_width</span><span class="p">)</span>
+
+        <span class="c1"># When the input is an empty quantum circuit</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_width</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_layer_width</span> <span class="o">=</span> <span class="p">[</span><span class="n">GATE_DEFAULT_WIDTH</span><span class="p">]</span>
 
 <div class="viewcode-block" id="MPLCircuitlDrawer.draw"><a class="viewcode-back" href="../../../qulacsvis.visualization.matplotlib.html#qulacsvis.visualization.matplotlib.MPLCircuitlDrawer.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -179,22 +210,23 @@
 
         <span class="n">circuit_qubit_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">qubit_count</span>
         <span class="n">circuit_layer_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">layer_count</span>
-        <span class="n">layer_width</span> <span class="o">=</span> <span class="p">[</span><span class="n">GATE_DEFAULT_WIDTH</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_layer_count</span><span class="p">)]</span>
-        <span class="c1"># When the input is an empty quantum circuit</span>
-        <span class="k">if</span> <span class="n">layer_width</span> <span class="o">==</span> <span class="p">[]:</span>
-            <span class="n">layer_width</span> <span class="o">=</span> <span class="p">[</span><span class="n">GATE_DEFAULT_WIDTH</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calc_layer_width</span><span class="p">()</span>
+
         <span class="c1"># X/Y coordinates of the area where the circuit will be drawn.</span>
         <span class="c1"># Used to resize the figure.</span>
         <span class="c1"># In particular, the X coordinate is also used</span>
         <span class="c1"># as the right end (max_x) and left end (min_x) coordinates of the circuit wire.</span>
         <span class="n">circuit_max_x</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="nb">sum</span><span class="p">(</span><span class="n">layer_width</span><span class="p">)</span>
-            <span class="o">+</span> <span class="n">circuit_layer_count</span> <span class="o">*</span> <span class="n">GATE_MARGIN_RIGHT</span>
-            <span class="o">-</span> <span class="n">layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer_width</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">circuit_layer_count</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_MARGIN_RIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_LEFT</span><span class="p">)</span>
+            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="p">)</span>
-        <span class="n">circuit_min_x</span> <span class="o">=</span> <span class="o">-</span><span class="n">layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">GATE_MARGIN_LEFT</span>
+        <span class="n">circuit_min_x</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">GATE_MARGIN_LEFT</span> <span class="o">-</span> <span class="n">GATE_MARGIN_RIGHT</span>
         <span class="n">circuit_max_y</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">circuit_qubit_count</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+            <span class="n">circuit_qubit_count</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+            <span class="o">-</span> <span class="n">GATE_MARGIN_TOP</span>
             <span class="o">-</span> <span class="n">GATE_MARGIN_BOTTOM</span>
             <span class="o">-</span> <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="p">)</span>
@@ -202,11 +234,11 @@
         <span class="c1"># Determine the size of the figure (drawing size of the circuit + margins)</span>
         <span class="n">QUBIT_LABEL_WIDTH</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span>
-            <span class="n">circuit_min_x</span> <span class="o">-</span> <span class="n">QUBIT_LABEL_WIDTH</span><span class="p">,</span> <span class="n">circuit_max_x</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span>
+            <span class="n">circuit_min_x</span> <span class="o">-</span> <span class="n">QUBIT_LABEL_WIDTH</span><span class="p">,</span> <span class="n">circuit_max_x</span> <span class="o">+</span> <span class="n">CIRCUIT_MARGIN</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span>
-            <span class="n">circuit_max_y</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">,</span>
-            <span class="o">-</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">GATE_MARGIN_TOP</span><span class="p">,</span>
+            <span class="n">circuit_max_y</span> <span class="o">+</span> <span class="n">CIRCUIT_MARGIN</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">CIRCUIT_MARGIN</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Enlarge/reduce the shape while keeping the aspect ratio</span>
@@ -218,7 +250,9 @@
 
         <span class="c1"># Draw a Qubit label for the number of Qubits in the quantum circuit and a wire</span>
         <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_qubit_count</span><span class="p">):</span>
-            <span class="n">line_ypos</span> <span class="o">=</span> <span class="n">qubit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+            <span class="n">line_ypos</span> <span class="o">=</span> <span class="n">qubit</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">(</span>
                 <span class="n">circuit_min_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
                 <span class="n">line_ypos</span><span class="p">,</span>
@@ -241,7 +275,10 @@
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_layer_count</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_qubit_count</span><span class="p">):</span>
                 <span class="n">gate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">gates</span><span class="p">[</span><span class="n">qubit</span><span class="p">][</span><span class="n">layer</span><span class="p">]</span>
-                <span class="n">qubit_ypos</span> <span class="o">=</span> <span class="n">qubit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+                <span class="n">qubit_ypos</span> <span class="o">=</span> <span class="n">qubit</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span>
+                <span class="p">)</span>
+
                 <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;ghost&quot;</span><span class="p">:</span>
                     <span class="k">continue</span>
                 <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;wire&quot;</span><span class="p">:</span>
@@ -258,7 +295,12 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_gate_with_size</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="p">(</span><span class="n">layer_xpos</span><span class="p">,</span> <span class="n">qubit_ypos</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
             <span class="c1"># Determine the x-coordinate of the next layer</span>
-            <span class="n">layer_xpos</span> <span class="o">+=</span> <span class="n">layer_width</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span>
+            <span class="k">if</span> <span class="n">layer</span> <span class="o">&lt;</span> <span class="n">circuit_layer_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">layer_xpos</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer_width</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_width</span><span class="p">[</span><span class="n">layer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.5</span>
+                    <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span>
+                    <span class="o">+</span> <span class="n">GATE_MARGIN_LEFT</span>
+                <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
@@ -379,22 +421,24 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">=</span> <span class="n">xy</span>
+        <span class="n">gate_width</span> <span class="o">=</span> <span class="n">_calc_gate_width</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
         <span class="c1"># Find the midpoint of the y-coordinate of the gate with size</span>
         <span class="n">ypos</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">ypos</span>
             <span class="o">+</span> <span class="p">(</span>
                 <span class="n">ypos</span>
-                <span class="o">+</span> <span class="p">(</span><span class="n">multi_gate_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">multi_gate_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
-        <span class="n">multi_gate_height</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">*</span> <span class="n">multi_gate_size</span>
-            <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span> <span class="o">*</span> <span class="p">(</span><span class="n">multi_gate_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">multi_gate_height</span> <span class="o">=</span> <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">*</span> <span class="n">multi_gate_size</span> <span class="o">+</span> <span class="p">(</span>
+            <span class="n">GATE_MARGIN_BOTTOM</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">multi_gate_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">box</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span>
             <span class="c1"># The gate is centered.</span>
-            <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">xpos</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">GATE_DEFAULT_WIDTH</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">multi_gate_height</span><span class="p">),</span>
-            <span class="n">width</span><span class="o">=</span><span class="n">GATE_DEFAULT_WIDTH</span><span class="p">,</span>
+            <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">xpos</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">gate_width</span><span class="p">,</span> <span class="n">ypos</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">multi_gate_height</span><span class="p">),</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">gate_width</span><span class="p">,</span>
             <span class="n">height</span><span class="o">=</span><span class="n">multi_gate_height</span><span class="p">,</span>
             <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
             <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
@@ -434,7 +478,9 @@
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">adjacent_gates</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">groups_of_adjacent_gates</span><span class="p">):</span>
             <span class="n">group_x</span> <span class="o">=</span> <span class="n">xpos</span>
-            <span class="n">group_y</span> <span class="o">=</span> <span class="n">adjacent_gates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+            <span class="n">group_y</span> <span class="o">=</span> <span class="n">adjacent_gates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_gate_with_size</span><span class="p">(</span>
                 <span class="n">multi_gate_data</span><span class="p">,</span> <span class="p">(</span><span class="n">group_x</span><span class="p">,</span> <span class="n">group_y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">adjacent_gates</span><span class="p">)</span>
             <span class="p">)</span>
@@ -443,8 +489,12 @@
                 <span class="n">multi_gate_data</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="c1"># Gray line connecting the gates</span>
-        <span class="n">ypos</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
-        <span class="n">to_ypos</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span><span class="p">)</span>
+        <span class="n">ypos</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span>
+        <span class="p">)</span>
+        <span class="n">to_ypos</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">((</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span> <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">to_ypos</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lc</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_control_bits</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control_bit_infos</span><span class="p">,</span> <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">))</span>
@@ -524,7 +574,9 @@
 
         <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">control_bit_infos</span><span class="p">:</span>
             <span class="n">control_bit</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">index</span>
-            <span class="n">to_ypos</span> <span class="o">=</span> <span class="n">control_bit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span><span class="p">)</span>
+            <span class="n">to_ypos</span> <span class="o">=</span> <span class="n">control_bit</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span>
+            <span class="p">)</span>
             <span class="n">to_xpos</span> <span class="o">=</span> <span class="n">xy_from</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">(</span>
@@ -567,7 +619,9 @@
         <span class="n">TARGET_QUBIT_MARK_SIZE</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span>
 
         <span class="k">for</span> <span class="n">target_bit</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">target_bits</span><span class="p">:</span>
-            <span class="n">to_ypos</span> <span class="o">=</span> <span class="n">target_bit</span> <span class="o">*</span> <span class="p">(</span><span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_RIGHT</span><span class="p">)</span>
+            <span class="n">to_ypos</span> <span class="o">=</span> <span class="n">target_bit</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="n">GATE_DEFAULT_HEIGHT</span> <span class="o">+</span> <span class="n">GATE_MARGIN_BOTTOM</span> <span class="o">+</span> <span class="n">GATE_MARGIN_TOP</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">(</span>
                 <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">),</span>
                 <span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">to_ypos</span><span class="p">),</span>
