@@ -29,6 +29,17 @@ PORDER_GATE: Final[int] = 3
 PORDER_TEXT: Final[int] = 4
 
 
+def _calc_gate_width(gate: GateData) -> float:
+    width = GATE_DEFAULT_WIDTH
+    try:
+        to_latex_style(gate.name)
+    except KeyError:
+        char_width = 0.2
+        width += (len(gate.name) - 3) * char_width
+
+    return width
+
+
 class MPLCircuitlDrawer:
     """
     Drawing a circuit using Matplotlib.
@@ -85,6 +96,24 @@ class MPLCircuitlDrawer:
 
         self._circuit = circuit
         self._fig_scale_factor = scale
+        self._layer_width: List[float] = []
+
+    def _calc_layer_width(self) -> None:
+        circuit_qubit_count = self._circuit.qubit_count
+        circuit_layer_count = self._circuit.layer_count
+
+        for layer in range(circuit_layer_count):
+            max_width = 0.0
+
+            for qubit in range(circuit_qubit_count):
+                gate = self._circuit.gates[qubit][layer]
+                max_width = max(max_width, _calc_gate_width(gate))
+
+            self._layer_width.append(max_width)
+
+        # When the input is an empty quantum circuit
+        if self._layer_width == []:
+            self._layer_width = [GATE_DEFAULT_WIDTH]
 
     def draw(
         self, *, debug: bool = False, filename: Optional[str] = None
@@ -110,22 +139,23 @@ class MPLCircuitlDrawer:
 
         circuit_qubit_count = self._circuit.qubit_count
         circuit_layer_count = self._circuit.layer_count
-        layer_width = [GATE_DEFAULT_WIDTH for _ in range(circuit_layer_count)]
-        # When the input is an empty quantum circuit
-        if layer_width == []:
-            layer_width = [GATE_DEFAULT_WIDTH]
+
+        self._calc_layer_width()
+
         # X/Y coordinates of the area where the circuit will be drawn.
         # Used to resize the figure.
         # In particular, the X coordinate is also used
         # as the right end (max_x) and left end (min_x) coordinates of the circuit wire.
         circuit_max_x = (
-            sum(layer_width)
+            sum(self._layer_width)
             + circuit_layer_count * (GATE_MARGIN_RIGHT + GATE_MARGIN_LEFT)
-            - layer_width[0] / 2
+            - self._layer_width[0] / 2
         )
-        circuit_min_x = -layer_width[0] / 2 - GATE_MARGIN_LEFT - GATE_MARGIN_RIGHT
+        circuit_min_x = -self._layer_width[0] / 2 - GATE_MARGIN_LEFT - GATE_MARGIN_RIGHT
         circuit_max_y = (
-            circuit_qubit_count * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_TOP + GATE_MARGIN_BOTTOM) - GATE_MARGIN_TOP
+            circuit_qubit_count
+            * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_TOP + GATE_MARGIN_BOTTOM)
+            - GATE_MARGIN_TOP
             - GATE_MARGIN_BOTTOM
             - GATE_DEFAULT_HEIGHT / 2
         )
@@ -149,7 +179,9 @@ class MPLCircuitlDrawer:
 
         # Draw a Qubit label for the number of Qubits in the quantum circuit and a wire
         for qubit in range(circuit_qubit_count):
-            line_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_TOP + GATE_MARGIN_BOTTOM)
+            line_ypos = qubit * (
+                GATE_DEFAULT_HEIGHT + GATE_MARGIN_TOP + GATE_MARGIN_BOTTOM
+            )
             self._text(
                 circuit_min_x - 1,
                 line_ypos,
@@ -172,7 +204,10 @@ class MPLCircuitlDrawer:
         for layer in range(circuit_layer_count):
             for qubit in range(circuit_qubit_count):
                 gate = self._circuit.gates[qubit][layer]
-                qubit_ypos = qubit * (GATE_DEFAULT_HEIGHT + GATE_MARGIN_TOP + GATE_MARGIN_BOTTOM)
+                qubit_ypos = qubit * (
+                    GATE_DEFAULT_HEIGHT + GATE_MARGIN_TOP + GATE_MARGIN_BOTTOM
+                )
+
                 if gate.name == "ghost":
                     continue
                 elif gate.name == "wire":
@@ -189,7 +224,12 @@ class MPLCircuitlDrawer:
                     self._gate_with_size(gate, (layer_xpos, qubit_ypos), 1)
 
             # Determine the x-coordinate of the next layer
-            layer_xpos += layer_width[layer] + GATE_MARGIN_RIGHT + GATE_MARGIN_LEFT
+            if layer < circuit_layer_count - 1:
+                layer_xpos += (
+                    (self._layer_width[layer] + self._layer_width[layer + 1]) * 0.5
+                    + GATE_MARGIN_RIGHT
+                    + GATE_MARGIN_LEFT
+                )
 
         if filename:
             self._figure.savefig(
@@ -310,6 +350,8 @@ class MPLCircuitlDrawer:
         """
 
         xpos, ypos = xy
+        gate_width = _calc_gate_width(gate)
+
         # Find the midpoint of the y-coordinate of the gate with size
         ypos = (
             ypos
@@ -324,8 +366,8 @@ class MPLCircuitlDrawer:
         ) * (multi_gate_size - 1)
         box = patches.Rectangle(
             # The gate is centered.
-            xy=(xpos - 0.5 * GATE_DEFAULT_WIDTH, ypos - 0.5 * multi_gate_height),
-            width=GATE_DEFAULT_WIDTH,
+            xy=(xpos - 0.5 * gate_width, ypos - 0.5 * multi_gate_height),
+            width=gate_width,
             height=multi_gate_height,
             facecolor="w",
             edgecolor="k",
