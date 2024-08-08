@@ -10,12 +10,11 @@ authors = ["Qulacs-Osaka <you@example.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = "^3.8"
 Qulacs = ">=0.5.0"
 temp = "^2020.7.2"
 Pillow = "^9.1.0"
 numpy = "^1.24.0"
-scipy = "^1.10.0"
 matplotlib = "^3.4.3"
 dataclasses-json = "^0.5.7"
 
@@ -28,7 +27,8 @@ flake8 = "^4.0.1"
 mypy = "^0.910"
 isort = "^5.10.1"
 pytest-mpl = "^0.13"
-skqulacs = "^0.5.0"
+skqulacs = { version = "^0.5.0", python = ">=3.8,<3.12" }
+scipy = { version = "^1.10.0", python = ">=3.8,<3.12" }
 
 [tool.isort]
 default_section = "THIRDPARTY"
