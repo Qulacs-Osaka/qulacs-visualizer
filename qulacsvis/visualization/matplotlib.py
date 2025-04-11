@@ -35,7 +35,8 @@ def _calc_gate_width(gate: GateData) -> float:
         to_latex_style(gate.name)
     except KeyError:
         char_width = 0.2
-        width += (len(gate.name) - 3) * char_width
+        max_line_width = max(len(s) for s in gate.name.splitlines())
+        width += (max_line_width - 3) * char_width
 
     return width
 
