@@ -5,6 +5,7 @@ from typing import Deque, List, Optional, Sequence, Tuple
 
 import dataclasses_json
 
+
 @dataclasses_json.dataclass_json
 @dataclasses.dataclass
 class ControlQubitInfo:
