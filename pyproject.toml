@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "qulacsvis"
-version = "0.7.3"
+version = "0.7.4"
 readme = "README.md"
 description = "visualizers for qulacs"
 repository = "https://github.com/Qulacs-Osaka/qulacs-visualizer"
@@ -10,13 +10,13 @@ authors = ["Qulacs-Osaka <you@example.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.10"
 Qulacs = ">=0.5.0"
 temp = "^2020.7.2"
 Pillow = "^9.1.0"
 numpy = "^1.24.0"
 matplotlib = "^3.4.3"
-dataclasses-json = "^0.5.7"
+dataclasses-json = ">=0.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -27,8 +27,6 @@ flake8 = "^4.0.1"
 mypy = "^0.910"
 isort = "^5.10.1"
 pytest-mpl = "^0.13"
-skqulacs = { version = "^0.5.0", python = ">=3.8,<3.12" }
-scipy = { version = "^1.10.0", python = ">=3.8,<3.12" }
 
 [tool.isort]
 default_section = "THIRDPARTY"
