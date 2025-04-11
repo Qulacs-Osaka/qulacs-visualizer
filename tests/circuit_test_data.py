@@ -2,8 +2,13 @@ from typing import Dict
 
 import numpy as np
 from qulacs import QuantumCircuit
-from qulacs.gate import CNOT, TOFFOLI, DenseMatrix, to_matrix_gate
-from qulacs.gate import BitFlipNoise
+from qulacs.gate import (
+    CNOT,
+    TOFFOLI,
+    BitFlipNoise,
+    DenseMatrix,
+    to_matrix_gate,
+)
 from skqulacs.circuit.pre_defined import (
     create_farhi_neven_ansatz,
     create_farhi_neven_watle_ansatz,
