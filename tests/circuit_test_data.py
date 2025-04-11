@@ -9,16 +9,82 @@ from qulacs.gate import (
     DenseMatrix,
     to_matrix_gate,
 )
-from skqulacs.circuit.pre_defined import (
-    create_farhi_neven_ansatz,
-    create_farhi_neven_watle_ansatz,
-    create_ibm_embedding_circuit,
-    create_npqc_ansatz,
-    create_qcl_ansatz,
-    create_qcnn_ansatz,
-    create_shirai_ansatz,
-    create_yzcx_ansatz,
-)
+
+try:
+    from skqulacs.circuit.pre_defined import (
+        create_farhi_neven_ansatz,
+        create_farhi_neven_watle_ansatz,
+        create_ibm_embedding_circuit,
+        create_npqc_ansatz,
+        create_qcl_ansatz,
+        create_qcnn_ansatz,
+        create_shirai_ansatz,
+        create_yzcx_ansatz,
+    )
+    HAS_SKQULACS = True
+
+    def skqulacs_qcl_ansatz() -> QuantumCircuit:
+        n_qubit = 4
+        c_depth = 2
+        time_step = 1.0
+        ansatz = create_qcl_ansatz(n_qubit, c_depth, time_step)
+        circuit: QuantumCircuit = ansatz._circuit
+        return circuit
+
+
+    def skqulacs_farhi_neven_ansatz() -> QuantumCircuit:
+        n_qubit = 4
+        c_depth = 2
+        ansatz = create_farhi_neven_ansatz(n_qubit, c_depth)
+        circuit: QuantumCircuit = ansatz._circuit
+        return circuit
+
+
+    def skqulacs_farhi_neven_watle_ansatz() -> QuantumCircuit:
+        n_qubit = 4
+        c_depth = 2
+        ansatz = create_farhi_neven_watle_ansatz(n_qubit, c_depth)
+        circuit: QuantumCircuit = ansatz._circuit
+        return circuit
+
+
+    def skqulacs_ibm_embedding_circuit() -> QuantumCircuit:
+        n_qubit = 4
+        circuit: QuantumCircuit = create_ibm_embedding_circuit(n_qubit)._circuit
+        return circuit
+
+
+    def skqulacs_shirai_ansatz() -> QuantumCircuit:
+        n_qubit = 4
+        c_depth = 2
+        ansatz = create_shirai_ansatz(n_qubit, c_depth)
+        circuit: QuantumCircuit = ansatz._circuit
+        return circuit
+
+
+    def skqulacs_npqc_ansatz() -> QuantumCircuit:
+        n_qubit = 4
+        c_depth = 2
+        ansatz = create_npqc_ansatz(n_qubit, c_depth)
+        circuit: QuantumCircuit = ansatz._circuit
+        return circuit
+
+
+    def skqulacs_yzcx_ansatz() -> QuantumCircuit:
+        n_qubit = 4
+        c_depth = 2
+        ansatz = create_yzcx_ansatz(n_qubit, c_depth)
+        circuit: QuantumCircuit = ansatz._circuit
+        return circuit
+
+
+    def skqulacs_qcnn_ansatz() -> QuantumCircuit:
+        n_qubit = 8
+        ansatz = create_qcnn_ansatz(n_qubit)
+        circuit: QuantumCircuit = ansatz._circuit
+        return circuit
+except:
+    HAS_SKQULACS = False
 
 
 def load_circuit_data() -> Dict[str, QuantumCircuit]:
@@ -48,14 +114,15 @@ def load_circuit_data() -> Dict[str, QuantumCircuit]:
     circuits["xyz_horizontal_circuit"] = xyz_horizontal_circuit()
     circuits["xyz_vertical_circuit"] = xyz_vertical_circuit()
     circuits["unsupported_gates"] = unsupported_gates()
-    circuits["skqulacs_qcl_ansatz"] = skqulacs_qcl_ansatz()
-    circuits["skqulacs_farhi_neven_ansatz"] = skqulacs_farhi_neven_ansatz()
-    circuits["skqulacs_farhi_neven_watle_ansatz"] = skqulacs_farhi_neven_watle_ansatz()
-    circuits["skqulacs_ibm_embedding_circuit"] = skqulacs_ibm_embedding_circuit()
-    circuits["skqulacs_shirai_ansatz"] = skqulacs_shirai_ansatz()
-    circuits["skqulacs_npqc_ansatz"] = skqulacs_npqc_ansatz()
-    circuits["skqulacs_yzcx_ansatz"] = skqulacs_yzcx_ansatz()
-    circuits["skqulacs_qcnn_ansatz"] = skqulacs_qcnn_ansatz()
+    if HAS_SKQULACS:
+        circuits["skqulacs_qcl_ansatz"] = skqulacs_qcl_ansatz()
+        circuits["skqulacs_farhi_neven_ansatz"] = skqulacs_farhi_neven_ansatz()
+        circuits["skqulacs_farhi_neven_watle_ansatz"] = skqulacs_farhi_neven_watle_ansatz()
+        circuits["skqulacs_ibm_embedding_circuit"] = skqulacs_ibm_embedding_circuit()
+        circuits["skqulacs_shirai_ansatz"] = skqulacs_shirai_ansatz()
+        circuits["skqulacs_npqc_ansatz"] = skqulacs_npqc_ansatz()
+        circuits["skqulacs_yzcx_ansatz"] = skqulacs_yzcx_ansatz()
+        circuits["skqulacs_qcnn_ansatz"] = skqulacs_qcnn_ansatz()
     return circuits
 
 
@@ -199,66 +266,4 @@ def unsupported_gates() -> QuantumCircuit:
     circuit.add_X_gate(0)
     circuit.add_X_gate(1)
     circuit.add_gate(BitFlipNoise(0, 0.5))
-    return circuit
-
-
-def skqulacs_qcl_ansatz() -> QuantumCircuit:
-    n_qubit = 4
-    c_depth = 2
-    time_step = 1.0
-    ansatz = create_qcl_ansatz(n_qubit, c_depth, time_step)
-    circuit: QuantumCircuit = ansatz._circuit
-    return circuit
-
-
-def skqulacs_farhi_neven_ansatz() -> QuantumCircuit:
-    n_qubit = 4
-    c_depth = 2
-    ansatz = create_farhi_neven_ansatz(n_qubit, c_depth)
-    circuit: QuantumCircuit = ansatz._circuit
-    return circuit
-
-
-def skqulacs_farhi_neven_watle_ansatz() -> QuantumCircuit:
-    n_qubit = 4
-    c_depth = 2
-    ansatz = create_farhi_neven_watle_ansatz(n_qubit, c_depth)
-    circuit: QuantumCircuit = ansatz._circuit
-    return circuit
-
-
-def skqulacs_ibm_embedding_circuit() -> QuantumCircuit:
-    n_qubit = 4
-    circuit: QuantumCircuit = create_ibm_embedding_circuit(n_qubit)._circuit
-    return circuit
-
-
-def skqulacs_shirai_ansatz() -> QuantumCircuit:
-    n_qubit = 4
-    c_depth = 2
-    ansatz = create_shirai_ansatz(n_qubit, c_depth)
-    circuit: QuantumCircuit = ansatz._circuit
-    return circuit
-
-
-def skqulacs_npqc_ansatz() -> QuantumCircuit:
-    n_qubit = 4
-    c_depth = 2
-    ansatz = create_npqc_ansatz(n_qubit, c_depth)
-    circuit: QuantumCircuit = ansatz._circuit
-    return circuit
-
-
-def skqulacs_yzcx_ansatz() -> QuantumCircuit:
-    n_qubit = 4
-    c_depth = 2
-    ansatz = create_yzcx_ansatz(n_qubit, c_depth)
-    circuit: QuantumCircuit = ansatz._circuit
-    return circuit
-
-
-def skqulacs_qcnn_ansatz() -> QuantumCircuit:
-    n_qubit = 8
-    ansatz = create_qcnn_ansatz(n_qubit)
-    circuit: QuantumCircuit = ansatz._circuit
     return circuit
