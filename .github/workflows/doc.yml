@@ -6,7 +6,6 @@ on:
       - "main"
     paths-ignore:
       - "tests/**"
-  pull_request:
   workflow_dispatch:
 
 jobs:
