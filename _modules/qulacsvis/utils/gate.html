@@ -13,7 +13,9 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -69,7 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qulacsvis.utils.gate</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
 <span class="n">__DEFAULT_GATESTR_MAP</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -130,14 +132,14 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="to_text_style"><a class="viewcode-back" href="../../../qulacsvis.utils.gate.html#qulacsvis.utils.gate.to_text_style">[docs]</a><span class="k">def</span> <span class="nf">to_text_style</span><span class="p">(</span><span class="n">gate_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="to_text_style"><a class="viewcode-back" href="../../../qulacsvis.utils.gate.html#qulacsvis.utils.gate.to_text_style">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">to_text_style</span><span class="p">(</span><span class="n">gate_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">gate_str</span> <span class="o">=</span> <span class="n">__DEFAULT_GATESTR_MAP</span><span class="p">[</span><span class="n">gate_name</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate_str</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">gate_str</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">__DEFAULT_GATESTR_MAP</span><span class="p">[</span><span class="n">gate_name</span><span class="p">]</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="to_latex_style"><a class="viewcode-back" href="../../../qulacsvis.utils.gate.html#qulacsvis.utils.gate.to_latex_style">[docs]</a><span class="k">def</span> <span class="nf">to_latex_style</span><span class="p">(</span><span class="n">gate_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="to_latex_style"><a class="viewcode-back" href="../../../qulacsvis.utils.gate.html#qulacsvis.utils.gate.to_latex_style">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">to_latex_style</span><span class="p">(</span><span class="n">gate_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get string for latex from gate name.</span>
 
 <span class="sd">    Parameters</span>
@@ -158,7 +160,7 @@
     <span class="k">return</span> <span class="n">__TO_LATEX_STYLE_GATESTR_MAP</span><span class="p">[</span><span class="n">gate_name</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="grouping_adjacent_gates"><a class="viewcode-back" href="../../../qulacsvis.utils.gate.html#qulacsvis.utils.gate.grouping_adjacent_gates">[docs]</a><span class="k">def</span> <span class="nf">grouping_adjacent_gates</span><span class="p">(</span><span class="n">target_bits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+<div class="viewcode-block" id="grouping_adjacent_gates"><a class="viewcode-back" href="../../../qulacsvis.utils.gate.html#qulacsvis.utils.gate.grouping_adjacent_gates">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">grouping_adjacent_gates</span><span class="p">(</span><span class="n">target_bits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Grouping adjacent gates.</span>
 

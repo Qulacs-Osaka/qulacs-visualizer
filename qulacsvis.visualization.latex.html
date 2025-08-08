@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -87,10 +89,10 @@
            <div itemprop="articleBody">
              
   <section id="module-qulacsvis.visualization.latex">
-<span id="qulacsvis-visualization-latex-module"></span><h1>qulacsvis.visualization.latex module<a class="headerlink" href="#module-qulacsvis.visualization.latex" title="Permalink to this headline"></a></h1>
+<span id="qulacsvis-visualization-latex-module"></span><h1>qulacsvis.visualization.latex module<a class="headerlink" href="#module-qulacsvis.visualization.latex" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="qulacsvis.visualization.latex.LatexSourceGenerator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qulacsvis.visualization.latex.</span></span><span class="sig-name descname"><span class="pre">LatexSourceGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="qulacsvis.models.circuit.html#qulacsvis.models.circuit.CircuitData" title="qulacsvis.models.circuit.CircuitData"><span class="pre">qulacsvis.models.circuit.CircuitData</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qulacsvis/visualization/latex.html#LatexSourceGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qulacsvis.visualization.latex.</span></span><span class="sig-name descname"><span class="pre">LatexSourceGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="qulacsvis.models.circuit.html#qulacsvis.models.circuit.CircuitData" title="qulacsvis.models.circuit.CircuitData"><span class="pre">CircuitData</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qulacsvis/visualization/latex.html#LatexSourceGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qulacsvis.visualization.latex.LatexSourceGenerator" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Generate latex source from CircuitData</p>
 <dl class="field-list simple">
@@ -145,15 +147,15 @@ Quantum circuit only, input values are not contained.</p>
 </dd></dl>
 
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qulacsvis.qulacs.circuit</span> <span class="kn">import</span> <span class="n">to_model</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qulacsvis.visualization</span> <span class="kn">import</span> <span class="n">LatexSourceGenerator</span>
-<span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">qulacs</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">qulacsvis.qulacs.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">qulacsvis.visualization</span><span class="w"> </span><span class="kn">import</span> <span class="n">LatexSourceGenerator</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_X_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_Y_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_Z_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">generator</span> <span class="o">=</span> <span class="n">LatexSourceGenerator</span><span class="p">(</span><span class="n">to_model</span><span class="p">(</span><span class="n">circuit</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">latex_source</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">latex_source</span><span class="p">)</span>

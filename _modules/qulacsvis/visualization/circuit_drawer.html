@@ -13,7 +13,9 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -69,24 +71,24 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qulacsvis.visualization.circuit_drawer</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib</span>  <span class="c1"># NOQA</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>  <span class="c1"># NOQA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qulacs</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumCircuit</span>
 
-<span class="kn">from</span> <span class="nn">qulacsvis.utils.latex</span> <span class="kn">import</span> <span class="n">_LatexCompiler</span><span class="p">,</span> <span class="n">_PDFtoImage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qulacsvis.utils.latex</span><span class="w"> </span><span class="kn">import</span> <span class="n">_LatexCompiler</span><span class="p">,</span> <span class="n">_PDFtoImage</span>
 
-<span class="kn">from</span> <span class="nn">..qulacs.circuit</span> <span class="kn">import</span> <span class="n">to_model</span>
-<span class="kn">from</span> <span class="nn">.latex</span> <span class="kn">import</span> <span class="n">LatexSourceGenerator</span>
-<span class="kn">from</span> <span class="nn">.matplotlib</span> <span class="kn">import</span> <span class="n">MPLCircuitlDrawer</span>
-<span class="kn">from</span> <span class="nn">.text</span> <span class="kn">import</span> <span class="n">TextCircuitDrawer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..qulacs.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.latex</span><span class="w"> </span><span class="kn">import</span> <span class="n">LatexSourceGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">MPLCircuitlDrawer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextCircuitDrawer</span>
 
 
-<div class="viewcode-block" id="circuit_drawer"><a class="viewcode-back" href="../../../qulacsvis.visualization.circuit_drawer.html#qulacsvis.visualization.circuit_drawer.circuit_drawer">[docs]</a><span class="k">def</span> <span class="nf">circuit_drawer</span><span class="p">(</span>
+<div class="viewcode-block" id="circuit_drawer"><a class="viewcode-back" href="../../../qulacsvis.visualization.circuit_drawer.html#qulacsvis.visualization.circuit_drawer.circuit_drawer">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">circuit_drawer</span><span class="p">(</span>
     <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">,</span>
     <span class="n">output_method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>

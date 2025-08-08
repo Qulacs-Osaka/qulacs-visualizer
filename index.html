@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -73,25 +75,25 @@
   <div class="toctree-wrapper compound">
 </div>
 <section id="welcome-to-qulacsvis-s-documentation">
-<h1>Welcome to qulacsvis’s documentation!<a class="headerlink" href="#welcome-to-qulacsvis-s-documentation" title="Permalink to this headline"></a></h1>
+<h1>Welcome to qulacsvis’s documentation!<a class="headerlink" href="#welcome-to-qulacsvis-s-documentation" title="Permalink to this heading"></a></h1>
 <p>qulacs-visualizer is a quantum circuit drawing library for <a class="reference external" href="https://github.com/qulacs/qulacs">qulacs</a>. This library only supports Python. Not available in C/C++.</p>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
 <p>Install using pip from PyPI:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>qulacsvis
 </pre></div>
 </div>
 </section>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <p>For more information, see the <a class="reference external" href="https://qulacs-osaka.github.io/qulacs-visualizer/qulacsvis.visualization.circuit_drawer.html">documentation</a> of the <code class="docutils literal notranslate"><span class="pre">circuit_drawer()</span></code> function. The documentation describes the other options available.
 Or See also <a class="reference internal" href="options.html#how-to-use-options"><span class="std std-ref">How to use options</span></a>.</p>
 <section id="text-based-drawing">
-<h3>Text-Based Drawing<a class="headerlink" href="#text-based-drawing" title="Permalink to this headline"></a></h3>
+<h3>Text-Based Drawing<a class="headerlink" href="#text-based-drawing" title="Permalink to this heading"></a></h3>
 <p>In text-based mode, draws the circuit as ASCII art. This mode is the default behavior.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qulacsvis</span> <span class="kn">import</span> <span class="n">circuit_drawer</span>
-<span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">qulacs</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">qulacsvis</span><span class="w"> </span><span class="kn">import</span> <span class="n">circuit_drawer</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Build a quantum circuit</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_X_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -102,7 +104,7 @@ Or See also <a class="reference internal" href="options.html#how-to-use-options"
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_X_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
 <span class="go">       ___     ___     ___</span>
 <span class="go">      | X |   |DeM|   |CX |</span>
@@ -120,10 +122,10 @@ Or See also <a class="reference internal" href="options.html#how-to-use-options"
 </div>
 </section>
 <section id="matplotlib-drawing">
-<h3>Matplotlib Drawing<a class="headerlink" href="#matplotlib-drawing" title="Permalink to this headline"></a></h3>
+<h3>Matplotlib Drawing<a class="headerlink" href="#matplotlib-drawing" title="Permalink to this heading"></a></h3>
 <p>To use another drawing method, you can specify it by setting a value to the <code class="docutils literal notranslate"><span class="pre">output_method</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">circuit_drawer()</span></code> function. For matplotlib drawing, set <code class="docutils literal notranslate"><span class="pre">output_method=&quot;mpl&quot;</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;mpl&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -133,7 +135,7 @@ Or See also <a class="reference internal" href="options.html#how-to-use-options"
 </figure>
 </section>
 <section id="latex-drawing">
-<h3>LaTeX Drawing<a class="headerlink" href="#latex-drawing" title="Permalink to this headline"></a></h3>
+<h3>LaTeX Drawing<a class="headerlink" href="#latex-drawing" title="Permalink to this heading"></a></h3>
 <p>For LaTeX drawing, set <code class="docutils literal notranslate"><span class="pre">output_method=&quot;latex&quot;</span></code>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;latex&quot;</span><span class="p">)</span>
 </pre></div>
@@ -159,18 +161,18 @@ Or See also <a class="reference internal" href="options.html#how-to-use-options"
 </pre></div>
 </div>
 <section id="requirement">
-<h4>Requirement<a class="headerlink" href="#requirement" title="Permalink to this headline"></a></h4>
+<h4>Requirement<a class="headerlink" href="#requirement" title="Permalink to this heading"></a></h4>
 <p>If you want to use LaTeX for drawing, you need to have a local environment where you can run LaTeX (pdflatex).
 You will also need the <a class="reference external" href="https://github.com/CQuIC/qcircuit">qcircuit package</a>.
 <a class="reference external" href="https://www.tug.org/texlive/">TeX Live</a> and <a class="reference external" href="https://miktex.org/">MiKTeX</a> have the qcircuit package installed by default.</p>
 </section>
 </section>
 <section id="save-image-to-file">
-<h3>Save image to file<a class="headerlink" href="#save-image-to-file" title="Permalink to this headline"></a></h3>
+<h3>Save image to file<a class="headerlink" href="#save-image-to-file" title="Permalink to this heading"></a></h3>
 <p>You can save the images you draw with matplotlib and LaTeX to a file.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># matplotlib</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;mpl&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;output.png&quot;</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># latex</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit_drawer</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;latex&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;output.png&quot;</span><span class="p">)</span>
 </pre></div>
