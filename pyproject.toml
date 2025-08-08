@@ -14,7 +14,7 @@ python = ">=3.9"
 Qulacs = ">=0.5.0"
 temp = "^2020.7.2"
 Pillow = "^9.1.0"
-numpy = "^1.24.0"
+numpy = ">=1.24.0"
 matplotlib = "^3.4.3"
 dataclasses-json = ">=0.5"
 
