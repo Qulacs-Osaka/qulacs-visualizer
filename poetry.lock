@@ -1731,17 +1731,6 @@ standalone = ["Sphinx (>=5)"]
 test = ["pytest"]
 
 [[package]]
-name = "temp"
-version = "2020.7.2"
-description = "temp.tempdir(), temp.tempfile() functions"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "temp-2020.7.2.tar.gz", hash = "sha256:aefecf9e4d0d3900fba7fde844dc9dc62918ab66ad4003c8fdddcf3cd0a1edb4"},
-]
-
-[[package]]
 name = "threadpoolctl"
 version = "3.6.0"
 description = "threadpoolctl"
@@ -1878,4 +1867,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9"
-content-hash = "24d8ba57b909da8320b9a2f98a9f0fbb89a833984bcf472695073fab2352bcb5"
+content-hash = "d2014cdbcdf66ba447821cabeede77c67ea39bc17f54434f4f98965855114924"
